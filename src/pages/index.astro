@@ -1,18 +1,21 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import PracticeAreaItem from "../components/practice/PracticeAreaItem.astro";
+import PublicationItem from "../components/publications/PublicationItem.astro";
 import Button from "../components/ui/Button.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import { cms } from "../lib/cms";
-import { formatPublicationDate } from "../lib/content";
 
-const [settings, indicators, areas, testimonials, publications] = await Promise.all([
-  cms.getSiteSettings(),
-  cms.getIndicators(),
-  cms.getPracticeAreas(),
-  cms.getTestimonials(),
-  cms.getPublications(),
-]);
+const [settings, hero, indicators, areas, testimonials, publications] =
+  await Promise.all([
+    cms.getSiteSettings(),
+    cms.getHomeHero(),
+    cms.getIndicators(),
+    cms.getPracticeAreas(),
+    cms.getTestimonials(),
+    cms.getPublications(),
+  ]);
 
 const featuredPublications = publications.slice(0, 3);
 ---
@@ -20,33 +23,35 @@ const featuredPublications = publications.slice(0, 3);
 <BaseLayout
   title="Estudio jurídico boutique"
   description={settings.tagline}
+  headerVariant="transparent"
 >
-  <section class="relative overflow-hidden">
-    <div class="container-x pt-20 md:pt-32 pb-24 md:pb-40">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-end">
-        <div class="md:col-span-10">
-          <p class="eyebrow reveal">{settings.legalName} · Desde Providencia, Santiago</p>
-          <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] tracking-[-0.02em] mt-8 reveal">
-            Rigor técnico,<br />
-            <span class="text-fg-accent italic">profundidad jurídica</span><br />
-            y resultados consistentes.
-          </h1>
-          <p class="mt-10 max-w-xl text-lg md:text-xl text-fg-muted leading-relaxed reveal">
-            Estudio boutique especializado en seguros, responsabilidad civil y derecho de
-            transporte marítimo, aéreo y terrestre. Asesoramos a aseguradoras,
-            concesionarias y empresas logísticas con el conocimiento que su industria exige.
-          </p>
-          <div class="mt-12 flex flex-col sm:flex-row gap-6 sm:items-center reveal">
-            <Button href="/contacto">Agendar consulta</Button>
-            <TextLink href="/areas-de-practica" class="self-start sm:self-auto">
-              Ver áreas de práctica
-            </TextLink>
-          </div>
+  <PageHero
+    videoSrc={hero.backgroundVideo?.url}
+    imgSrc={hero.backgroundImage.url}
+    imgAlt={hero.backgroundImage.alt}
+    overlayOpacity={hero.overlayOpacity}
+    minHeight={hero.minHeight}
+  >
+    <div class="grid grid-cols-1 md:grid-cols-12">
+      <div class="md:col-span-10">
+        <p class="eyebrow !text-fg-on-inverse-accent reveal">
+          {settings.legalName}
+        </p>
+        <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] tracking-[-0.02em] mt-8 text-fg-on-inverse reveal">
+          {hero.title}
+        </h1>
+        <p class="mt-10 max-w-xl text-lg md:text-xl text-fg-on-inverse/75 leading-relaxed reveal">
+          {hero.subtitle}
+        </p>
+        <div class="mt-12 flex flex-col sm:flex-row gap-6 sm:items-center reveal">
+          <Button href="/contacto" tone="inverse">Agendar consulta</Button>
+          <TextLink href="/areas-de-practica" variant="inverse" class="self-start sm:self-auto">
+            Ver áreas de práctica
+          </TextLink>
         </div>
-
       </div>
     </div>
-  </section>
+  </PageHero>
 
   <section aria-labelledby="trust-indicators" class="border-y border-line bg-surface-soft">
     <h2 id="trust-indicators" class="sr-only">Indicadores de confianza</h2>
@@ -54,9 +59,23 @@ const featuredPublications = publications.slice(0, 3);
       <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 divide-y md:divide-y-0 md:divide-x divide-line">
         {indicators.map((indicator, i) => (
           <div class={`reveal ${i > 0 ? "md:pl-10" : ""}`}>
-            <p class="font-display text-5xl md:text-6xl text-fg leading-none">
-              {indicator.value}
-            </p>
+            <div class="flex h-14 items-end md:h-16">
+              {indicator.value === "LATAM" ? (
+                <img
+                  src="/flags2.svg"
+                  alt="Banderas de Chile, Reino Unido y España"
+                  width="152"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-11 w-auto md:h-12"
+                />
+              ) : (
+                <p class="font-display text-5xl md:text-6xl text-fg leading-none">
+                  {indicator.value}
+                </p>
+              )}
+            </div>
             <p class="mt-4 text-sm text-fg-muted max-w-[200px] leading-snug">
               {indicator.label}
             </p>
@@ -174,34 +193,7 @@ const featuredPublications = publications.slice(0, 3);
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14">
         {featuredPublications.map((publication) => (
-          <a
-            href={`/publicaciones/${publication.slug}`}
-            class="group flex flex-col reveal"
-          >
-            <div class="flex items-center gap-3 text-xs text-fg-muted">
-              <span class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
-                {publication.category}
-              </span>
-              <span aria-hidden="true">·</span>
-              <time datetime={publication.date}>
-                {formatPublicationDate(publication.date)}
-              </time>
-            </div>
-            <h3 class="font-display text-2xl md:text-3xl mt-6 leading-[1.15] text-fg group-hover:text-fg-accent transition-colors">
-              {publication.title}
-            </h3>
-            <p class="mt-5 text-sm md:text-base text-fg-muted leading-relaxed">
-              {publication.excerpt}
-            </p>
-            <TextLink
-              as="span"
-              variant="muted"
-              size="sm"
-              class="mt-6 text-fg-subtle group-hover:text-fg group-hover:gap-3"
-            >
-              Leer publicación
-            </TextLink>
-          </a>
+          <PublicationItem publication={publication} variant="card" />
         ))}
       </div>
     </div>

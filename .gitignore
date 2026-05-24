@@ -16,6 +16,12 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
+
+# Local media binaries — host in external storage/CDN (see .env.example)
+public/videos/*.mp4
+public/videos/*.mov
+public/videos/*.webm
 
 # macOS-specific files
 .DS_Store

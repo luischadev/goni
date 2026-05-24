@@ -1,3 +1,19 @@
+export interface MediaAsset {
+  url: string;
+  alt?: string;
+  mimeType?: string;
+}
+
+export interface HeroContent {
+  title: string;
+  subtitle: string;
+  overlayOpacity?: number;
+  bottomGradientOpacity?: number;
+  minHeight?: string;
+  backgroundImage: MediaAsset;
+  backgroundVideo?: MediaAsset;
+}
+
 export interface PracticeArea {
   slug: string;
   title: string;
@@ -18,6 +34,8 @@ export interface Publication {
   readingMinutes: number;
   author: string;
   body: string[];
+  coverImage?: string;
+  coverImageAlt?: string;
 }
 
 export interface TeamMember {

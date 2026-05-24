@@ -1,6 +1,41 @@
 ---
-import TextLink from "./ui/TextLink.astro";
 import { cms } from "../lib/cms";
+
+/**
+ * Header
+ *
+ * Sticky/fixed top navigation with two configurable behaviors:
+ *
+ *   variant = "solid"        Look por defecto (fondo claro, tokens neutros).
+ *                            Render con un spacer debajo para empujar el
+ *                            contenido y no ocultarlo bajo el header fijo.
+ *
+ *   variant = "transparent"  Pensado para páginas con hero oscuro
+ *                            (imagen/video). El header arranca transparente
+ *                            usando tokens *-on-inverse y se vuelve sólido
+ *                            cuando el usuario hace scroll. No se renderiza
+ *                            spacer: el hero pasa por debajo desde y=0.
+ *
+ *   autoHide = true          Oculta el header al hacer scroll hacia abajo y
+ *                            lo vuelve a mostrar al scrollear hacia arriba.
+ *                            Respeta prefers-reduced-motion y el menú móvil.
+ *
+ *   scrollThreshold          Pixeles a partir de los cuales el header se
+ *                            considera "scrolled" (cambio de look). El
+ *                            auto-hide solo arranca después del doble de
+ *                            ese valor para evitar saltos cerca del top.
+ */
+interface Props {
+  variant?: "solid" | "transparent";
+  autoHide?: boolean;
+  scrollThreshold?: number;
+}
+
+const {
+  variant = "solid",
+  autoHide = true,
+  scrollThreshold = 80,
+} = Astro.props;
 
 const settings = await cms.getSiteSettings();
 const currentPath = Astro.url.pathname;
@@ -18,7 +53,14 @@ function isActive(href: string): boolean {
 }
 ---
 
-<header class="border-b border-line bg-surface/95 backdrop-blur sticky top-0 z-50">
+<header
+  class="header fixed inset-x-0 top-0 z-50"
+  data-variant={variant}
+  data-scrolled="false"
+  data-hidden="false"
+  data-autohide={String(autoHide)}
+  data-threshold={scrollThreshold}
+>
   <div class="container-x flex items-center justify-between py-6 md:py-7">
     <a href="/" class="block shrink-0" aria-label={`${settings.name} — Inicio`}>
       <img
@@ -26,7 +68,7 @@ function isActive(href: string): boolean {
         alt={settings.legalName}
         width="1000"
         height="320"
-        class="h-8 w-auto md:h-10"
+        class="header-logo h-8 w-auto md:h-10"
       />
     </a>
 
@@ -34,28 +76,30 @@ function isActive(href: string): boolean {
       {navItems.map((item) => (
         <a
           href={item.href}
-          class={`text-[13px] tracking-wide transition-colors ${
-            isActive(item.href)
-              ? "text-fg"
-              : "text-fg-muted hover:text-fg"
+          class={`text-[13px] tracking-wide transition-opacity ${
+            isActive(item.href) ? "opacity-100" : "opacity-60 hover:opacity-100"
           }`}
         >
           {item.label}
           {isActive(item.href) && (
-            <span class="block h-px w-full bg-surface-inverse mt-1"></span>
+            <span class="block h-px w-full bg-current mt-1"></span>
           )}
         </a>
       ))}
     </nav>
 
-    <TextLink href="/contacto" size="sm" class="hidden md:inline-flex text-[13px]">
+    <a
+      href="/contacto"
+      class="hidden md:inline-flex w-[8.5rem] justify-end items-center gap-2 text-[13px] tracking-wide border-b border-current pb-1 transition-all hover:gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+    >
       Agendar consulta
-    </TextLink>
+      <span aria-hidden="true">→</span>
+    </a>
 
     <button
       type="button"
       id="menu-toggle"
-      class="md:hidden p-2 -mr-2 text-fg"
+      class="md:hidden p-2 -mr-2"
       aria-label="Abrir menú"
       aria-expanded="false"
       aria-controls="mobile-menu"
@@ -69,34 +113,83 @@ function isActive(href: string): boolean {
 
   <div
     id="mobile-menu"
-    class="md:hidden hidden border-t border-line bg-surface"
+    class="md:hidden hidden border-t border-line bg-surface text-fg"
   >
     <nav class="container-x flex flex-col py-6 gap-5" aria-label="Navegación móvil">
       {navItems.map((item) => (
         <a
           href={item.href}
-          class={`text-base ${
-            isActive(item.href)
-              ? "text-fg"
-              : "text-fg-muted"
-          }`}
+          class={`text-base ${isActive(item.href) ? "text-fg" : "text-fg-muted"}`}
         >
           {item.label}
         </a>
       ))}
-      <TextLink href="/contacto" class="mt-2 self-start">
+      <a
+        href="/contacto"
+        class="mt-2 self-start inline-flex items-center gap-2 text-sm tracking-wide border-b border-line-strong pb-1 text-fg"
+      >
         Agendar consulta
-      </TextLink>
+        <span aria-hidden="true">→</span>
+      </a>
     </nav>
   </div>
 </header>
 
+{variant === "solid" && (
+  <div aria-hidden="true" class="h-20 md:h-24"></div>
+)}
+
 <script>
+  const header = document.querySelector<HTMLElement>("header.header");
   const toggle = document.getElementById("menu-toggle");
   const menu = document.getElementById("mobile-menu");
+
   toggle?.addEventListener("click", () => {
     const isOpen = !menu?.classList.contains("hidden");
     menu?.classList.toggle("hidden");
     toggle.setAttribute("aria-expanded", String(!isOpen));
   });
+
+  if (header) {
+    const threshold = Number(header.dataset.threshold) || 80;
+    const autoHide = header.dataset.autohide === "true";
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const isMenuOpen = () =>
+      menu instanceof HTMLElement && !menu.classList.contains("hidden");
+
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+
+      header.dataset.scrolled = y > threshold ? "true" : "false";
+
+      if (autoHide && !isMenuOpen() && !reduceMotion && y > threshold * 2) {
+        if (y > lastY + 4) header.dataset.hidden = "true";
+        else if (y < lastY - 4) header.dataset.hidden = "false";
+      } else {
+        header.dataset.hidden = "false";
+      }
+
+      lastY = y;
+      ticking = false;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+
+    update();
+  }
 </script>

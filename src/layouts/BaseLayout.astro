@@ -8,6 +8,8 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  headerVariant?: "solid" | "transparent";
+  headerAutoHide?: boolean;
 }
 
 const settings = await cms.getSiteSettings();
@@ -16,6 +18,8 @@ const {
   title,
   description = settings.tagline,
   ogImage,
+  headerVariant = "solid",
+  headerAutoHide = true,
 } = Astro.props;
 
 const pageTitle = title ? `${title} · ${settings.name}` : `${settings.name} · ${settings.legalName}`;
@@ -60,7 +64,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
       Saltar al contenido principal
     </a>
 
-    <Header />
+    <Header variant={headerVariant} autoHide={headerAutoHide} />
 
     <main id="main" class="flex-1">
       <slot />

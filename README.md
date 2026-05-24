@@ -105,10 +105,16 @@ npm run build    # genera ./dist
 npm run preview  # previsualiza el build
 ```
 
+## Créditos de medios
+
+- **Hero (video):** [Scenic view of cargo ships on calm sea](https://www.pexels.com/video/scenic-view-of-cargo-ships-on-calm-sea-34533819/) — Video by Evgenij Mikhailov from Pexels.
+- **Hero (poster):** imagen de respaldo vía Unsplash mientras carga el video.
+
 ## Próximos pasos sugeridos
 
 1. Conectar el adaptador `cms` con la API de Strapi (REST o GraphQL).
-2. Reemplazar las fotos del equipo (hoy desde Unsplash) por imágenes propias.
-3. Implementar el endpoint del formulario de contacto (`/api/contact`).
-4. Definir un sitemap y robots, y registrar dominio en Search Console.
-5. Añadir analítica (idealmente respetuosa de privacidad como Plausible).
+2. Optimizar `public/videos/cargo-ships-hero.mp4` (hoy ~22 MB; ideal &lt; 8 MB con ffmpeg).
+3. Reemplazar las fotos del equipo (hoy desde Unsplash) por imágenes propias.
+4. Implementar el endpoint del formulario de contacto (`/api/contact`).
+5. Definir un sitemap y robots, y registrar dominio en Search Console.
+6. Añadir analítica (idealmente respetuosa de privacidad como Plausible).

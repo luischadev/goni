@@ -1,4 +1,5 @@
 import {
+  getHomeHero,
   getIndicators,
   getPracticeAreaBySlug,
   getPracticeAreas,
@@ -8,7 +9,13 @@ import {
   getTeamMembers,
   getTestimonials,
 } from "./content";
+import {
+  isExternalMediaUrl,
+  resolveMediaAsset,
+  resolveMediaUrl,
+} from "./media";
 import type {
+  HeroContent,
   Indicator,
   PracticeArea,
   Publication,
@@ -16,6 +23,39 @@ import type {
   TeamMember,
   Testimonial,
 } from "./types";
+
+function resolveHero(hero: HeroContent): HeroContent {
+  const backgroundImage = resolveMediaAsset(hero.backgroundImage);
+
+  let backgroundVideo = hero.backgroundVideo
+    ? resolveMediaAsset(hero.backgroundVideo)
+    : undefined;
+
+  // Only expose video in production when hosted externally (CDN / Strapi).
+  // In dev, local /videos/* paths still work if files exist in public/.
+  if (
+    backgroundVideo &&
+    !isExternalMediaUrl(backgroundVideo.url) &&
+    !import.meta.env.DEV
+  ) {
+    backgroundVideo = undefined;
+  }
+
+  return {
+    ...hero,
+    backgroundImage,
+    backgroundVideo,
+  };
+}
+
+function resolvePublication(publication: Publication): Publication {
+  return {
+    ...publication,
+    coverImage: publication.coverImage
+      ? resolveMediaUrl(publication.coverImage)
+      : undefined,
+  };
+}
 
 /**
  * CMS adapter.
@@ -33,6 +73,10 @@ export const cms = {
     return getSiteSettings();
   },
 
+  async getHomeHero(): Promise<HeroContent> {
+    return resolveHero(getHomeHero());
+  },
+
   async getIndicators(): Promise<Indicator[]> {
     return getIndicators();
   },
@@ -46,15 +90,19 @@ export const cms = {
   },
 
   async getPublications(): Promise<Publication[]> {
-    return getPublications();
+    return getPublications().map(resolvePublication);
   },
 
   async getPublicationBySlug(slug: string): Promise<Publication | undefined> {
-    return getPublicationBySlug(slug);
+    const publication = getPublicationBySlug(slug);
+    return publication ? resolvePublication(publication) : undefined;
   },
 
   async getTeamMembers(): Promise<TeamMember[]> {
-    return getTeamMembers();
+    return getTeamMembers().map((member) => ({
+      ...member,
+      photo: resolveMediaUrl(member.photo),
+    }));
   },
 
   async getTestimonials(): Promise<Testimonial[]> {

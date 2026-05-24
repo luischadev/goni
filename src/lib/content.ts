@@ -1,4 +1,5 @@
 import type {
+  HeroContent,
   Indicator,
   PracticeArea,
   Publication,
@@ -25,11 +26,27 @@ export const siteSettings: SiteSettings = {
   },
 };
 
+export const homeHero: HeroContent = {
+  title: "Defensa legal para riesgos complejos.",
+  subtitle:
+    "Rigor técnico, profundidad jurídica y resultados consistentes.",
+  overlayOpacity: 80,
+  backgroundImage: {
+    url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
+    alt: "Buques de carga en mar en calma",
+  },
+  // Path relative to PUBLIC_MEDIA_BASE_URL. Omitted at runtime until CDN is configured.
+  backgroundVideo: {
+    url: "/videos/container-port-hero.mp4",
+    mimeType: "video/mp4",
+  },
+};
+
 export const indicators: Indicator[] = [
   { value: "30+", label: "Años asesorando al mercado asegurador" },
   { value: "200+", label: "Recuperos judiciales activos al año" },
   { value: "4", label: "Modalidades de transporte cubiertas" },
-  { value: "LATAM", label: "Cobertura regional con aseguradores y brokers" },
+  { value: "LATAM", label: "Cobertura internacional con aseguradores y brokers" },
 ];
 
 export const practiceAreas: PracticeArea[] = [
@@ -297,6 +314,9 @@ export const publications: Publication[] = [
     date: "2026-04-12",
     readingMinutes: 7,
     author: "Carlos Goñi",
+    coverImage:
+      "https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&w=1600&q=80",
+    coverImageAlt: "Documentos legales y pluma sobre escritorio",
     body: [
       "La acción de subrogación es la herramienta jurídica que permite al asegurador, tras indemnizar al asegurado, colocarse en su lugar para perseguir al tercero responsable. En siniestros de transporte, donde concurren múltiples actores (cargador, transportista, operador logístico, terminal, conductor), su correcta articulación es decisiva para el resultado del recupero.",
       "En los últimos años, la jurisprudencia chilena ha ido afinando criterios sobre los presupuestos de la acción —pago efectivo de la indemnización, vigencia y cobertura de la póliza, existencia de responsabilidad del tercero— así como sobre el alcance temporal de la subrogación y la posibilidad de ejercerla parcialmente.",
@@ -312,6 +332,9 @@ export const publications: Publication[] = [
     date: "2026-03-02",
     readingMinutes: 9,
     author: "Felipe Aguirre",
+    coverImage:
+      "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&w=1600&q=80",
+    coverImageAlt: "Buque portacontenedores en altamar",
     body: [
       "La avería gruesa es una institución del derecho marítimo que distribuye, entre todos los intereses involucrados en una expedición marítima, los gastos y sacrificios extraordinarios realizados para salvar la nave y la carga de un peligro común.",
       "En la práctica chilena, su declaración suele generar incertidumbre en cargadores y aseguradores: liberar la carga implica entregar garantías cuya magnitud no siempre es proporcional al riesgo asumido por cada interés.",
@@ -327,6 +350,9 @@ export const publications: Publication[] = [
     date: "2026-01-20",
     readingMinutes: 6,
     author: "María José Ramírez",
+    coverImage:
+      "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=80",
+    coverImageAlt: "Autopista en perspectiva al atardecer",
     body: [
       "Las concesionarias de autopistas enfrentan una creciente exposición a demandas de responsabilidad civil derivadas de accidentes ocurridos en sus tramos. La jurisprudencia ha venido consolidando estándares de mantenimiento, señalización y respuesta operativa que delimitan los contornos de la responsabilidad.",
       "Para una gestión eficiente de siniestros, es clave articular tres capas de información: la operacional (bitácoras, registros de mantenimiento), la pericial (informes técnicos del siniestro) y la documental contractual con el concedente.",
@@ -342,6 +368,9 @@ export const publications: Publication[] = [
     date: "2025-12-10",
     readingMinutes: 8,
     author: "Felipe Aguirre",
+    coverImage:
+      "https://images.unsplash.com/photo-1577415124269-fc1140a69e91?auto=format&fit=crop&w=1600&q=80",
+    coverImageAlt: "Vista aérea de contenedores en terminal portuario",
     body: [
       "El mercado spot de fletes ha exhibido en los últimos años una volatilidad inédita, con oscilaciones que han transformado clausulados estandarizados en focos de disputa. La selección de modelos (Gencon, NYPE, BPVOY) y la redacción de las desviaciones particulares se han vuelto decisivas.",
       "En esta publicación analizamos las cláusulas más sensibles: laycan, demoras, despatch, off-hire, war risk, y las particularidades de su aplicación en el comercio chileno e internacional.",
@@ -357,6 +386,9 @@ export const publications: Publication[] = [
     date: "2025-11-05",
     readingMinutes: 7,
     author: "Antonia Velasco",
+    coverImage:
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=80",
+    coverImageAlt: "Obra industrial en construcción con grúas",
     body: [
       "Las pólizas de construcción todo riesgo (CAR) y de montaje todo riesgo (EAR) protegen proyectos cuya complejidad técnica es, por definición, alta. Cuando ocurre un siniestro, la articulación de la defensa requiere coordinar argumentos jurídicos con análisis de ingeniería y de gestión de proyectos.",
       "Una defensa eficaz parte por un análisis riguroso del clausulado y de las exclusiones, especialmente aquellas relativas a vicios de diseño, falta de mantenimiento, errores de operación y daños a la propia obra.",
@@ -397,6 +429,10 @@ export function getIndicators(): Indicator[] {
 
 export function getSiteSettings(): SiteSettings {
   return siteSettings;
+}
+
+export function getHomeHero(): HeroContent {
+  return homeHero;
 }
 
 export function formatPublicationDate(date: string): string {

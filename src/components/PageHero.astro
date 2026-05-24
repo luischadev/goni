@@ -1,0 +1,90 @@
+---
+/**
+ * PageHero
+ *
+ * Full-bleed section with an image or video background, a dark overlay
+ * built from the `surface-inverse` design token, and a content slot.
+ * All child elements should use the `*-on-inverse` token variants
+ * so they remain legible over the dark overlay.
+ *
+ * Props:
+ *   imgSrc     – URL of the background image (required if no videoSrc)
+ *   imgAlt     – Alt text for the background image (default: "")
+ *   videoSrc   – URL of the background video (mp4). If provided, takes priority over imgSrc.
+ *   overlayOpacity – 0–100 opacity of the surface-inverse overlay (default: 60)
+ *   bottomGradientOpacity – 0–100 opacity of the subtle bottom gradient (default: 25)
+ *   minHeight  – Tailwind min-height class (default: "min-h-[88vh]")
+ */
+
+interface Props {
+  imgSrc?: string;
+  imgAlt?: string;
+  videoSrc?: string;
+  overlayOpacity?: number;
+  bottomGradientOpacity?: number;
+  minHeight?: string;
+}
+
+const {
+  imgSrc,
+  imgAlt = "",
+  videoSrc,
+  overlayOpacity = 60,
+  bottomGradientOpacity = 25,
+  minHeight = "min-h-[88vh]",
+} = Astro.props;
+
+const hasMedia = Boolean(imgSrc || videoSrc);
+---
+
+<section
+  class={`relative overflow-hidden flex items-end ${minHeight}`}
+  aria-label="Hero"
+>
+  <!-- ── Background media ───────────────────────────────────── -->
+  {videoSrc ? (
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      poster={imgSrc}
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+    >
+      <source src={videoSrc} type="video/mp4" />
+    </video>
+  ) : imgSrc ? (
+    <img
+      src={imgSrc}
+      alt={imgAlt}
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
+      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+    />
+  ) : null}
+
+  <!-- ── Overlay usando token surface-inverse ───────────────── -->
+  {hasMedia && (
+    <div
+      class="absolute inset-0 bg-surface-inverse pointer-events-none"
+      style={`opacity: ${overlayOpacity / 100};`}
+      aria-hidden="true"
+    />
+  )}
+
+  <!-- ── Gradiente inferior para reforzar legibilidad del texto -->
+  {hasMedia && (
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style={`background: linear-gradient(to top, color-mix(in srgb, var(--color-surface-inverse) ${bottomGradientOpacity}%, transparent) 0%, transparent 55%);`}
+      aria-hidden="true"
+    />
+  )}
+
+  <!-- ── Contenido ──────────────────────────────────────────── -->
+  <div class="relative z-10 container-x w-full pt-40 pb-24 md:pt-40 md:pb-32">
+    <slot />
+  </div>
+</section>
