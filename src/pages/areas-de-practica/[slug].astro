@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PracticeAreaCard from "../../components/practice/PracticeAreaCard.astro";
+import PracticeAreaNext from "../../components/practice/PracticeAreaNext.astro";
+import Button from "../../components/ui/Button.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import { cms } from "../../lib/cms";
+import type { PracticeArea } from "../../lib/types";
+
+export async function getStaticPaths() {
+  const areas = await cms.getPracticeAreas();
+  return areas.map((area) => ({
+    params: { slug: area.slug },
+    props: { area },
+  }));
+}
+
+interface Props {
+  area: PracticeArea;
+}
+
+const { area } = Astro.props;
+
+const allAreas = await cms.getPracticeAreas();
+const currentIndex = allAreas.findIndex((a) => a.slug === area.slug);
+const nextArea = allAreas[(currentIndex + 1) % allAreas.length];
+const otherAreas = allAreas.filter((a) => a.slug !== area.slug).slice(0, 3);
+---
+
+<BaseLayout title={area.title} description={area.shortDescription}>
+  <section class="container-x pt-16 md:pt-24">
+    <nav class="text-xs text-fg-subtle flex items-center gap-2" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-fg transition-colors">Inicio</a>
+      <span aria-hidden="true">/</span>
+      <a href="/areas-de-practica" class="hover:text-fg transition-colors">Áreas de práctica</a>
+      <span aria-hidden="true">/</span>
+      <span class="text-fg-muted">{area.title}</span>
+    </nav>
+  </section>
+
+  <section class="container-x pt-16 md:pt-24 pb-16 md:pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+      <div class="md:col-span-8">
+        <p class="font-display text-3xl text-fg-accent reveal">{area.number}</p>
+        <h1 class="font-display text-5xl md:text-7xl lg:text-[80px] leading-[1.02] mt-6 reveal">
+          {area.title}
+        </h1>
+        <p class="mt-10 max-w-2xl text-lg md:text-xl text-fg-muted leading-relaxed reveal">
+          {area.intro}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-surface-soft">
+    <div class="container-x py-20 md:py-28">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        <div class="md:col-span-7">
+          <p class="eyebrow reveal">Cómo trabajamos</p>
+          <div class="mt-8 space-y-7 reveal">
+            {area.body.map((paragraph) => (
+              <p class="text-base md:text-lg text-fg-soft leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <div class="md:col-span-4 md:col-start-9">
+          <div class="border-l border-fg-subtle/30 pl-8 reveal">
+            <p class="eyebrow">Servicios</p>
+            <ul class="mt-6 space-y-4">
+              {area.highlights.map((highlight) => (
+                <li class="flex items-start gap-3 text-sm md:text-base text-fg-soft">
+                  <span class="text-fg-accent mt-1">—</span>
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="mt-12 border-l border-fg-subtle/30 pl-8 reveal">
+            <p class="eyebrow">Industrias</p>
+            <ul class="mt-6 space-y-3">
+              {area.industries.map((industry) => (
+                <li class="text-sm text-fg-muted">{industry}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-24 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">Próximo paso</p>
+        <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
+          Conversemos sobre cómo {area.title.toLowerCase()} aplica a su operación.
+        </h2>
+      </div>
+      <div class="md:col-span-4 md:text-right reveal">
+        <Button href="/contacto">Agendar consulta</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface-soft">
+    <div class="container-x py-20 md:py-28">
+      <div class="flex items-end justify-between mb-12">
+        <p class="eyebrow">Otras áreas del estudio</p>
+        <TextLink href="/areas-de-practica" variant="subtle" class="hidden md:inline-flex">
+          Ver todas las áreas
+        </TextLink>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        {otherAreas.map((other) => (
+          <PracticeAreaCard area={other} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-16">
+    <PracticeAreaNext area={nextArea} />
+  </section>
+</BaseLayout>

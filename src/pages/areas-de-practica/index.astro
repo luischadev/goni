@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PracticeAreaItem from "../../components/practice/PracticeAreaItem.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import { cms } from "../../lib/cms";
+
+const areas = await cms.getPracticeAreas();
+---
+
+<BaseLayout
+  title="Áreas de práctica"
+  description="Las áreas en las que el estudio concentra su práctica: seguros, recuperos, responsabilidad civil, derecho marítimo y transporte, corporativo y litigios."
+>
+  <section class="container-x pt-20 md:pt-32 pb-16 md:pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+      <div class="md:col-span-7">
+        <p class="eyebrow reveal">Áreas de práctica</p>
+        <h1 class="font-display text-5xl md:text-7xl lg:text-[80px] leading-[1.02] mt-8 reveal">
+          Profundidad técnica en los frentes que definen su industria.
+        </h1>
+      </div>
+      <div class="md:col-span-4 md:col-start-9 md:pt-10">
+        <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          Hemos construido nuestra práctica alrededor de los riesgos más complejos
+          del mercado asegurador, logístico y marítimo. Cada área del estudio combina
+          conocimiento académico de alto nivel con experiencia forense intensiva.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-line">
+    <ul class="container-x divide-y divide-line">
+      {areas.map((area) => (
+        <PracticeAreaItem area={area} variant="detailed" />
+      ))}
+    </ul>
+  </section>
+
+  <section class="container-x py-24 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">¿No encuentra su frente?</p>
+        <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
+          También asesoramos en operaciones donde la complejidad técnica<br class="hidden md:block" />
+          y regulatoria exige una mirada experta.
+        </h2>
+      </div>
+      <div class="md:col-span-4 md:text-right reveal">
+        <TextLink href="/contacto">Conversar con el estudio</TextLink>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

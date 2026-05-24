@@ -1,0 +1,84 @@
+---
+import TextLink from "./ui/TextLink.astro";
+import { cms } from "../lib/cms";
+
+const settings = await cms.getSiteSettings();
+const areas = await cms.getPracticeAreas();
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-surface-inverse text-fg-on-inverse mt-32 md:mt-48">
+  <div class="container-x py-20 md:py-28">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+      <div class="md:col-span-5">
+        <p class="eyebrow text-fg-on-inverse-accent">{settings.legalName}</p>
+        <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] text-fg-on-inverse">
+          Asesoría jurídica con la profundidad técnica que exige su industria.
+        </h2>
+        <TextLink href="/contacto" variant="inverse" class="mt-10">
+          Iniciar conversación
+        </TextLink>
+      </div>
+
+      <div class="md:col-span-3 md:col-start-7">
+        <p class="eyebrow text-fg-on-inverse-accent">Práctica</p>
+        <ul class="mt-6 space-y-3">
+          {areas.slice(0, 5).map((area) => (
+            <li>
+              <a
+                href={`/areas-de-practica/${area.slug}`}
+                class="text-sm text-fg-on-inverse/85 hover:text-fg-on-inverse transition-colors"
+              >
+                {area.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="eyebrow text-fg-on-inverse-accent">Estudio</p>
+        <ul class="mt-6 space-y-3 text-sm text-fg-on-inverse/85">
+          <li><a href="/nosotros" class="hover:text-fg-on-inverse transition-colors">Nosotros</a></li>
+          <li><a href="/publicaciones" class="hover:text-fg-on-inverse transition-colors">Publicaciones</a></li>
+          <li><a href="/contacto" class="hover:text-fg-on-inverse transition-colors">Contacto</a></li>
+          <li>
+            <a
+              href={settings.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-fg-on-inverse transition-colors"
+            >
+              LinkedIn
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="eyebrow text-fg-on-inverse-accent">Contacto</p>
+        <address class="not-italic mt-6 text-sm text-fg-on-inverse/85 space-y-3 leading-relaxed">
+          <p>
+            {settings.address.street}<br />
+            {settings.address.city}, {settings.address.region}<br />
+            {settings.address.country}
+          </p>
+          <p>
+            <a href={`tel:${settings.phone.replace(/\s+/g, "")}`} class="hover:text-fg-on-inverse transition-colors">
+              {settings.phone}
+            </a><br />
+            <a href={`mailto:${settings.email}`} class="hover:text-fg-on-inverse transition-colors">
+              {settings.email}
+            </a>
+          </p>
+        </address>
+      </div>
+    </div>
+
+    <div class="mt-20 pt-8 border-t border-line-on-inverse/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-fg-on-inverse/55">
+      <p>© {currentYear} {settings.legalName}. Todos los derechos reservados.</p>
+      <p>Sitio diseñado con foco en confianza, claridad y rigor técnico.</p>
+    </div>
+  </div>
+</footer>

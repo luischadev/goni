@@ -1,0 +1,87 @@
+---
+import {
+  buttonSizes,
+  buttonVariants,
+} from "../../lib/ui-classes";
+
+type Variant = keyof typeof buttonVariants;
+type Tone = keyof (typeof buttonVariants)["primary"];
+type Size = keyof typeof buttonSizes;
+
+interface Props {
+  variant?: Variant;
+  tone?: Tone;
+  size?: Size;
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  showArrow?: boolean;
+  class?: string;
+  target?: string;
+  rel?: string;
+  id?: string;
+  "aria-label"?: string;
+  "aria-expanded"?: string;
+  "aria-controls"?: string;
+  onclick?: string;
+}
+
+const {
+  variant = "primary",
+  tone = "default",
+  size = variant === "primary" ? "md" : "none",
+  href,
+  type = "button",
+  disabled = false,
+  showArrow = true,
+  class: className = "",
+  target,
+  rel,
+  id,
+  "aria-label": ariaLabel,
+  "aria-expanded": ariaExpanded,
+  "aria-controls": ariaControls,
+  onclick,
+} = Astro.props;
+
+const classes = [
+  buttonVariants[variant][tone],
+  variant === "primary" ? buttonSizes[size] : "",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+
+const isLink = Boolean(href) && !disabled;
+const Tag = isLink ? "a" : "button";
+---
+
+{
+  isLink ? (
+    <a
+      href={href}
+      class={classes}
+      target={target}
+      rel={rel}
+      id={id}
+      aria-label={ariaLabel}
+    >
+      <slot />
+      {showArrow && <span aria-hidden="true">→</span>}
+    </a>
+  ) : (
+    <button
+      type={type}
+      class={classes}
+      disabled={disabled}
+      id={id}
+      aria-label={ariaLabel}
+      aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
+      onclick={onclick}
+    >
+      <slot />
+      {showArrow && <span aria-hidden="true">→</span>}
+    </button>
+  )
+}

@@ -1,0 +1,228 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PracticeAreaItem from "../components/practice/PracticeAreaItem.astro";
+import Button from "../components/ui/Button.astro";
+import TextLink from "../components/ui/TextLink.astro";
+import { cms } from "../lib/cms";
+import { formatPublicationDate } from "../lib/content";
+
+const [settings, indicators, areas, testimonials, publications] = await Promise.all([
+  cms.getSiteSettings(),
+  cms.getIndicators(),
+  cms.getPracticeAreas(),
+  cms.getTestimonials(),
+  cms.getPublications(),
+]);
+
+const featuredPublications = publications.slice(0, 3);
+---
+
+<BaseLayout
+  title="Estudio jurídico boutique"
+  description={settings.tagline}
+>
+  <section class="relative overflow-hidden">
+    <div class="container-x pt-20 md:pt-32 pb-24 md:pb-40">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-end">
+        <div class="md:col-span-10">
+          <p class="eyebrow reveal">{settings.legalName} · Desde Providencia, Santiago</p>
+          <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] tracking-[-0.02em] mt-8 reveal">
+            Rigor técnico,<br />
+            <span class="text-fg-accent italic">profundidad jurídica</span><br />
+            y resultados consistentes.
+          </h1>
+          <p class="mt-10 max-w-xl text-lg md:text-xl text-fg-muted leading-relaxed reveal">
+            Estudio boutique especializado en seguros, responsabilidad civil y derecho de
+            transporte marítimo, aéreo y terrestre. Asesoramos a aseguradoras,
+            concesionarias y empresas logísticas con el conocimiento que su industria exige.
+          </p>
+          <div class="mt-12 flex flex-col sm:flex-row gap-6 sm:items-center reveal">
+            <Button href="/contacto">Agendar consulta</Button>
+            <TextLink href="/areas-de-practica" class="self-start sm:self-auto">
+              Ver áreas de práctica
+            </TextLink>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="trust-indicators" class="border-y border-line bg-surface-soft">
+    <h2 id="trust-indicators" class="sr-only">Indicadores de confianza</h2>
+    <div class="container-x py-14 md:py-16">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 divide-y md:divide-y-0 md:divide-x divide-line">
+        {indicators.map((indicator, i) => (
+          <div class={`reveal ${i > 0 ? "md:pl-10" : ""}`}>
+            <p class="font-display text-5xl md:text-6xl text-fg leading-none">
+              {indicator.value}
+            </p>
+            <p class="mt-4 text-sm text-fg-muted max-w-[200px] leading-snug">
+              {indicator.label}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="practice-areas" class="container-x py-28 md:py-40">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16 md:mb-24">
+      <div class="md:col-span-6">
+        <p class="eyebrow reveal">Áreas de práctica</p>
+        <h2 id="practice-areas" class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal">
+          Profundidad en los frentes donde se decide la operación.
+        </h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8 md:pt-4">
+        <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          Cada área del estudio combina práctica forense intensiva con
+          conocimiento técnico de la industria. Trabajamos cerca de los equipos
+          de operaciones de nuestros clientes para anticipar riesgos y construir
+          estrategias procesales eficientes.
+        </p>
+      </div>
+    </div>
+
+    <ul class="divide-y divide-line border-y border-line">
+      {areas.map((area) => (
+        <PracticeAreaItem area={area} variant="row" />
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="testimonials" class="bg-surface-inverse text-fg-on-inverse py-28 md:py-40">
+    <div class="container-x">
+      <div class="max-w-3xl">
+        <p class="eyebrow text-fg-on-inverse-accent reveal">Voces del mercado</p>
+        <h2 id="testimonials" class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] text-fg-on-inverse reveal">
+          La confianza de quienes operan en los frentes más exigentes.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mt-20 md:mt-24">
+        {testimonials.map((testimonial) => (
+          <figure class="flex flex-col reveal">
+            <span class="font-display text-5xl text-fg-on-inverse-accent leading-none" aria-hidden="true">
+              "
+            </span>
+            <blockquote class="mt-6 text-lg md:text-xl leading-relaxed text-fg-on-inverse/95 font-display">
+              {testimonial.quote}
+            </blockquote>
+            <figcaption class="mt-8 pt-6 border-t border-line-on-inverse/15">
+              <p class="text-sm text-fg-on-inverse">{testimonial.author}</p>
+              <p class="text-xs text-fg-on-inverse/65 mt-1">
+                {testimonial.position} · {testimonial.company}
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="recognitions" class="container-x py-24 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+      <div class="md:col-span-4">
+        <p class="eyebrow reveal">Reconocimientos</p>
+        <h2 id="recognitions" class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
+          Validados por la industria y la academia.
+        </h2>
+      </div>
+      <div class="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 self-center">
+        <div class="reveal">
+          <p class="eyebrow text-fg-accent">Académico</p>
+          <p class="mt-3 text-sm text-fg-muted leading-snug">
+            Tulane Law School · LL.M. Admiralty Law
+          </p>
+        </div>
+        <div class="reveal">
+          <p class="eyebrow text-fg-accent">Docencia</p>
+          <p class="mt-3 text-sm text-fg-muted leading-snug">
+            Profesor de Derecho y Seguro Marítimo
+          </p>
+        </div>
+        <div class="reveal">
+          <p class="eyebrow text-fg-accent">Sector</p>
+          <p class="mt-3 text-sm text-fg-muted leading-snug">
+            Liquidador oficial de seguros
+          </p>
+        </div>
+        <div class="reveal">
+          <p class="eyebrow text-fg-accent">Diplomados</p>
+          <p class="mt-3 text-sm text-fg-muted leading-snug">
+            Escuela de Seguros · Asoc. Aseguradores de Chile
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="publications" class="bg-surface-soft py-28 md:py-40 border-y border-line">
+    <div class="container-x">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-end mb-16 md:mb-20">
+        <div class="md:col-span-7">
+          <p class="eyebrow reveal">Publicaciones</p>
+          <h2 id="publications" class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal">
+            Análisis técnicos que orientan decisiones de negocio.
+          </h2>
+        </div>
+        <div class="md:col-span-4 md:col-start-9 md:text-right reveal">
+          <TextLink href="/publicaciones">Ver todas las publicaciones</TextLink>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14">
+        {featuredPublications.map((publication) => (
+          <a
+            href={`/publicaciones/${publication.slug}`}
+            class="group flex flex-col reveal"
+          >
+            <div class="flex items-center gap-3 text-xs text-fg-muted">
+              <span class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+                {publication.category}
+              </span>
+              <span aria-hidden="true">·</span>
+              <time datetime={publication.date}>
+                {formatPublicationDate(publication.date)}
+              </time>
+            </div>
+            <h3 class="font-display text-2xl md:text-3xl mt-6 leading-[1.15] text-fg group-hover:text-fg-accent transition-colors">
+              {publication.title}
+            </h3>
+            <p class="mt-5 text-sm md:text-base text-fg-muted leading-relaxed">
+              {publication.excerpt}
+            </p>
+            <TextLink
+              as="span"
+              variant="muted"
+              size="sm"
+              class="mt-6 text-fg-subtle group-hover:text-fg group-hover:gap-3"
+            >
+              Leer publicación
+            </TextLink>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-28 md:py-40">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">Conversemos</p>
+        <h2 class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal">
+          ¿Tiene un caso o un programa de seguros<br />que evaluar con nosotros?
+        </h2>
+        <p class="mt-8 max-w-xl text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          Coordinamos una reunión inicial para entender el contexto de su empresa
+          o aseguradora, los riesgos críticos y la mejor forma de articular una
+          asesoría que aporte valor desde el primer día.
+        </p>
+      </div>
+      <div class="md:col-span-4 md:text-right reveal">
+        <Button href="/contacto">Iniciar conversación</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

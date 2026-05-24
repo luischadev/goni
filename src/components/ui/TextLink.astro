@@ -1,0 +1,63 @@
+---
+import { textLinkSizes, textLinkVariants } from "../../lib/ui-classes";
+
+type Variant = keyof typeof textLinkVariants;
+type Size = keyof typeof textLinkSizes;
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  size?: Size;
+  showArrow?: boolean;
+  arrow?: "left" | "right" | "none";
+  as?: "a" | "span";
+  class?: string;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  href,
+  variant = "default",
+  size = "md",
+  showArrow = true,
+  arrow = showArrow ? "right" : "none",
+  as = href ? "a" : "span",
+  class: className = "",
+  target,
+  rel,
+} = Astro.props;
+
+const displayArrow = arrow !== "none";
+const arrowChar = arrow === "left" ? "←" : "→";
+
+const classes = [textLinkVariants[variant], textLinkSizes[size], className]
+  .filter(Boolean)
+  .join(" ");
+
+const Tag = as === "a" && href ? "a" : "span";
+---
+
+{
+  Tag === "a" ? (
+    <a href={href} class={classes} target={target} rel={rel}>
+      {displayArrow && arrow === "left" && (
+        <span aria-hidden="true">{arrowChar}</span>
+      )}
+      <slot />
+      {displayArrow && arrow === "right" && (
+        <span aria-hidden="true">{arrowChar}</span>
+      )}
+    </a>
+  ) : (
+    <span class={classes}>
+      {displayArrow && arrow === "left" && (
+        <span aria-hidden="true">{arrowChar}</span>
+      )}
+      <slot />
+      {displayArrow && arrow === "right" && (
+        <span aria-hidden="true">{arrowChar}</span>
+      )}
+    </span>
+  )
+}

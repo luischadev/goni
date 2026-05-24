@@ -1,0 +1,28 @@
+---
+import type { PracticeArea } from "../../lib/types";
+
+interface Props {
+  area: PracticeArea;
+  class?: string;
+  reveal?: boolean;
+}
+
+const { area, class: className = "", reveal = true } = Astro.props;
+const href = `/areas-de-practica/${area.slug}`;
+const wrapperClass = ["group block", reveal ? "reveal" : "", className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<a
+  href={href}
+  class={`${wrapperClass} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong`}
+>
+  <p class="font-display text-lg text-fg-accent">{area.number}</p>
+  <h3 class="font-display text-2xl md:text-3xl mt-4 leading-[1.15] text-fg group-hover:text-fg-accent transition-colors">
+    {area.title}
+  </h3>
+  <p class="mt-4 text-sm text-fg-muted leading-relaxed">
+    {area.shortDescription}
+  </p>
+</a>

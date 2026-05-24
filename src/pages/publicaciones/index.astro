@@ -1,0 +1,122 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import { cms } from "../../lib/cms";
+import { formatPublicationDate } from "../../lib/content";
+
+const publications = await cms.getPublications();
+const categories = Array.from(new Set(publications.map((p) => p.category)));
+const featured = publications[0];
+const rest = publications.slice(1);
+---
+
+<BaseLayout
+  title="Publicaciones"
+  description="Análisis y publicaciones del estudio sobre seguros, responsabilidad civil, derecho marítimo y transporte."
+>
+  <section class="container-x pt-20 md:pt-32 pb-12 md:pb-20">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">Publicaciones</p>
+        <h1 class="font-display text-5xl md:text-7xl lg:text-[80px] leading-[1.02] mt-8 reveal">
+          Análisis técnicos que orientan decisiones de negocio.
+        </h1>
+      </div>
+      <div class="md:col-span-4 md:pt-10">
+        <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          Lecturas breves para gerentes legales, de reclamos y de operaciones que
+          requieren entender, con rigor, cómo se mueven los criterios jurídicos en
+          seguros, transporte y responsabilidad civil.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-14 md:mt-20 flex flex-wrap gap-3 reveal">
+      <span class="text-xs px-3 py-1.5 border border-line-strong text-fg uppercase tracking-[var(--tracking-eyebrow)]">
+        Todas
+      </span>
+      {categories.map((category) => (
+        <span class="text-xs px-3 py-1.5 border border-line text-fg-muted uppercase tracking-[var(--tracking-eyebrow)]">
+          {category}
+        </span>
+      ))}
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-surface-soft">
+    <a
+      href={`/publicaciones/${featured.slug}`}
+      class="group block container-x py-16 md:py-24 reveal"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
+        <div class="md:col-span-1">
+          <p class="eyebrow text-fg-accent">Destacada</p>
+        </div>
+        <div class="md:col-span-7">
+          <div class="flex items-center gap-3 text-xs text-fg-muted">
+            <span class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+              {featured.category}
+            </span>
+            <span aria-hidden="true">·</span>
+            <time datetime={featured.date}>{formatPublicationDate(featured.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span>{featured.readingMinutes} min de lectura</span>
+          </div>
+          <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] text-fg group-hover:text-fg-accent transition-colors">
+            {featured.title}
+          </h2>
+          <p class="mt-6 max-w-2xl text-base md:text-lg text-fg-muted leading-relaxed">
+            {featured.excerpt}
+          </p>
+        </div>
+        <div class="md:col-span-4 md:text-right">
+          <p class="text-sm text-fg-muted">Por {featured.author}</p>
+          <TextLink as="span" class="mt-6 group-hover:gap-3">
+            Leer publicación
+          </TextLink>
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <section class="container-x py-20 md:py-28">
+    <ul class="divide-y divide-line border-t border-line">
+      {rest.map((publication) => (
+        <li class="reveal">
+          <a
+            href={`/publicaciones/${publication.slug}`}
+            class="group grid grid-cols-12 gap-6 py-10 md:py-14 items-baseline hover:bg-surface-soft/50 transition-colors px-2"
+          >
+            <div class="col-span-12 md:col-span-2 text-xs text-fg-muted">
+              <p class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+                {publication.category}
+              </p>
+              <time class="mt-2 block" datetime={publication.date}>
+                {formatPublicationDate(publication.date)}
+              </time>
+            </div>
+            <div class="col-span-12 md:col-span-7">
+              <h3 class="font-display text-2xl md:text-4xl leading-[1.1] text-fg group-hover:text-fg-accent transition-colors">
+                {publication.title}
+              </h3>
+              <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed max-w-2xl">
+                {publication.excerpt}
+              </p>
+            </div>
+            <div class="col-span-12 md:col-span-3 md:text-right md:pl-6 text-xs text-fg-muted">
+              <p>Por {publication.author}</p>
+              <p class="mt-2">{publication.readingMinutes} min de lectura</p>
+              <TextLink
+                as="span"
+                size="sm"
+                class="mt-6 group-hover:gap-3"
+              >
+                Leer
+              </TextLink>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

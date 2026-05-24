@@ -1,0 +1,25 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: "left" | "center";
+  as?: "h1" | "h2";
+}
+
+const { eyebrow, title, description, align = "left", as = "h2" } = Astro.props;
+const alignment = align === "center" ? "text-center mx-auto" : "text-left";
+const Heading = as;
+---
+
+<div class={`max-w-2xl ${alignment}`}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Heading class={`font-display ${as === "h1" ? "text-5xl md:text-7xl" : "text-4xl md:text-5xl"} mt-6 leading-[1.05]`}>
+    {title}
+  </Heading>
+  {description && (
+    <p class="mt-6 text-base md:text-lg text-fg-muted leading-relaxed max-w-xl">
+      {description}
+    </p>
+  )}
+</div>

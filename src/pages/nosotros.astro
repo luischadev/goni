@@ -1,0 +1,183 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/ui/Button.astro";
+import { cms } from "../lib/cms";
+
+const team = await cms.getTeamMembers();
+const founder = team[0];
+const otherMembers = team.slice(1);
+---
+
+<BaseLayout
+  title="Nosotros"
+  description="Conozca al equipo de Goñi & Cía. Abogados: socios, abogados jefes y especialistas con trayectoria en seguros, responsabilidad civil y derecho de transporte."
+>
+  <section class="container-x pt-20 md:pt-32 pb-16 md:pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">El estudio</p>
+        <h1 class="font-display text-5xl md:text-7xl lg:text-[80px] leading-[1.02] mt-8 reveal">
+          Un estudio boutique, construido sobre conocimiento técnico y trato cercano.
+        </h1>
+      </div>
+      <div class="md:col-span-4 md:pt-12">
+        <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          Somos una firma boutique con sede en Providencia, Santiago. Nuestro
+          trabajo se concentra en los frentes donde la complejidad técnica y la
+          exposición patrimonial exigen una asesoría profunda, paciente y rigurosa.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-surface-soft">
+    <div class="container-x py-24 md:py-32">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        <div class="md:col-span-5">
+          <p class="eyebrow reveal">Nuestra mirada</p>
+          <h2 class="font-display text-4xl md:text-5xl mt-6 leading-[1.05] reveal">
+            La práctica jurídica como un oficio que se profundiza con el tiempo.
+          </h2>
+        </div>
+        <div class="md:col-span-6 md:col-start-7 space-y-7 text-base md:text-lg text-fg-soft leading-relaxed reveal">
+          <p>
+            Creemos en una práctica jurídica que combina rigor académico con
+            experiencia forense intensiva. Por eso nuestro estudio se ha
+            especializado deliberadamente: ser referentes en seguros, transporte y
+            responsabilidad civil antes que abarcar todo el espectro del derecho.
+          </p>
+          <p>
+            Trabajamos cerca de los equipos de operaciones de nuestros clientes —de
+            reclamos, de riesgos, legales y de cumplimiento— para construir
+            estrategias que conversen con su realidad operativa, no solo con la
+            jurisprudencia.
+          </p>
+          <p>
+            Esa cercanía se traduce en relaciones de largo plazo con aseguradoras,
+            concesionarias, navieras y operadores logísticos que confían en
+            nosotros para los frentes más sensibles de su negocio.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mt-20 md:mt-24 pt-16 border-t border-line">
+        <div class="reveal">
+          <p class="font-display text-5xl text-fg-accent">01</p>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Profundidad técnica</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Nuestra práctica nace del conocimiento profundo de las industrias que
+            asesoramos. Hablamos el lenguaje del negocio, no solo el del derecho.
+          </p>
+        </div>
+        <div class="reveal">
+          <p class="font-display text-5xl text-fg-accent">02</p>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Trato cercano</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Como estudio boutique, cada cliente tiene acceso directo a los socios
+            y a un equipo que conoce su operación de extremo a extremo.
+          </p>
+        </div>
+        <div class="reveal">
+          <p class="font-display text-5xl text-fg-accent">03</p>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Resultados consistentes</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Más de tres décadas asesorando al mercado asegurador y logístico nos
+            han enseñado que la consistencia es el mejor capital de un estudio.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-24 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+      <div class="md:col-span-5">
+        <p class="eyebrow reveal">Socio fundador</p>
+        <div class="mt-10 aspect-[4/5] overflow-hidden bg-surface-soft reveal">
+          <img
+            src={founder.photo}
+            alt={`Retrato de ${founder.name}`}
+            class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 md:pt-12">
+        <h2 class="font-display text-4xl md:text-6xl leading-[1.05] reveal">{founder.name}</h2>
+        <p class="mt-3 text-sm text-fg-accent uppercase tracking-[var(--tracking-eyebrow)] reveal">
+          {founder.role}
+        </p>
+        <p class="mt-10 text-base md:text-lg text-fg-soft leading-relaxed reveal">
+          {founder.bio}
+        </p>
+
+        <div class="mt-10 pt-8 border-t border-line reveal">
+          <p class="eyebrow">Credenciales</p>
+          <ul class="mt-6 space-y-3">
+            {founder.credentials.map((credential) => (
+              <li class="flex items-start gap-3 text-sm md:text-base text-fg-soft">
+                <span class="text-fg-accent mt-1">—</span>
+                <span>{credential}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface-soft">
+    <div class="container-x py-24 md:py-32">
+      <div class="flex items-end justify-between mb-16 md:mb-20">
+        <div class="max-w-2xl">
+          <p class="eyebrow reveal">El equipo</p>
+          <h2 class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal">
+            Abogados que dedican su carrera a entender, no solo a litigar.
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16 md:gap-y-20">
+        {otherMembers.map((member) => (
+          <article class="flex flex-col reveal">
+            <div class="aspect-[4/5] overflow-hidden bg-surface mb-8">
+              <img
+                src={member.photo}
+                alt={`Retrato de ${member.name}`}
+                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                loading="lazy"
+              />
+            </div>
+            <h3 class="font-display text-2xl md:text-3xl leading-[1.1]">{member.name}</h3>
+            <p class="mt-2 text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+              {member.role}
+            </p>
+            <p class="mt-5 text-sm text-fg-muted leading-relaxed">
+              {member.bio}
+            </p>
+            <ul class="mt-6 pt-6 border-t border-line space-y-2 text-xs text-fg-muted">
+              {member.credentials.map((credential) => (
+                <li>— {credential}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-24 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">Trabajar con nosotros</p>
+        <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
+          Si cree que somos el estudio adecuado para acompañar su operación,<br class="hidden md:block" />
+          conversemos.
+        </h2>
+      </div>
+      <div class="md:col-span-4 md:text-right reveal">
+        <Button href="/contacto">Agendar consulta</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

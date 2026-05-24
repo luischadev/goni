@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────
+   PALETTE (PRIMITIVES)
+
+   Source of truth for raw color values. These live in :root and
+   are NOT exposed as Tailwind utilities. Components must consume
+   semantic tokens, never primitives.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --palette-ink:          #0f1822;
+  --palette-ink-soft:     #2a3340;
+  --palette-stone-deep:   #4a525d;
+  --palette-stone:        #8a8f99;
+  --palette-hairline:     #e3e1dc;
+  --palette-cream:        #f6f3ee;
+  --palette-paper:        #fbfaf7;
+  --palette-bronze:       #8a6a3f;
+  --palette-bronze-soft:  #b89a6c;
+}
+
+@theme {
+  /* ────────────────────────────────────────────────────────────
+     SURFACES — backgrounds.
+     Tailwind utilities: bg-surface, bg-surface-soft,
+     bg-surface-inverse, bg-surface-inverse-soft
+     ──────────────────────────────────────────────────────────── */
+  --color-surface:              var(--palette-paper);     /* page */
+  --color-surface-soft:         var(--palette-cream);     /* alt. sections / cards */
+  --color-surface-inverse:      var(--palette-ink);       /* dark sections, footer */
+  --color-surface-inverse-soft: var(--palette-ink-soft);  /* hover on dark / primary CTAs */
+
+  /* ────────────────────────────────────────────────────────────
+     FOREGROUND (text).
+     Tailwind utilities: text-fg, text-fg-soft, text-fg-muted,
+     text-fg-subtle, text-fg-accent, text-fg-on-inverse,
+     text-fg-on-inverse-accent
+     ──────────────────────────────────────────────────────────── */
+  --color-fg:                    var(--palette-ink);         /* headings, default text */
+  --color-fg-soft:               var(--palette-ink-soft);    /* article body */
+  --color-fg-muted:              var(--palette-stone-deep);  /* leads, descriptions */
+  --color-fg-subtle:             var(--palette-stone);       /* metadata, breadcrumbs */
+  --color-fg-accent:             var(--palette-bronze);      /* numbers, hover accents */
+  --color-fg-on-inverse:         var(--palette-cream);       /* text on dark */
+  --color-fg-on-inverse-accent:  var(--palette-bronze-soft); /* accent on dark */
+
+  /* ────────────────────────────────────────────────────────────
+     LINES — borders & separators.
+     Tailwind utilities: border-line, border-line-strong,
+     border-line-on-inverse, divide-line, outline-line-strong
+     ──────────────────────────────────────────────────────────── */
+  --color-line:             var(--palette-hairline);  /* default hairline separator */
+  --color-line-strong:      var(--palette-ink);       /* CTA underlines, active state */
+  --color-line-on-inverse:  var(--palette-cream);     /* separator on dark */
+
+  /* ────────────────────────────────────────────────────────────
+     TYPOGRAPHY
+     ──────────────────────────────────────────────────────────── */
+  --font-display: "Gilda Display", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --tracking-display: -0.015em;
+  --tracking-eyebrow: 0.22em;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+    font-feature-settings: "ss01", "cv11";
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: var(--tracking-display);
+    color: var(--color-fg);
+    line-height: 1.1;
+  }
+
+  ::selection {
+    background-color: var(--color-surface-inverse);
+    color: var(--color-fg-on-inverse);
+  }
+}
+
+@layer components {
+  .container-x {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    max-width: 80rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-x {
+      padding-inline: 4rem;
+    }
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--color-fg-muted);
+  }
+
+  .rule {
+    height: 1px;
+    background-color: var(--color-line);
+    width: 100%;
+  }
+
+  .link-underline {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 2px;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform-origin: right;
+    transform: scaleX(1);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after {
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: link-redraw 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes link-redraw {
+    0% { transform-origin: right; transform: scaleX(1); }
+    50% { transform-origin: right; transform: scaleX(0); }
+    50.01% { transform-origin: left; transform: scaleX(0); }
+    100% { transform-origin: left; transform: scaleX(1); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.9s ease-out, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
