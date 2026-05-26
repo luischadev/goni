@@ -7,7 +7,7 @@ const focusRingInverse =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-on-inverse";
 
 export const buttonBase =
-  "inline-flex items-center justify-center gap-2 text-sm tracking-wide transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 text-md font-medium tracking-wide transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
 
 export const buttonVariants = {
   primary: {
@@ -32,7 +32,7 @@ export const buttonSizes = {
 } as const;
 
 export const textLinkBase =
-  "inline-flex items-center gap-2 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "inline-flex items-center gap-2 text-md font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 export const textLinkVariants = {
   default: `${textLinkBase} ${focusRing} text-fg border-b border-line-strong pb-1 hover:gap-3 active:opacity-80`,

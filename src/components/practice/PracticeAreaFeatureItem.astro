@@ -1,0 +1,31 @@
+---
+import type { PracticeAreaFeature } from "../../lib/types";
+
+interface Props {
+  feature: PracticeAreaFeature;
+  class?: string;
+}
+
+const { feature, class: className = "" } = Astro.props;
+---
+
+<article
+  class={`py-10 md:py-14 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 ${className}`}
+>
+  <img
+    src={feature.icon.url}
+    alt={feature.icon.alt ?? ""}
+    loading="lazy"
+    decoding="async"
+    class="h-9 w-9 shrink-0 opacity-45 md:col-span-2"
+  />
+
+  <div class="md:col-span-10">
+    <h3 class="font-sans text-xl md:text-2xl font-medium leading-snug tracking-[-0.02em] text-fg">
+      {feature.title}
+    </h3>
+    <p class="mt-4 max-w-xl text-base leading-relaxed text-fg-muted">
+      {feature.description}
+    </p>
+  </div>
+</article>

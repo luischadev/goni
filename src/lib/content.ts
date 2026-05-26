@@ -30,7 +30,7 @@ export const homeHero: HeroContent = {
   title: "Defensa legal para riesgos complejos.",
   subtitle:
     "Rigor técnico, profundidad jurídica y resultados consistentes.",
-  overlayOpacity: 80,
+  overlayOpacity: 75,
   backgroundImage: {
     url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
     alt: "Buques de carga en mar en calma",
@@ -49,6 +49,36 @@ export const indicators: Indicator[] = [
   { value: "LATAM", label: "Cobertura internacional con aseguradores y brokers" },
 ];
 
+const sharedPracticeAreaFeatures = [
+  {
+    title: "Diagnóstico técnico desde el inicio",
+    description:
+      "Ordenamos hechos, pólizas, contratos y evidencia para definir una estrategia clara antes de avanzar.",
+    icon: {
+      url: "/icons/practice/focus.svg",
+      alt: "",
+    },
+  },
+  {
+    title: "Criterio jurídico aplicable al negocio",
+    description:
+      "Traducimos la complejidad legal en decisiones comprensibles para equipos legales, técnicos y operacionales.",
+    icon: {
+      url: "/icons/practice/clarity.svg",
+      alt: "",
+    },
+  },
+  {
+    title: "Seguimiento con foco en resultado",
+    description:
+      "Gestionamos cada asunto con trazabilidad, prioridades definidas y comunicación permanente con el cliente.",
+    icon: {
+      url: "/icons/practice/layers.svg",
+      alt: "",
+    },
+  },
+];
+
 export const practiceAreas: PracticeArea[] = [
   {
     slug: "seguros-y-reaseguros",
@@ -60,8 +90,8 @@ export const practiceAreas: PracticeArea[] = [
       "Acompañamos a compañías de seguros y reaseguros en la totalidad del ciclo de la póliza: desde la estructuración de programas hasta la defensa frente a reclamos y disputas técnicas.",
     body: [
       "Nuestra práctica nace de un conocimiento profundo del negocio asegurador y de su lógica contractual. Trabajamos con aseguradores nacionales e internacionales, brokers y reaseguradores, asesorando en pólizas de transporte, casco y maquinaria, construcción y montaje, responsabilidad civil y líneas técnicas.",
-      "El estudio combina práctica forense con experiencia académica en seguros, lo que nos permite traducir cláusulas técnicas en argumentos jurídicos sólidos y defender la posición del asegurador en sede judicial y arbitral con criterios consistentes.",
     ],
+    features: sharedPracticeAreaFeatures,
     highlights: [
       "Defensa de reclamos de cobertura",
       "Análisis y opinión legal sobre pólizas",
@@ -87,6 +117,7 @@ export const practiceAreas: PracticeArea[] = [
       "Asesoramos a aseguradoras y concesionarias en acciones de subrogación contra terceros responsables, integrando gestión judicial y extrajudicial. Aplicamos métricas de seguimiento, tiempos de resolución y montos recuperados que el cliente puede consultar de forma transparente.",
       "Nuestra experiencia abarca recuperos en siniestros de transporte marítimo, terrestre, aéreo, robo, daños a infraestructura vial y responsabilidad civil de terceros.",
     ],
+    features: sharedPracticeAreaFeatures,
     highlights: [
       "Recupero judicial y extrajudicial",
       "Gestión de carteras masivas",
@@ -111,6 +142,7 @@ export const practiceAreas: PracticeArea[] = [
       "Combinamos análisis técnico-pericial con argumentación jurídica para articular defensas robustas frente a reclamos individuales y colectivos. Trabajamos coordinadamente con peritos, ajustadores y equipos de operaciones del cliente.",
       "Hemos representado intereses en casos de daños a la propiedad, accidentes de transporte, responsabilidad de producto, riesgos operacionales y responsabilidad civil de directores y administradores.",
     ],
+    features: sharedPracticeAreaFeatures,
     highlights: [
       "Defensa frente a demandas indemnizatorias",
       "Estrategias de transacción",
@@ -136,6 +168,7 @@ export const practiceAreas: PracticeArea[] = [
       "Asesoramos en contratos de fletamento, conocimientos de embarque, contratos de transporte multimodal y operaciones portuarias. Representamos a navieras, operadores logísticos, cargadores, terminales y aseguradores ante tribunales chilenos y en arbitrajes internacionales.",
       "Nuestra inserción en el ecosistema marítimo-portuario nos permite anticipar riesgos, coordinar con surveyors y P&I Clubs, y articular estrategias eficientes en siniestros complejos.",
     ],
+    features: sharedPracticeAreaFeatures,
     highlights: [
       "Contratos de fletamento y transporte",
       "Defensa en averías gruesas y particulares",
@@ -161,6 +194,7 @@ export const practiceAreas: PracticeArea[] = [
       "Asesoramos en constitución y reorganización de sociedades, negociación y redacción de contratos comerciales, joint ventures, compraventa de activos y operaciones transfronterizas. Trabajamos coordinadamente con asesores en otras jurisdicciones cuando la operación lo requiere.",
       "Nuestra mirada está puesta en industrias de alta exigencia regulatoria: seguros, transporte, logística e infraestructura.",
     ],
+    features: sharedPracticeAreaFeatures,
     highlights: [
       "Contratos comerciales complejos",
       "Operaciones transfronterizas",
@@ -185,6 +219,7 @@ export const practiceAreas: PracticeArea[] = [
       "Asumimos casos donde la complejidad técnica y la exposición patrimonial requieren un equipo con experiencia probada. Definimos estrategias procesales claras desde el inicio, evaluando alternativas de transacción cuando agregan valor al cliente.",
       "Tenemos experiencia en juicios ordinarios, sumarios, ejecutivos, arbitrales y procedimientos especiales aplicables a seguros y transporte.",
     ],
+    features: sharedPracticeAreaFeatures,
     highlights: [
       "Litigios civiles y comerciales",
       "Arbitrajes nacionales e internacionales",

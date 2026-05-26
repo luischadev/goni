@@ -57,6 +57,16 @@ function resolvePublication(publication: Publication): Publication {
   };
 }
 
+function resolvePracticeArea(area: PracticeArea): PracticeArea {
+  return {
+    ...area,
+    features: area.features?.map((feature) => ({
+      ...feature,
+      icon: resolveMediaAsset(feature.icon),
+    })),
+  };
+}
+
 /**
  * CMS adapter.
  *
@@ -82,11 +92,12 @@ export const cms = {
   },
 
   async getPracticeAreas(): Promise<PracticeArea[]> {
-    return getPracticeAreas();
+    return getPracticeAreas().map(resolvePracticeArea);
   },
 
   async getPracticeAreaBySlug(slug: string): Promise<PracticeArea | undefined> {
-    return getPracticeAreaBySlug(slug);
+    const area = getPracticeAreaBySlug(slug);
+    return area ? resolvePracticeArea(area) : undefined;
   },
 
   async getPublications(): Promise<Publication[]> {

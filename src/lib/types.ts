@@ -14,6 +14,12 @@ export interface HeroContent {
   backgroundVideo?: MediaAsset;
 }
 
+export interface PracticeAreaFeature {
+  title: string;
+  description: string;
+  icon: MediaAsset;
+}
+
 export interface PracticeArea {
   slug: string;
   title: string;
@@ -21,6 +27,7 @@ export interface PracticeArea {
   number: string;
   intro: string;
   body: string[];
+  features?: PracticeAreaFeature[];
   highlights: string[];
   industries: string[];
 }
