@@ -27,7 +27,7 @@ export const siteSettings: SiteSettings = {
 };
 
 export const homeHero: HeroContent = {
-  title: "Defensa legal para riesgos complejos.",
+  title: "Defensa legal para riesgos complejos",
   subtitle:
     "Rigor técnico, profundidad jurídica y resultados consistentes.",
   overlayOpacity: 75,
@@ -35,9 +35,9 @@ export const homeHero: HeroContent = {
     url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
     alt: "Buques de carga en mar en calma",
   },
-  // Path relative to PUBLIC_MEDIA_BASE_URL. Omitted at runtime until CDN is configured.
+  // Path relative to PUBLIC_MEDIA_BASE_URL (R2 / CDN).
   backgroundVideo: {
-    url: "/videos/container-port-hero.mp4",
+    url: "/container-port-hero.mp4",
     mimeType: "video/mp4",
   },
 };
