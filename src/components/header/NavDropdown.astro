@@ -1,0 +1,80 @@
+---
+import type { NavItem as NavItemType } from "../../lib/types";
+
+interface Props {
+  id: string;
+  variant: "desktop" | "mobile";
+  items: NavItemType[];
+  parent: NavItemType;
+}
+
+const { id, variant, items, parent } = Astro.props;
+---
+
+{variant === "desktop" ? (
+  <div
+    id={id}
+    data-nav-panel={id}
+    hidden
+    class="nav-dropdown fixed inset-x-0 top-20 md:top-24 z-[60] border-t border-line bg-surface text-fg shadow-sm"
+  >
+    <div class="container-x py-12 grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div class="md:col-span-4">
+        <p class="eyebrow">{parent.label}</p>
+        {parent.href && (
+          <a
+            href={parent.href}
+            class="mt-6 inline-flex items-center gap-2 text-sm tracking-wide border-b border-line-strong pb-1 hover:gap-3 transition-all text-fg"
+          >
+            Ver todas
+            <span aria-hidden="true">→</span>
+          </a>
+        )}
+      </div>
+
+      <ul class="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+        {items.map((child) => (
+          <li>
+            <a
+              href={child.href}
+              class="group block py-1 transition-colors"
+            >
+              <span class="block text-base font-medium text-fg group-hover:text-fg-accent transition-colors">
+                {child.label}
+              </span>
+              {child.description && (
+                <span class="block mt-1 text-sm text-fg-muted leading-relaxed">
+                  {child.description}
+                </span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+) : (
+  <div
+    id={id}
+    data-nav-panel={id}
+    hidden
+    class="nav-dropdown mt-3 pl-4 border-l border-line space-y-3"
+  >
+    {parent.href && (
+      <a
+        href={parent.href}
+        class="block text-sm text-fg-muted hover:text-fg"
+      >
+        Ver todas
+      </a>
+    )}
+    {items.map((child) => (
+      <a
+        href={child.href}
+        class="block text-sm text-fg-muted hover:text-fg"
+      >
+        {child.label}
+      </a>
+    ))}
+  </div>
+)}

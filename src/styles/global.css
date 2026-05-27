@@ -227,6 +227,23 @@
     -webkit-backdrop-filter: none;
   }
 
+  /* Cuando hay un dropdown abierto, el header vuelve al look sólido
+     para mantener la coherencia con el panel claro del menú. */
+  .header[data-dropdown-open="true"] {
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+    border-bottom-color: var(--color-line);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .header[data-dropdown-open="true"] .header-logo {
+    filter: none;
+  }
+
+  .nav-dropdown[hidden] {
+    display: none !important;
+  }
+
   .header[data-hidden="true"] {
     transform: translateY(-100%);
   }

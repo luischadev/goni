@@ -1,0 +1,77 @@
+---
+import NavDropdown from "./NavDropdown.astro";
+import type { NavItem as NavItemType } from "../../lib/types";
+
+interface Props {
+  item: NavItemType;
+  variant: "desktop" | "mobile";
+  active: boolean;
+  id: string;
+}
+
+const { item, variant, active, id } = Astro.props;
+const hasChildren = Boolean(item.children && item.children.length > 0);
+
+const desktopLinkClasses = `text-[13px] tracking-wide transition-opacity ${
+  active ? "opacity-100" : "opacity-60 hover:opacity-100"
+}`;
+
+const mobileLinkClasses = `text-base ${
+  active ? "text-fg" : "text-fg-muted"
+}`;
+
+const desktopTriggerClasses = `inline-flex items-center gap-1.5 text-[13px] tracking-wide transition-opacity cursor-pointer ${
+  active ? "opacity-100" : "opacity-60 hover:opacity-100"
+}`;
+
+const mobileTriggerClasses = `flex w-full items-center justify-between text-base cursor-pointer ${
+  active ? "text-fg" : "text-fg-muted"
+}`;
+---
+
+{hasChildren ? (
+  <div
+    class={variant === "desktop" ? "nav-group relative" : "nav-group"}
+    data-nav-group={id}
+  >
+    <button
+      type="button"
+      class={variant === "desktop" ? desktopTriggerClasses : mobileTriggerClasses}
+      data-nav-toggle={id}
+      aria-expanded="false"
+      aria-controls={id}
+    >
+      <span class="inline-block">
+        <span>{item.label}</span>
+        {variant === "desktop" && active && (
+          <span class="block h-px w-full bg-current mt-1" aria-hidden="true" />
+        )}
+      </span>
+      <span
+        class="nav-caret material-symbols-sharp text-base leading-none transition-transform"
+        aria-hidden="true"
+      >
+        expand_more
+      </span>
+    </button>
+
+    <NavDropdown
+      id={id}
+      variant={variant}
+      items={item.children!}
+      parent={item}
+    />
+  </div>
+) : (
+  <a
+    href={item.href}
+    class={variant === "desktop" ? desktopLinkClasses : mobileLinkClasses}
+  >
+    <span class="inline-block">
+      <span>{item.label}</span>
+      {variant === "desktop" && active && (
+        <span class="block h-px w-full bg-current mt-1" aria-hidden="true" />
+      )}
+    </span>
+  </a>
+)}

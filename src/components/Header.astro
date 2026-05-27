@@ -1,5 +1,6 @@
 ---
 import { cms } from "../lib/cms";
+import NavMenu from "./header/NavMenu.astro";
 
 /**
  * Header
@@ -24,6 +25,10 @@ import { cms } from "../lib/cms";
  *                            considera "scrolled" (cambio de look). El
  *                            auto-hide solo arranca después del doble de
  *                            ese valor para evitar saltos cerca del top.
+ *
+ * Los ítems del menú vienen de `cms.getMainNav()` para que estén listos
+ * para Strapi/CMS. Cada ítem puede tener `children`: si los tiene, el item
+ * se comporta como un trigger de dropdown (click); si no, navega directo.
  */
 interface Props {
   variant?: "solid" | "transparent";
@@ -37,31 +42,22 @@ const {
   scrollThreshold = 80,
 } = Astro.props;
 
-const settings = await cms.getSiteSettings();
+const [settings, navItems] = await Promise.all([
+  cms.getSiteSettings(),
+  cms.getMainNav(),
+]);
 const currentPath = Astro.url.pathname;
-
-const navItems = [
-  { href: "/areas-de-practica", label: "Áreas de práctica" },
-  { href: "/publicaciones", label: "Publicaciones" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/contacto", label: "Contacto" },
-];
-
-function isActive(href: string): boolean {
-  if (href === "/") return currentPath === "/";
-  return currentPath.startsWith(href);
-}
 ---
 
 <header
-  class="header fixed inset-x-0 top-0 z-50"
+  class="header fixed inset-x-0 top-0 z-50 overflow-visible"
   data-variant={variant}
   data-scrolled="false"
   data-hidden="false"
   data-autohide={String(autoHide)}
   data-threshold={scrollThreshold}
 >
-  <div class="container-x flex items-center justify-between py-6 md:py-7">
+  <div class="container-x flex items-center justify-between py-6 md:py-7 overflow-visible">
     <a href="/" class="block shrink-0" aria-label={`${settings.name} — Inicio`}>
       <img
         src="/goni-abogados-logo.png"
@@ -72,21 +68,7 @@ function isActive(href: string): boolean {
       />
     </a>
 
-    <nav class="hidden md:flex items-center gap-9" aria-label="Navegación principal">
-      {navItems.map((item) => (
-        <a
-          href={item.href}
-          class={`text-[13px] tracking-wide transition-opacity ${
-            isActive(item.href) ? "opacity-100" : "opacity-60 hover:opacity-100"
-          }`}
-        >
-          {item.label}
-          {isActive(item.href) && (
-            <span class="block h-px w-full bg-current mt-1"></span>
-          )}
-        </a>
-      ))}
-    </nav>
+    <NavMenu items={navItems} variant="desktop" currentPath={currentPath} />
 
     <a
       href="/contacto"
@@ -115,23 +97,16 @@ function isActive(href: string): boolean {
     id="mobile-menu"
     class="md:hidden hidden border-t border-line bg-surface text-fg"
   >
-    <nav class="container-x flex flex-col py-6 gap-5" aria-label="Navegación móvil">
-      {navItems.map((item) => (
-        <a
-          href={item.href}
-          class={`text-base ${isActive(item.href) ? "text-fg" : "text-fg-muted"}`}
-        >
-          {item.label}
-        </a>
-      ))}
+    <div class="container-x py-6">
+      <NavMenu items={navItems} variant="mobile" currentPath={currentPath} />
       <a
         href="/contacto"
-        class="mt-2 self-start inline-flex items-center gap-2 text-sm tracking-wide border-b border-line-strong pb-1 text-fg"
+        class="mt-6 self-start inline-flex items-center gap-2 text-sm tracking-wide border-b border-line-strong pb-1 text-fg"
       >
         Agendar consulta
         <span aria-hidden="true">→</span>
       </a>
-    </nav>
+    </div>
   </div>
 </header>
 
@@ -144,12 +119,81 @@ function isActive(href: string): boolean {
   const toggle = document.getElementById("menu-toggle");
   const menu = document.getElementById("mobile-menu");
 
+  // Mobile menu toggle
   toggle?.addEventListener("click", () => {
     const isOpen = !menu?.classList.contains("hidden");
     menu?.classList.toggle("hidden");
     toggle.setAttribute("aria-expanded", String(!isOpen));
   });
 
+  // Nav dropdowns (click to open/close, single open at a time)
+  const navTriggers = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-nav-toggle]")
+  );
+
+  function getPanelForTrigger(btn: HTMLButtonElement): HTMLElement | null {
+    const group = btn.closest("[data-nav-group]");
+    return group?.querySelector<HTMLElement>("[data-nav-panel]") ?? null;
+  }
+
+  function closeAllDropdowns() {
+    navTriggers.forEach((btn) => {
+      btn.setAttribute("aria-expanded", "false");
+      const panel = getPanelForTrigger(btn);
+      if (panel) {
+        panel.hidden = true;
+        panel.setAttribute("hidden", "");
+      }
+      const caret = btn.querySelector<HTMLElement>(".nav-caret");
+      if (caret) caret.style.transform = "";
+    });
+    header?.removeAttribute("data-dropdown-open");
+  }
+
+  function isAnyDropdownOpen(): boolean {
+    return navTriggers.some(
+      (btn) => btn.getAttribute("aria-expanded") === "true"
+    );
+  }
+
+  navTriggers.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const panel = getPanelForTrigger(btn);
+      if (!panel) return;
+
+      const wasOpen = btn.getAttribute("aria-expanded") === "true";
+      closeAllDropdowns();
+
+      if (!wasOpen) {
+        btn.setAttribute("aria-expanded", "true");
+        panel.hidden = false;
+        panel.removeAttribute("hidden");
+        const caret = btn.querySelector<HTMLElement>(".nav-caret");
+        if (caret) caret.style.transform = "rotate(180deg)";
+        header?.setAttribute("data-dropdown-open", "true");
+      }
+    });
+  });
+
+  // Close dropdowns when clicking outside (deferred so open-click doesn't immediately close)
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+    if (target.closest("[data-nav-toggle]")) return;
+    if (target.closest("[data-nav-group]")) return;
+    if (target.closest("[data-nav-panel]")) return;
+    closeAllDropdowns();
+  });
+
+  // Close dropdowns on Escape
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeAllDropdowns();
+  });
+
+  // Header scroll behavior
   if (header) {
     const threshold = Number(header.dataset.threshold) || 80;
     const autoHide = header.dataset.autohide === "true";
@@ -157,7 +201,7 @@ function isActive(href: string): boolean {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    const isMenuOpen = () =>
+    const isMobileMenuOpen = () =>
       menu instanceof HTMLElement && !menu.classList.contains("hidden");
 
     let lastY = window.scrollY;
@@ -168,7 +212,9 @@ function isActive(href: string): boolean {
 
       header.dataset.scrolled = y > threshold ? "true" : "false";
 
-      if (autoHide && !isMenuOpen() && !reduceMotion && y > threshold * 2) {
+      const blockHide = isMobileMenuOpen() || isAnyDropdownOpen();
+
+      if (autoHide && !blockHide && !reduceMotion && y > threshold * 2) {
         if (y > lastY + 4) header.dataset.hidden = "true";
         else if (y < lastY - 4) header.dataset.hidden = "false";
       } else {

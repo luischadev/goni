@@ -32,7 +32,7 @@ export const buttonSizes = {
 } as const;
 
 export const textLinkBase =
-  "inline-flex items-center gap-2 text-md font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "inline-flex items-center gap-2 font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 export const textLinkVariants = {
   default: `${textLinkBase} ${focusRing} text-fg border-b border-line-strong pb-1 hover:gap-3 active:opacity-80`,
@@ -44,5 +44,6 @@ export const textLinkVariants = {
 export const textLinkSizes = {
   sm: "text-xs tracking-wide",
   md: "text-sm tracking-wide",
-  lg: "text-sm md:text-base tracking-wide",
+  lg: "text-base tracking-wide",
+  xl: "text-lg md:text-xl tracking-wide",
 } as const;

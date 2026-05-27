@@ -67,6 +67,13 @@ export interface Indicator {
   label: string;
 }
 
+export interface NavItem {
+  label: string;
+  href?: string;
+  description?: string;
+  children?: NavItem[];
+}
+
 export interface SiteSettings {
   name: string;
   legalName: string;

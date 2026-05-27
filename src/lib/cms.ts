@@ -17,6 +17,7 @@ import {
 import type {
   HeroContent,
   Indicator,
+  NavItem,
   PracticeArea,
   Publication,
   SiteSettings,
@@ -112,6 +113,25 @@ export const cms = {
 
   async getTestimonials(): Promise<Testimonial[]> {
     return getTestimonials();
+  },
+
+  async getMainNav(): Promise<NavItem[]> {
+    const areas = getPracticeAreas().map(resolvePracticeArea);
+
+    return [
+      {
+        label: "Áreas de práctica",
+        href: "/areas-de-practica",
+        children: areas.map((area) => ({
+          label: area.title,
+          href: `/areas-de-practica/${area.slug}`,
+          description: area.shortDescription,
+        })),
+      },
+      { label: "Publicaciones", href: "/publicaciones" },
+      { label: "Nosotros", href: "/nosotros" },
+      { label: "Contacto", href: "/contacto" },
+    ];
   },
 };
 

@@ -1,0 +1,46 @@
+---
+import NavItem from "./NavItem.astro";
+import type { NavItem as NavItemType } from "../../lib/types";
+
+interface Props {
+  items: NavItemType[];
+  variant: "desktop" | "mobile";
+  currentPath: string;
+}
+
+const { items, variant, currentPath } = Astro.props;
+
+function isActive(item: NavItemType): boolean {
+  if (item.href === "/") return currentPath === "/";
+  if (item.href && currentPath.startsWith(item.href)) return true;
+  return item.children?.some(isActive) ?? false;
+}
+
+function slugify(label: string): string {
+  return label
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+const navClass =
+  variant === "desktop"
+    ? "hidden md:flex items-center gap-9"
+    : "flex flex-col gap-5";
+
+const ariaLabel =
+  variant === "desktop" ? "Navegación principal" : "Navegación móvil";
+---
+
+<nav class={navClass} aria-label={ariaLabel}>
+  {items.map((item) => (
+    <NavItem
+      item={item}
+      variant={variant}
+      active={isActive(item)}
+      id={`nav-${variant}-${slugify(item.label)}`}
+    />
+  ))}
+</nav>

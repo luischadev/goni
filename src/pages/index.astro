@@ -56,7 +56,7 @@ const featuredPublications = publications.slice(0, 3);
   <section aria-labelledby="trust-indicators" class="border-y border-line bg-surface-soft">
     <h2 id="trust-indicators" class="sr-only">Indicadores de confianza</h2>
     <div class="container-x py-14 md:py-16">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 divide-y md:divide-y-0 md:divide-x divide-line">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 md:divide-x divide-line">
         {indicators.map((indicator, i) => (
           <div class={`reveal ${i > 0 ? "md:pl-10" : ""}`}>
             <div class="flex h-14 items-end md:h-16">
@@ -81,6 +81,24 @@ const featuredPublications = publications.slice(0, 3);
             </p>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="home-intro" class="container-x py-24 md:py-32 border-b border-line">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+      <div class="md:col-span-3">
+        <p class="eyebrow reveal">Una mirada experta</p>
+      </div>
+
+      <div class="md:col-span-8 md:col-start-5">
+        <h2 id="home-intro" class="font-display text-4xl md:text-6xl leading-[1.05] reveal">
+          Goñi & Cía. Abogados es un estudio especializado en riesgos complejos,
+          seguros y responsabilidad civil.
+        </h2>
+        <div class="mt-10 reveal">
+          <TextLink href="/nosotros" size="xl">Más sobre nosotros</TextLink>
+        </div>
       </div>
     </div>
   </section>
