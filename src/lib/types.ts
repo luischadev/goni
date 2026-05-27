@@ -17,7 +17,8 @@ export interface HeroContent {
 export interface PracticeAreaFeature {
   title: string;
   description: string;
-  icon: MediaAsset;
+  bullets?: string[];
+  icon: string;
 }
 
 export interface PracticeArea {

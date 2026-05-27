@@ -58,13 +58,7 @@ function resolvePublication(publication: Publication): Publication {
 }
 
 function resolvePracticeArea(area: PracticeArea): PracticeArea {
-  return {
-    ...area,
-    features: area.features?.map((feature) => ({
-      ...feature,
-      icon: resolveMediaAsset(feature.icon),
-    })),
-  };
+  return area;
 }
 
 /**

@@ -54,28 +54,62 @@ const sharedPracticeAreaFeatures = [
     title: "Diagnóstico técnico desde el inicio",
     description:
       "Ordenamos hechos, pólizas, contratos y evidencia para definir una estrategia clara antes de avanzar.",
-    icon: {
-      url: "/icons/practice/focus.svg",
-      alt: "",
-    },
+    bullets: [
+      "Revisión de pólizas, contratos y antecedentes clave",
+      "Identificación temprana de riesgos y escenarios",
+      "Definición de una estrategia de acción inicial",
+    ],
+    icon: "track_changes",
   },
   {
     title: "Criterio jurídico aplicable al negocio",
     description:
       "Traducimos la complejidad legal en decisiones comprensibles para equipos legales, técnicos y operacionales.",
-    icon: {
-      url: "/icons/practice/clarity.svg",
-      alt: "",
-    },
+    bullets: [
+      "Análisis alineado con la operación del cliente",
+      "Comunicación clara entre áreas legales y de negocio",
+      "Recomendaciones accionables, no solo teóricas",
+    ],
+    icon: "account_tree",
   },
   {
     title: "Seguimiento con foco en resultado",
     description:
       "Gestionamos cada asunto con trazabilidad, prioridades definidas y comunicación permanente con el cliente.",
-    icon: {
-      url: "/icons/practice/layers.svg",
-      alt: "",
-    },
+    bullets: [
+      "Hitos y prioridades definidos desde el inicio",
+      "Trazabilidad documental y de decisiones",
+      "Actualización permanente al cliente",
+    ],
+    icon: "timeline",
+  },
+  {
+    title: "Coordinación con equipos técnicos",
+    description:
+      "Integramos antecedentes de liquidadores, peritos, ajustadores y equipos internos para construir una visión completa del caso.",
+    bullets: [
+      "Levantamiento ordenado de información técnica",
+      "Coordinación con especialistas y contrapartes",
+      "Síntesis jurídica de hallazgos críticos",
+    ],
+    icon: "hub",
+  },
+  {
+    title: "Estrategia procesal y negociación",
+    description:
+      "Definimos rutas de acción que combinan análisis jurídico, oportunidad procesal y espacios de negociación cuando agregan valor.",
+    icon: "gavel",
+  },
+  {
+    title: "Comunicación ejecutiva",
+    description:
+      "Presentamos avances, riesgos y próximos pasos en formatos claros para que los equipos puedan tomar decisiones con rapidez.",
+    bullets: [
+      "Reportes breves orientados a decisión",
+      "Priorización de riesgos materiales",
+      "Lenguaje claro para comités y áreas de negocio",
+    ],
+    icon: "summarize",
   },
 ];
 

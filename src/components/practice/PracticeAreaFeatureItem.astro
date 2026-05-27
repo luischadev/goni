@@ -12,13 +12,12 @@ const { feature, class: className = "" } = Astro.props;
 <article
   class={`py-10 md:py-14 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 ${className}`}
 >
-  <img
-    src={feature.icon.url}
-    alt={feature.icon.alt ?? ""}
-    loading="lazy"
-    decoding="async"
-    class="h-9 w-9 shrink-0 opacity-45 md:col-span-2"
-  />
+  <span
+    class="material-symbols-sharp text-4xl leading-none text-fg-muted md:col-span-1"
+    aria-hidden="true"
+  >
+    {feature.icon}
+  </span>
 
   <div class="md:col-span-10">
     <h3 class="font-sans text-xl md:text-2xl font-medium leading-snug tracking-[-0.02em] text-fg">
@@ -27,5 +26,18 @@ const { feature, class: className = "" } = Astro.props;
     <p class="mt-4 max-w-xl text-base leading-relaxed text-fg-muted">
       {feature.description}
     </p>
+    {feature.bullets && feature.bullets.length > 0 && (
+      <ul class="mt-6 space-y-3 text-sm md:text-base leading-relaxed text-fg-muted">
+        {feature.bullets.map((bullet) => (
+          <li class="flex gap-3">
+            <span
+              class="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-fg-muted/50"
+              aria-hidden="true"
+            />
+            <span>{bullet}</span>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 </article>
