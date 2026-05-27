@@ -1,0 +1,35 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+  labelledBy?: string;
+}
+
+const { id, class: className = "", labelledBy } = Astro.props;
+---
+
+<section
+  id={id}
+  class={`scroll-stack-section ${className}`}
+  data-scroll-stack
+  aria-labelledby={labelledBy}
+>
+  <div class="container-x pt-28 md:pt-40 pb-12 md:pb-16">
+    <slot name="header" />
+  </div>
+
+  <div class="scroll-stack-stage">
+    <div class="container-x">
+      <div data-scroll-stack-track class="scroll-stack-track">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initScrollStacks } from "../../scripts/scroll-stack";
+
+  initScrollStacks();
+  document.addEventListener("astro:page-load", initScrollStacks);
+</script>

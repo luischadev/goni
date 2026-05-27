@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
-import PracticeAreaItem from "../components/practice/PracticeAreaItem.astro";
+import PracticeAreaStackSection from "../components/practice/PracticeAreaStackSection.astro";
 import PublicationItem from "../components/publications/PublicationItem.astro";
 import Button from "../components/ui/Button.astro";
 import TextLink from "../components/ui/TextLink.astro";
@@ -21,7 +21,6 @@ const featuredPublications = publications.slice(0, 3);
 ---
 
 <BaseLayout
-  title="Estudio jurídico boutique"
   description={settings.tagline}
   headerVariant="transparent"
 >
@@ -103,30 +102,7 @@ const featuredPublications = publications.slice(0, 3);
     </div>
   </section>
 
-  <section aria-labelledby="practice-areas" class="container-x py-28 md:py-40">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16 md:mb-24">
-      <div class="md:col-span-6">
-        <p class="eyebrow reveal">Áreas de práctica</p>
-        <h2 id="practice-areas" class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal">
-          Profundidad en los frentes donde se decide la operación.
-        </h2>
-      </div>
-      <div class="md:col-span-5 md:col-start-8 md:pt-4">
-        <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
-          Cada área del estudio combina práctica forense intensiva con
-          conocimiento técnico de la industria. Trabajamos cerca de los equipos
-          de operaciones de nuestros clientes para anticipar riesgos y construir
-          estrategias procesales eficientes.
-        </p>
-      </div>
-    </div>
-
-    <ul class="divide-y divide-line border-y border-line">
-      {areas.map((area) => (
-        <PracticeAreaItem area={area} variant="row" />
-      ))}
-    </ul>
-  </section>
+  <PracticeAreaStackSection areas={areas} />
 
   <section aria-labelledby="testimonials" class="bg-surface-inverse text-fg-on-inverse py-28 md:py-40">
     <div class="container-x">

@@ -266,4 +266,48 @@
       transform: none;
     }
   }
+
+  /* Stacking cards (scroll-stack) */
+  .scroll-stack-section {
+    --stack-sticky-top: 5.5rem;
+  }
+
+  .scroll-stack-stage {
+    position: relative;
+    padding-bottom: clamp(4rem, 12vh, 8rem);
+  }
+
+  .scroll-stack-track {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .scroll-stack-track {
+      gap: 1.5rem;
+    }
+  }
+
+  .scroll-stack-item {
+    position: sticky;
+    top: var(--stack-sticky-top);
+    will-change: transform;
+  }
+
+  .scroll-stack-item:not(:last-child) {
+    padding-bottom: clamp(5rem, 28vh, 14rem);
+  }
+
+  .scroll-stack--static .scroll-stack-item {
+    position: relative;
+    top: auto;
+    will-change: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-stack-item {
+      will-change: auto;
+    }
+  }
 }

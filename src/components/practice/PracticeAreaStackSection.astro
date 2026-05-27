@@ -1,0 +1,81 @@
+---
+import ScrollStackItem from "../stack/ScrollStackItem.astro";
+import ScrollStackSection from "../stack/ScrollStackSection.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { PracticeArea } from "../../lib/types";
+
+interface Props {
+  areas: PracticeArea[];
+}
+
+const { areas } = Astro.props;
+---
+
+<ScrollStackSection labelledBy="practice-areas">
+  <div slot="header">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+      <div class="md:col-span-6">
+        <p class="eyebrow reveal">Áreas de práctica</p>
+        <h2 id="practice-areas" class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal">
+          Profundidad en los frentes donde se decide la operación.
+        </h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8 md:pt-4">
+        <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          Cada área del estudio combina práctica forense intensiva con
+          conocimiento técnico de la industria. Trabajamos cerca de los equipos
+          de operaciones de nuestros clientes para anticipar riesgos y construir
+          estrategias procesales eficientes.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {
+    areas.map((area, index) => (
+      <ScrollStackItem index={index}>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+          <p class="font-display text-2xl md:text-3xl text-fg-accent md:col-span-2">
+            {area.number}
+          </p>
+
+          <div class="md:col-span-8">
+            <a
+              href={`/areas-de-practica/${area.slug}`}
+              class="group/title inline-block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong"
+            >
+              <h3 class="font-display text-5xl md:text-5xl leading-[0.98] tracking-[-0.03em] text-fg transition-colors group-hover/title:text-fg-accent">
+                {area.title}
+              </h3>
+            </a>
+
+            <p class="mt-10 max-w-4xl text-xl md:text-2xl text-fg leading-snug">
+              {area.shortDescription}
+            </p>
+
+            <p class="mt-10 flex flex-wrap items-center text-base md:text-md text-fg-muted leading-relaxed">
+              {area.industries.slice(0, 3).map((industry, industryIndex) => (
+                <>
+                  {industryIndex > 0 && (
+                    <span aria-hidden="true" class="mx-2">
+                      ·
+                    </span>
+                  )}
+                  <span>{industry}</span>
+                </>
+              ))}
+            </p>
+
+            <TextLink
+              href={`/areas-de-practica/${area.slug}`}
+              size="xl"
+              class="mt-10"
+            >
+              Más sobre el servicio
+            </TextLink>
+          </div>
+        </div>
+      </ScrollStackItem>
+    ))
+  }
+</ScrollStackSection>

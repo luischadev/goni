@@ -22,7 +22,10 @@ const {
   headerAutoHide = true,
 } = Astro.props;
 
-const pageTitle = title ? `${title} · ${settings.name}` : `${settings.name} · ${settings.legalName}`;
+const browserSiteName = "Goni";
+const isHome = Astro.url.pathname === "/";
+const pageTitle =
+  isHome || !title ? browserSiteName : `${title} · ${browserSiteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogados.cl").toString();
 ---
 

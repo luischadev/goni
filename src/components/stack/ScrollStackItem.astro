@@ -1,0 +1,34 @@
+---
+interface Props {
+  index: number;
+  href?: string;
+  class?: string;
+}
+
+const { index, href, class: className = "" } = Astro.props;
+
+const itemClass = ["scroll-stack-item", className]
+  .filter(Boolean)
+  .join(" ");
+
+const innerClass =
+  "block min-h-[28rem] md:min-h-[34rem] bg-surface p-8 shadow-[0_24px_80px_rgba(15,24,34,0.08)] md:p-14 lg:p-16";
+---
+
+<article
+  class={itemClass}
+  data-scroll-stack-item
+  style={`--stack-index: ${index}`}
+>
+  {
+    href ? (
+      <a href={href} class={innerClass} data-scroll-stack-panel>
+        <slot />
+      </a>
+    ) : (
+      <div class={innerClass} data-scroll-stack-panel>
+        <slot />
+      </div>
+    )
+  }
+</article>

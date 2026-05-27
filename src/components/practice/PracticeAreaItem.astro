@@ -59,13 +59,15 @@ const liClass = [reveal ? "reveal" : "", className].filter(Boolean).join(" ");
             <p class="mt-5 max-w-2xl text-base text-fg-muted leading-relaxed">
               {area.shortDescription}
             </p>
+            <div class="mt-6">
+              <p class="eyebrow mb-3 text-fg-subtle">Industrias</p>
+              <p class="text-sm text-fg-muted leading-snug">
+                {area.industries.slice(0, 3).join(" · ")}
+              </p>
+            </div>
           </div>
           <div class="col-span-12 md:col-span-4 md:text-right md:pl-6">
-            <p class="eyebrow mb-3 text-fg-subtle">Industrias</p>
-            <p class="text-sm text-fg-muted leading-snug">
-              {area.industries.slice(0, 3).join(" · ")}
-            </p>
-            <TextLink as="span" class="mt-6 group-hover:gap-3">
+            <TextLink as="span" class="group-hover:gap-3">
               Conocer más
             </TextLink>
           </div>

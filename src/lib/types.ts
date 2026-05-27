@@ -67,6 +67,11 @@ export interface Indicator {
   label: string;
 }
 
+export interface ScrollStackItemData {
+  id: string;
+  href?: string;
+}
+
 export interface NavItem {
   label: string;
   href?: string;
