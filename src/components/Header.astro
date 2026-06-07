@@ -1,6 +1,7 @@
 ---
 import { cms } from "../lib/cms";
 import NavMenu from "./header/NavMenu.astro";
+import TextLink from "./ui/TextLink.astro";
 
 /**
  * Header
@@ -70,13 +71,14 @@ const currentPath = Astro.url.pathname;
 
     <NavMenu items={navItems} variant="desktop" currentPath={currentPath} />
 
-    <a
+    <TextLink
       href="/contacto"
-      class="hidden md:inline-flex w-[8.5rem] justify-end items-center gap-2 text-[13px] tracking-wide border-b border-current pb-1 transition-all hover:gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+      variant="current"
+      size="md"
+      class="max-md:hidden md:inline-flex hover:text-[var(--header-nav-hover)]"
     >
       Agendar consulta
-      <span aria-hidden="true">→</span>
-    </a>
+    </TextLink>
 
     <button
       type="button"
@@ -95,17 +97,13 @@ const currentPath = Astro.url.pathname;
 
   <div
     id="mobile-menu"
-    class="md:hidden hidden border-t border-line bg-surface text-fg"
+    class="md:hidden hidden border-t border-line bg-surface text-fg h-[calc(100dvh-5rem)] overflow-y-auto"
   >
-    <div class="container-x py-6">
+    <div class="container-x py-8">
       <NavMenu items={navItems} variant="mobile" currentPath={currentPath} />
-      <a
-        href="/contacto"
-        class="mt-6 self-start inline-flex items-center gap-2 text-sm tracking-wide border-b border-line-strong pb-1 text-fg"
-      >
+      <TextLink href="/contacto" size="xl" class="mt-8">
         Agendar consulta
-        <span aria-hidden="true">→</span>
-      </a>
+      </TextLink>
     </div>
   </div>
 </header>
@@ -124,30 +122,80 @@ const currentPath = Astro.url.pathname;
     const isOpen = !menu?.classList.contains("hidden");
     menu?.classList.toggle("hidden");
     toggle.setAttribute("aria-expanded", String(!isOpen));
+    // Header transparente → sólido cuando se abre el menú móvil
+    if (!isOpen) {
+      header?.setAttribute("data-mobile-menu-open", "true");
+    } else {
+      header?.removeAttribute("data-mobile-menu-open");
+    }
   });
 
   // Nav dropdowns (click to open/close, single open at a time)
   const navTriggers = Array.from(
     document.querySelectorAll<HTMLButtonElement>("[data-nav-toggle]")
   );
+  let dropdownOpenTimer: number | undefined;
+  const dropdownTransitionMs = 280;
+  const dropdownHeaderGapMs = 120;
 
   function getPanelForTrigger(btn: HTMLButtonElement): HTMLElement | null {
     const group = btn.closest("[data-nav-group]");
     return group?.querySelector<HTMLElement>("[data-nav-panel]") ?? null;
   }
 
-  function closeAllDropdowns() {
+  function isHeaderTransparentAtTop(): boolean {
+    return (
+      header?.dataset.variant === "transparent" &&
+      header?.dataset.scrolled === "false" &&
+      !header.hasAttribute("data-dropdown-open")
+    );
+  }
+
+  function revealDropdownPanel(panel: HTMLElement) {
+    panel.hidden = false;
+    panel.removeAttribute("hidden");
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        panel.setAttribute("data-open", "true");
+      });
+    });
+  }
+
+  function hideDropdownPanel(panel: HTMLElement) {
+    panel.removeAttribute("data-open");
+
+    window.setTimeout(() => {
+      if (panel.getAttribute("data-open") === "true") return;
+      panel.hidden = true;
+      panel.setAttribute("hidden", "");
+    }, dropdownTransitionMs);
+  }
+
+  function closeAllDropdowns({ preserveHeader = false, delayHeaderReset = false } = {}) {
+    if (dropdownOpenTimer) {
+      window.clearTimeout(dropdownOpenTimer);
+      dropdownOpenTimer = undefined;
+    }
+
     navTriggers.forEach((btn) => {
       btn.setAttribute("aria-expanded", "false");
       const panel = getPanelForTrigger(btn);
       if (panel) {
-        panel.hidden = true;
-        panel.setAttribute("hidden", "");
+        hideDropdownPanel(panel);
       }
       const caret = btn.querySelector<HTMLElement>(".nav-caret");
       if (caret) caret.style.transform = "";
     });
-    header?.removeAttribute("data-dropdown-open");
+    if (!preserveHeader) {
+      if (delayHeaderReset) {
+        window.setTimeout(() => {
+          if (isAnyDropdownOpen()) return;
+          header?.removeAttribute("data-dropdown-open");
+        }, dropdownHeaderGapMs);
+      } else {
+        header?.removeAttribute("data-dropdown-open");
+      }
+    }
   }
 
   function isAnyDropdownOpen(): boolean {
@@ -165,15 +213,27 @@ const currentPath = Astro.url.pathname;
       if (!panel) return;
 
       const wasOpen = btn.getAttribute("aria-expanded") === "true";
-      closeAllDropdowns();
+      const hadOpenDropdown = isAnyDropdownOpen();
+      const shouldWaitForHeader = !hadOpenDropdown && isHeaderTransparentAtTop();
+      closeAllDropdowns({
+        preserveHeader: !wasOpen && hadOpenDropdown,
+        delayHeaderReset: wasOpen && header?.dataset.variant === "transparent",
+      });
 
       if (!wasOpen) {
         btn.setAttribute("aria-expanded", "true");
-        panel.hidden = false;
-        panel.removeAttribute("hidden");
         const caret = btn.querySelector<HTMLElement>(".nav-caret");
         if (caret) caret.style.transform = "rotate(180deg)";
         header?.setAttribute("data-dropdown-open", "true");
+
+        if (shouldWaitForHeader) {
+          dropdownOpenTimer = window.setTimeout(() => {
+            revealDropdownPanel(panel);
+            dropdownOpenTimer = undefined;
+          }, dropdownHeaderGapMs);
+        } else {
+          revealDropdownPanel(panel);
+        }
       }
     });
   });
@@ -185,12 +245,18 @@ const currentPath = Astro.url.pathname;
     if (target.closest("[data-nav-toggle]")) return;
     if (target.closest("[data-nav-group]")) return;
     if (target.closest("[data-nav-panel]")) return;
-    closeAllDropdowns();
+    closeAllDropdowns({
+      delayHeaderReset: header?.dataset.variant === "transparent",
+    });
   });
 
   // Close dropdowns on Escape
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeAllDropdowns();
+    if (event.key === "Escape") {
+      closeAllDropdowns({
+        delayHeaderReset: header?.dataset.variant === "transparent",
+      });
+    }
   });
 
   // Header scroll behavior

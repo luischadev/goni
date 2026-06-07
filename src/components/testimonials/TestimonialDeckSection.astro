@@ -1,0 +1,74 @@
+---
+import CardDeckSection from "../deck/CardDeckSection.astro";
+import CardDeckItem from "../deck/CardDeckItem.astro";
+import type { Testimonial } from "../../lib/types";
+
+interface Props {
+  testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+
+function getInitials(value: string): string {
+  return value
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+---
+
+<CardDeckSection
+  labelledBy="testimonials"
+  class="bg-surface-inverse-soft text-fg-on-inverse"
+>
+  <div slot="header" class="max-w-3xl">
+    <p class="eyebrow text-fg-on-inverse-accent reveal">Voces del mercado</p>
+    <h2
+      id="testimonials"
+      class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] text-fg-on-inverse reveal"
+    >
+      La confianza de quienes operan en los frentes más exigentes.
+    </h2>
+  </div>
+
+  {
+    testimonials.map((testimonial, index) => (
+      <CardDeckItem index={index}>
+        <figure class="mx-auto flex h-full w-full max-w-3xl flex-col bg-surface-inverse text-fg-on-inverse p-8 md:p-12 lg:p-14 shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+          <span
+            class="material-symbols-sharp text-fg-on-inverse-accent leading-none"
+            style={{
+              fontSize: "56px",
+              fontVariationSettings: '"FILL" 0, "wght" 200, "GRAD" 0, "opsz" 48',
+            }}
+            aria-hidden="true"
+          >
+            format_quote
+          </span>
+          <blockquote class="mt-6 md:mt-8 font-display text-xl md:text-2xl leading-relaxed text-fg-on-inverse">
+            {testimonial.quote}
+          </blockquote>
+          <figcaption class="mt-auto flex items-center gap-4 pt-8 md:pt-10">
+            <span
+              class="flex size-12 shrink-0 items-center justify-center rounded-full bg-surface-inverse-soft text-sm font-medium text-fg-on-inverse-accent ring-1 ring-line-on-inverse/10"
+              aria-hidden="true"
+            >
+              {getInitials(testimonial.author)}
+            </span>
+            <div>
+              <p class="text-sm md:text-base text-fg-on-inverse">
+                {testimonial.author}
+              </p>
+              <p class="mt-1 text-xs md:text-sm text-fg-on-inverse/65">
+                {testimonial.position} · {testimonial.company}
+              </p>
+            </div>
+          </figcaption>
+        </figure>
+      </CardDeckItem>
+    ))
+  }
+</CardDeckSection>

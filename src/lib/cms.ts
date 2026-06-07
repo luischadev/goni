@@ -25,6 +25,15 @@ import type {
   Testimonial,
 } from "./types";
 
+const practiceAreaNavDescriptions: Record<string, string> = {
+  "seguros-y-reaseguros": "Cobertura, pólizas y disputas técnicas.",
+  "recuperos-legales": "Subrogación, recuperos y carteras masivas.",
+  "responsabilidad-civil": "Defensa y reclamación de daños.",
+  "derecho-maritimo-y-transporte": "Contratos, siniestros y arbitrajes.",
+  "derecho-corporativo": "Sociedades, contratos y operaciones.",
+  "litigios-y-arbitrajes": "Estrategia judicial y arbitral.",
+};
+
 function resolveHero(hero: HeroContent): HeroContent {
   const backgroundImage = resolveMediaAsset(hero.backgroundImage);
 
@@ -122,10 +131,11 @@ export const cms = {
       {
         label: "Áreas de práctica",
         href: "/areas-de-practica",
+        description: "Frentes legales donde combinamos criterio técnico y estrategia.",
         children: areas.map((area) => ({
           label: area.title,
           href: `/areas-de-practica/${area.slug}`,
-          description: area.shortDescription,
+          description: practiceAreaNavDescriptions[area.slug],
         })),
       },
       { label: "Publicaciones", href: "/publicaciones" },

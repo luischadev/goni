@@ -1,0 +1,14 @@
+---
+interface Props {
+  index: number;
+  class?: string;
+}
+
+const { index, class: className = "" } = Astro.props;
+
+const itemClass = ["card-deck-item", className].filter(Boolean).join(" ");
+---
+
+<article class={itemClass} data-card-deck-item style={`--deck-index: ${index}`}>
+  <slot />
+</article>

@@ -6,8 +6,11 @@ const focusRing =
 const focusRingInverse =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-line-on-inverse";
 
+const focusRingCurrent =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
+
 export const buttonBase =
-  "inline-flex items-center justify-center gap-2 text-md font-medium tracking-wide transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 text-md font-bold transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
 
 export const buttonVariants = {
   primary: {
@@ -32,11 +35,12 @@ export const buttonSizes = {
 } as const;
 
 export const textLinkBase =
-  "inline-flex items-center gap-2 font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "group/text-link inline-flex items-center gap-2 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 export const textLinkVariants = {
-  default: `${textLinkBase} ${focusRing} text-fg border-b border-line-strong pb-1 hover:gap-3 active:opacity-80`,
-  inverse: `${textLinkBase} ${focusRingInverse} text-fg-on-inverse border-b border-line-on-inverse pb-1 hover:gap-3 active:opacity-80`,
+  default: `${textLinkBase} ${focusRing} text-fg border-b border-line-strong pb-1 active:opacity-80`,
+  inverse: `${textLinkBase} ${focusRingInverse} text-fg-on-inverse border-b border-line-on-inverse pb-1 active:opacity-80`,
+  current: `${textLinkBase} ${focusRingCurrent} text-current border-b border-current pb-1 active:opacity-80`,
   muted: `${textLinkBase} ${focusRing} text-fg-muted hover:text-fg active:opacity-80`,
   subtle: `${textLinkBase} ${focusRing} text-xs text-fg-muted hover:text-fg active:opacity-80`,
 } as const;
@@ -45,5 +49,5 @@ export const textLinkSizes = {
   sm: "text-xs tracking-wide",
   md: "text-sm tracking-wide",
   lg: "text-base tracking-wide",
-  xl: "text-lg md:text-xl tracking-wide",
+  xl: "text-lg md:text-xl ",
 } as const;

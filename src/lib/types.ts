@@ -60,6 +60,7 @@ export interface Testimonial {
   author: string;
   position: string;
   company: string;
+  avatar: string;
 }
 
 export interface Indicator {

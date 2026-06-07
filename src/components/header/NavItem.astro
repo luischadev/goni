@@ -12,19 +12,19 @@ interface Props {
 const { item, variant, active, id } = Astro.props;
 const hasChildren = Boolean(item.children && item.children.length > 0);
 
-const desktopLinkClasses = `text-[13px] tracking-wide transition-opacity ${
-  active ? "opacity-100" : "opacity-60 hover:opacity-100"
+const desktopLinkClasses = `header-nav-item text-sm tracking-wide transition-colors ${
+  active ? "text-current" : "text-current hover:text-[var(--header-nav-hover)]"
 }`;
 
-const mobileLinkClasses = `text-base ${
+const mobileLinkClasses = `text-2xl ${
   active ? "text-fg" : "text-fg-muted"
 }`;
 
-const desktopTriggerClasses = `inline-flex items-center gap-1.5 text-[13px] tracking-wide transition-opacity cursor-pointer ${
-  active ? "opacity-100" : "opacity-60 hover:opacity-100"
+const desktopTriggerClasses = `header-nav-item inline-flex items-center gap-1.5 text-sm tracking-wide transition-colors cursor-pointer ${
+  active ? "text-current" : "text-current hover:text-[var(--header-nav-hover)]"
 }`;
 
-const mobileTriggerClasses = `flex w-full items-center justify-between text-base cursor-pointer ${
+const mobileTriggerClasses = `flex w-full items-center justify-between text-2xl cursor-pointer ${
   active ? "text-fg" : "text-fg-muted"
 }`;
 ---

@@ -30,6 +30,10 @@ const {
 
 const displayArrow = arrow !== "none";
 const arrowChar = arrow === "left" ? "←" : "→";
+const arrowClass =
+  arrow === "left"
+    ? "inline-block shrink-0 transition-transform duration-300 ease-out group-hover/text-link:-translate-x-1"
+    : "inline-block shrink-0 transition-transform duration-300 ease-out group-hover/text-link:translate-x-1";
 
 const classes = [textLinkVariants[variant], textLinkSizes[size], className]
   .filter(Boolean)
@@ -42,21 +46,21 @@ const Tag = as === "a" && href ? "a" : "span";
   Tag === "a" ? (
     <a href={href} class={classes} target={target} rel={rel}>
       {displayArrow && arrow === "left" && (
-        <span aria-hidden="true">{arrowChar}</span>
+        <span aria-hidden="true" class={arrowClass}>{arrowChar}</span>
       )}
       <slot />
       {displayArrow && arrow === "right" && (
-        <span aria-hidden="true">{arrowChar}</span>
+        <span aria-hidden="true" class={arrowClass}>{arrowChar}</span>
       )}
     </a>
   ) : (
     <span class={classes}>
       {displayArrow && arrow === "left" && (
-        <span aria-hidden="true">{arrowChar}</span>
+        <span aria-hidden="true" class={arrowClass}>{arrowChar}</span>
       )}
       <slot />
       {displayArrow && arrow === "right" && (
-        <span aria-hidden="true">{arrowChar}</span>
+        <span aria-hidden="true" class={arrowClass}>{arrowChar}</span>
       )}
     </span>
   )

@@ -25,6 +25,7 @@ interface Props {
   variant?: Variant;
   showImage?: boolean;
   showAuthor?: boolean;
+  showCta?: boolean;
   reveal?: boolean;
   class?: string;
 }
@@ -34,6 +35,7 @@ const {
   variant = "card",
   showImage = true,
   showAuthor = variant !== "card",
+  showCta = true,
   reveal = true,
   class: className = "",
 } = Astro.props;
@@ -69,7 +71,7 @@ const wrapperReveal = reveal ? "reveal" : "";
       <time datetime={publication.date}>{formattedDate}</time>
     </div>
 
-    <h3 class="font-display text-2xl md:text-3xl mt-5 leading-[1.15] text-fg group-hover:text-fg-accent transition-colors">
+    <h3 class="link-underline font-display text-2xl md:text-3xl mt-5 leading-[1.15] text-fg group-hover:text-fg-accent transition-colors">
       {publication.title}
     </h3>
     <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
@@ -80,14 +82,16 @@ const wrapperReveal = reveal ? "reveal" : "";
       <p class="mt-5 text-xs text-fg-subtle">Por {publication.author}</p>
     )}
 
-    <TextLink
-      as="span"
-      variant="muted"
-      size="sm"
-      class="mt-6 text-fg-subtle group-hover:text-fg group-hover:gap-3"
-    >
-      Leer publicación
-    </TextLink>
+    {showCta && (
+      <TextLink
+        as="span"
+        variant="muted"
+        size="sm"
+        class="mt-6 text-fg-subtle group-hover:text-fg"
+      >
+        Leer publicación
+      </TextLink>
+    )}
   </a>
 )}
 

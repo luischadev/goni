@@ -1,0 +1,49 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+  labelledBy?: string;
+  headerClass?: string;
+  pinClass?: string;
+  stageClass?: string;
+  footerSpacerClass?: string;
+}
+
+const {
+  id,
+  class: className = "",
+  labelledBy,
+  headerClass = "container-x pt-28 md:pt-40 pb-16 md:pb-20",
+  pinClass = "card-deck-pin",
+  stageClass = "card-deck-stage",
+  footerSpacerClass = "h-20 md:h-28",
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class={`card-deck-section ${className}`}
+  data-card-deck
+  aria-labelledby={labelledBy}
+>
+  <div class={headerClass}>
+    <slot name="header" />
+  </div>
+
+  <div class={pinClass} data-card-deck-pin>
+    <div class="container-x">
+      <div class={stageClass} data-card-deck-track>
+        <slot />
+      </div>
+    </div>
+  </div>
+
+  <div class={footerSpacerClass} aria-hidden="true"></div>
+</section>
+
+<script>
+  import { initCardDecks } from "../../scripts/card-deck";
+
+  initCardDecks();
+  document.addEventListener("astro:page-load", initCardDecks);
+</script>

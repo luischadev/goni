@@ -9,7 +9,7 @@
    ────────────────────────────────────────────────────────────── */
 :root {
   --palette-ink:          #0f1822;
-  --palette-ink-soft:     #2a3340;
+  --palette-ink-soft:     #1d2630;
   --palette-stone-deep:   #4a525d;
   --palette-stone:        #8a8f99;
   --palette-hairline:     #e3e1dc;
@@ -17,6 +17,10 @@
   --palette-paper:        #fbfaf7;
   --palette-bronze:       #8a6a3f;
   --palette-bronze-soft:  #b89a6c;
+  --palette-bronze-light: #d6bd8d;
+  --palette-blue:         #145584;
+  --palette-blue-soft:    #78a8c7;
+  --palette-blue-light:   #a9cce0;
 }
 
 @theme {
@@ -34,15 +38,16 @@
      FOREGROUND (text).
      Tailwind utilities: text-fg, text-fg-soft, text-fg-muted,
      text-fg-subtle, text-fg-accent, text-fg-on-inverse,
-     text-fg-on-inverse-accent
+     text-fg-on-inverse-accent, text-fg-on-inverse-interaction
      ──────────────────────────────────────────────────────────── */
   --color-fg:                    var(--palette-ink);         /* headings, default text */
   --color-fg-soft:               var(--palette-ink-soft);    /* article body */
   --color-fg-muted:              var(--palette-stone-deep);  /* leads, descriptions */
   --color-fg-subtle:             var(--palette-stone);       /* metadata, breadcrumbs */
-  --color-fg-accent:             var(--palette-bronze);      /* numbers, hover accents */
+  --color-fg-accent:             var(--palette-blue);        /* numbers, hover accents */
   --color-fg-on-inverse:         var(--palette-cream);       /* text on dark */
-  --color-fg-on-inverse-accent:  var(--palette-bronze-soft); /* accent on dark */
+  --color-fg-on-inverse-accent:  var(--palette-blue-soft);   /* accent on dark */
+  --color-fg-on-inverse-interaction: var(--palette-blue-light); /* hover on dark */
 
   /* ────────────────────────────────────────────────────────────
      LINES — borders & separators.
@@ -155,26 +160,17 @@
   }
 
   .link-underline {
-    position: relative;
     display: inline-block;
-    padding-bottom: 2px;
+    text-decoration-line: none;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
   }
-  .link-underline::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 1px;
-    background-color: currentColor;
-    transform-origin: right;
-    transform: scaleX(1);
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  .link-underline:hover {
+    text-decoration-line: underline;
   }
-  .link-underline:hover::after {
-    transform-origin: left;
-    transform: scaleX(0);
-    animation: link-redraw 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  .group:hover .link-underline,
+  .group\/title:hover .link-underline {
+    text-decoration-line: underline;
   }
 
   @keyframes link-redraw {
@@ -194,6 +190,15 @@
     transform: translateY(0);
   }
 
+  .scroll-background-section {
+    background-color: var(--color-surface);
+    transition: background-color 1400ms ease;
+  }
+
+  .scroll-background-section.scroll-background--active {
+    background-color: var(--palette-blue-light);
+  }
+
   /* ────────────────────────────────────────────────────────────
    * Header
    * Estados controlados por data-attrs (no por clases dinámicas).
@@ -206,6 +211,8 @@
    * sólido usando los tokens neutros del default.
    * ──────────────────────────────────────────────────────────── */
   .header {
+    --header-nav-hover: var(--color-fg-accent);
+
     background-color: color-mix(in srgb, var(--color-surface) 95%, transparent);
     color: var(--color-fg);
     border-bottom: 1px solid var(--color-line);
@@ -220,6 +227,8 @@
   }
 
   .header[data-variant="transparent"][data-scrolled="false"] {
+    --header-nav-hover: var(--color-fg-on-inverse-interaction);
+
     background-color: transparent;
     color: var(--color-fg-on-inverse);
     border-bottom-color: transparent;
@@ -227,21 +236,37 @@
     -webkit-backdrop-filter: none;
   }
 
-  /* Cuando hay un dropdown abierto, el header vuelve al look sólido
-     para mantener la coherencia con el panel claro del menú. */
-  .header[data-dropdown-open="true"] {
+  /* Cuando hay un dropdown o el menú móvil abierto, el header vuelve al look sólido. */
+  .header[data-variant="transparent"][data-scrolled="false"][data-dropdown-open="true"],
+  .header[data-dropdown-open="true"],
+  .header[data-variant="transparent"][data-scrolled="false"][data-mobile-menu-open="true"],
+  .header[data-mobile-menu-open="true"] {
+    --header-nav-hover: var(--color-fg-accent);
+
     background-color: var(--color-surface);
     color: var(--color-fg);
     border-bottom-color: var(--color-line);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .header[data-dropdown-open="true"] .header-logo {
-    filter: none;
-  }
 
   .nav-dropdown[hidden] {
     display: none !important;
+  }
+
+  .nav-dropdown {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+    pointer-events: none;
+    transition:
+      opacity 280ms ease-out,
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-dropdown[data-open="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   .header[data-hidden="true"] {
@@ -256,8 +281,18 @@
   .header[data-variant="transparent"][data-scrolled="false"] .header-logo {
     filter: brightness(0) invert(1);
   }
+  .header[data-variant="transparent"][data-scrolled="false"][data-dropdown-open="true"] .header-logo,
+  .header[data-dropdown-open="true"] .header-logo,
+  .header[data-variant="transparent"][data-scrolled="false"][data-mobile-menu-open="true"] .header-logo,
+  .header[data-mobile-menu-open="true"] .header-logo {
+    filter: none;
+  }
 
   @media (prefers-reduced-motion: reduce) {
+    .scroll-background-section {
+      transition: none;
+    }
+
     .header {
       transition: background-color 240ms ease-out, color 240ms ease-out,
         border-color 240ms ease-out;
@@ -270,6 +305,12 @@
   /* Stacking cards (scroll-stack) */
   .scroll-stack-section {
     --stack-sticky-top: 5.5rem;
+    background-color: var(--color-surface);
+    transition: background-color 1400ms ease;
+  }
+
+  .practice-area-stack.scroll-stack--blue-bg {
+    background-color: var(--color-surface-soft);
   }
 
   .scroll-stack-stage {
@@ -292,21 +333,139 @@
   .scroll-stack-item {
     position: sticky;
     top: var(--stack-sticky-top);
+  }
+
+  .scroll-stack-item [data-scroll-stack-panel] {
     will-change: transform;
   }
 
-  .scroll-stack-item:not(:last-child) {
+  .scroll-stack-item {
     padding-bottom: clamp(5rem, 28vh, 14rem);
   }
 
   .scroll-stack--static .scroll-stack-item {
     position: relative;
     top: auto;
+    padding-bottom: 0;
     will-change: auto;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .scroll-stack-item {
+    .scroll-stack-section {
+      transition: none;
+    }
+
+    .scroll-stack-item [data-scroll-stack-panel] {
+      will-change: auto;
+    }
+  }
+
+  /* Card deck (pinned, reverse stack) */
+  .card-deck-pin {
+    position: relative;
+  }
+
+  .card-deck-stage {
+    position: relative;
+    min-height: clamp(20rem, 52vh, 30rem);
+  }
+
+  .card-deck-item {
+    position: absolute;
+    inset: 0;
+    z-index: calc(100 - var(--deck-index, 0));
+    will-change: transform, opacity;
+  }
+
+  .card-deck--static .card-deck-stage {
+    min-height: 0;
+  }
+
+  .card-deck--static .card-deck-item {
+    position: relative;
+    inset: auto;
+    will-change: auto;
+  }
+
+  .card-deck--static .card-deck-item:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-deck-item {
+      will-change: auto;
+    }
+  }
+
+  /* Pinned horizontal scroll sections */
+  .horizontal-scroll-section {
+    overflow: hidden;
+  }
+
+  .horizontal-scroll-pin {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .horizontal-scroll-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .horizontal-scroll-track {
+    display: flex;
+    width: max-content;
+    gap: 1.5rem;
+    will-change: transform;
+  }
+
+  .horizontal-scroll-track::before,
+  .horizontal-scroll-track::after {
+    content: "";
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .horizontal-scroll-track::before {
+    width: clamp(3.9rem, 18.2vw, 15.6rem);
+  }
+
+  .horizontal-scroll-track::after {
+    width: clamp(8rem, 30vw, 24rem);
+  }
+
+  @media (min-width: 768px) {
+    .horizontal-scroll-track {
+      gap: 2rem;
+    }
+  }
+
+  .horizontal-scroll--static {
+    overflow: visible;
+  }
+
+  .horizontal-scroll--static .horizontal-scroll-pin,
+  .horizontal-scroll--static .horizontal-scroll-viewport {
+    min-height: 0;
+    display: block;
+    overflow: visible;
+  }
+
+  .horizontal-scroll--static .horizontal-scroll-track {
+    width: auto;
+    flex-direction: column;
+    will-change: auto;
+  }
+
+  .horizontal-scroll--static .horizontal-scroll-track::before,
+  .horizontal-scroll--static .horizontal-scroll-track::after {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .horizontal-scroll-track {
       will-change: auto;
     }
   }

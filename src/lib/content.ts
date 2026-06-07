@@ -275,6 +275,7 @@ export const testimonials: Testimonial[] = [
     author: "Gerente de Reclamos",
     position: "Gerencia de Reclamos",
     company: "Compañía de Seguros Generales",
+    avatar: "https://randomuser.me/api/portraits/women/65.jpg",
   },
   {
     quote:
@@ -282,6 +283,7 @@ export const testimonials: Testimonial[] = [
     author: "Subgerente Legal",
     position: "Subgerencia Legal",
     company: "Concesionaria de Autopistas",
+    avatar: "https://randomuser.me/api/portraits/men/46.jpg",
   },
   {
     quote:
@@ -289,6 +291,15 @@ export const testimonials: Testimonial[] = [
     author: "Director Legal Regional",
     position: "Dirección Legal",
     company: "Operador Logístico Internacional",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+  },
+  {
+    quote:
+      "Su capacidad para ordenar escenarios complejos y transformarlos en decisiones procesales claras nos ha permitido avanzar con seguridad en disputas de alta exposición.",
+    author: "Gerente Legal",
+    position: "Gerencia Legal",
+    company: "Empresa de Infraestructura",
+    avatar: "https://randomuser.me/api/portraits/men/52.jpg",
   },
 ];
 

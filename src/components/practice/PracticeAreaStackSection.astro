@@ -1,7 +1,7 @@
 ---
 import ScrollStackItem from "../stack/ScrollStackItem.astro";
 import ScrollStackSection from "../stack/ScrollStackSection.astro";
-import TextLink from "../ui/TextLink.astro";
+import Button from "../ui/Button.astro";
 import type { PracticeArea } from "../../lib/types";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const { areas } = Astro.props;
 ---
 
-<ScrollStackSection labelledBy="practice-areas">
+<ScrollStackSection labelledBy="practice-areas" class="practice-area-stack">
   <div slot="header">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-6">
@@ -34,45 +34,62 @@ const { areas } = Astro.props;
   {
     areas.map((area, index) => (
       <ScrollStackItem index={index}>
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-          <p class="font-display text-2xl md:text-3xl text-fg-accent md:col-span-2">
-            {area.number}
-          </p>
+        <div class="flex min-h-[22rem] flex-col md:min-h-[26rem]">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            <div class="md:col-span-9">
+              <a
+                href={`/areas-de-practica/${area.slug}`}
+                class="group/title inline-block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong"
+              >
+                <h3 class="link-underline font-display text-5xl md:text-6xl leading-[0.98] tracking-[-0.03em] text-fg transition-colors group-hover/title:text-fg-accent">
+                  {area.title}
+                </h3>
+              </a>
 
-          <div class="md:col-span-8">
-            <a
-              href={`/areas-de-practica/${area.slug}`}
-              class="group/title inline-block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong"
-            >
-              <h3 class="font-display text-5xl md:text-5xl leading-[0.98] tracking-[-0.03em] text-fg transition-colors group-hover/title:text-fg-accent">
-                {area.title}
-              </h3>
-            </a>
+              <p class="mt-10 max-w-4xl text-xl md:text-xl text-fg leading-snug">
+                {area.shortDescription}
+              </p>
 
-            <p class="mt-10 max-w-4xl text-xl md:text-2xl text-fg leading-snug">
-              {area.shortDescription}
-            </p>
+              <p class="mt-10 flex flex-wrap items-center text-sm md:text-sm text-fg-muted leading-relaxed">
+                {area.industries.slice(0, 3).map((industry, industryIndex) => (
+                  <>
+                    {industryIndex > 0 && (
+                      <span aria-hidden="true" class="mx-2">
+                        ·
+                      </span>
+                    )}
+                    <span>{industry}</span>
+                  </>
+                ))}
+              </p>
+            </div>
+          </div>
 
-            <p class="mt-10 flex flex-wrap items-center text-base md:text-md text-fg-muted leading-relaxed">
-              {area.industries.slice(0, 3).map((industry, industryIndex) => (
-                <>
-                  {industryIndex > 0 && (
-                    <span aria-hidden="true" class="mx-2">
-                      ·
-                    </span>
-                  )}
-                  <span>{industry}</span>
-                </>
-              ))}
-            </p>
+          <div class="mt-auto flex flex-col gap-10 pt-14 md:flex-row md:items-end md:justify-between">
+            <div class="order-2 md:order-1">
+              <Button href={`/areas-de-practica/${area.slug}`}>
+                Más sobre el servicio
+              </Button>
+            </div>
 
-            <TextLink
-              href={`/areas-de-practica/${area.slug}`}
-              size="xl"
-              class="mt-10"
-            >
-              Más sobre el servicio
-            </TextLink>
+            <div class="order-1 grid grid-cols-2 gap-0 self-stretch md:order-2 md:self-end">
+              <div class="pr-8">
+                <p class="font-display text-4xl lg:text-6xl leading-none tracking-[-0.04em] text-fg">
+                  30+
+                </p>
+                <p class="mt-3 max-w-[8rem] text-xs lg:text-sm leading-snug text-fg-muted">
+                  años de experiencia
+                </p>
+              </div>
+              <div>
+                <p class="font-display text-4xl lg:text-6xl leading-none tracking-[-0.04em] text-fg">
+                  {area.industries.length}
+                </p>
+                <p class="mt-3 max-w-[8rem] text-xs lg:text-sm leading-snug text-fg-muted">
+                  sectores foco
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </ScrollStackItem>

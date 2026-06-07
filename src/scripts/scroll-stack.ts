@@ -38,13 +38,14 @@ function initScrollStack(root: HTMLElement): void {
 
     item.style.setProperty("--stack-index", String(index));
     item.style.zIndex = String(index + 1);
-    gsap.set(item, { opacity: 1, clearProps: "scale,transform" });
+    gsap.set(item, { opacity: 1, clearProps: "transform" });
     if (panel) {
-      gsap.set(panel, { clearProps: "boxShadow" });
+      gsap.set(panel, { clearProps: "scale,transform,boxShadow" });
     }
   });
 
   root.classList.remove("scroll-stack--static");
+  root.classList.remove("scroll-stack--blue-bg");
 
   if (prefersReducedMotion()) {
     root.classList.add("scroll-stack--static");
@@ -53,6 +54,21 @@ function initScrollStack(root: HTMLElement): void {
 
   const mobile = isMobileViewport();
   const created: ScrollTrigger[] = [];
+  const backgroundStartItem = items[1] ?? items[0];
+
+  const backgroundTrigger = ScrollTrigger.create({
+    trigger: backgroundStartItem,
+    start: mobile ? `top bottom-=${HEADER_OFFSET}` : "top 80%",
+    endTrigger: root,
+    end: "bottom 35%",
+    invalidateOnRefresh: true,
+    onEnter: () => root.classList.add("scroll-stack--blue-bg"),
+    onEnterBack: () => root.classList.add("scroll-stack--blue-bg"),
+    onLeave: () => root.classList.remove("scroll-stack--blue-bg"),
+    onLeaveBack: () => root.classList.remove("scroll-stack--blue-bg"),
+  });
+
+  created.push(backgroundTrigger);
 
   items.forEach((item, index) => {
     if (index === items.length - 1) return;
@@ -67,20 +83,18 @@ function initScrollStack(root: HTMLElement): void {
         ? `top top+=${HEADER_OFFSET + index * 8}`
         : `top top+=${HEADER_OFFSET}`,
       scrub: mobile ? 0.35 : 0.6,
+      invalidateOnRefresh: true,
       onUpdate: (self) => {
+        if (!panel) return;
+
         const progress = self.progress;
-        gsap.set(item, {
+        gsap.set(panel, {
           scale: 1 - progress * SCALE_DELTA,
           transformOrigin: "center top",
+          boxShadow: `0 24px 80px rgba(15, 24, 34, ${
+            SHADOW_ALPHA * (1 - progress)
+          })`,
         });
-
-        if (panel) {
-          gsap.set(panel, {
-            boxShadow: `0 24px 80px rgba(15, 24, 34, ${
-              SHADOW_ALPHA * (1 - progress)
-            })`,
-          });
-        }
       },
     });
 
@@ -88,7 +102,7 @@ function initScrollStack(root: HTMLElement): void {
   });
 
   stackTriggers.set(root, created);
-  ScrollTrigger.refresh();
+  created.forEach((trigger) => trigger.refresh());
 }
 
 export function initScrollStacks(): void {

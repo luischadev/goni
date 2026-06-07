@@ -1,4 +1,5 @@
 ---
+import TextLink from "../ui/TextLink.astro";
 import type { NavItem as NavItemType } from "../../lib/types";
 
 interface Props {
@@ -20,15 +21,18 @@ const { id, variant, items, parent } = Astro.props;
   >
     <div class="container-x py-12 grid grid-cols-1 md:grid-cols-12 gap-10">
       <div class="md:col-span-4">
-        <p class="eyebrow">{parent.label}</p>
+        <p class="font-display text-4xl leading-[1.02] tracking-[-0.02em] text-fg">
+          {parent.label}
+        </p>
+        {parent.description && (
+          <p class="mt-5 max-w-xs text-sm leading-relaxed text-fg-muted">
+            {parent.description}
+          </p>
+        )}
         {parent.href && (
-          <a
-            href={parent.href}
-            class="mt-6 inline-flex items-center gap-2 text-sm tracking-wide border-b border-line-strong pb-1 hover:gap-3 transition-all text-fg"
-          >
+          <TextLink href={parent.href} class="mt-8">
             Ver todas
-            <span aria-hidden="true">→</span>
-          </a>
+          </TextLink>
         )}
       </div>
 
@@ -39,7 +43,7 @@ const { id, variant, items, parent } = Astro.props;
               href={child.href}
               class="group block py-1 transition-colors"
             >
-              <span class="block text-base font-medium text-fg group-hover:text-fg-accent transition-colors">
+              <span class="link-underline font-display text-2xl leading-[1.1] text-fg group-hover:text-fg-accent transition-colors">
                 {child.label}
               </span>
               {child.description && (
@@ -58,23 +62,23 @@ const { id, variant, items, parent } = Astro.props;
     id={id}
     data-nav-panel={id}
     hidden
-    class="nav-dropdown mt-3 pl-4 border-l border-line space-y-3"
+    class="nav-dropdown mt-3 pl-4 border-l border-line space-y-4"
   >
-    {parent.href && (
-      <a
-        href={parent.href}
-        class="block text-sm text-fg-muted hover:text-fg"
-      >
-        Ver todas
-      </a>
-    )}
     {items.map((child) => (
       <a
         href={child.href}
-        class="block text-sm text-fg-muted hover:text-fg"
+        class="block text-xl text-fg-muted hover:text-fg transition-colors"
       >
         {child.label}
       </a>
     ))}
+    {parent.href && (
+      <a
+        href={parent.href}
+        class="block text-base text-fg-accent hover:text-fg transition-colors pt-1"
+      >
+        Ver todas →
+      </a>
+    )}
   </div>
 )}
