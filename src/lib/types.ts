@@ -53,6 +53,11 @@ export interface TeamMember {
   bio: string;
   photo: string;
   credentials: string[];
+  practiceAreas?: string[];
+  experience?: string[];
+  education?: string[];
+  languages?: string[];
+  memberships?: string[];
 }
 
 export interface Testimonial {

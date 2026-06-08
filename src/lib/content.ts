@@ -307,80 +307,190 @@ export const teamMembers: TeamMember[] = [
   {
     slug: "carlos-goni",
     name: "Carlos Goñi",
-    role: "Socio Fundador",
+    role: "Socio",
     bio: "Abogado de la Pontificia Universidad Católica de Valparaíso y Magíster en Derecho Marítimo (LL.M. Admiralty Law) por Tulane Law School, Estados Unidos. Profesor de Derecho Marítimo y Seguro Marítimo en diversas instituciones y liquidador oficial de seguros. Lidera la estrategia del estudio en seguros, responsabilidad civil y transporte.",
     photo:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/7845290/pexels-photo-7845290.jpeg?auto=compress&cs=tinysrgb&w=900",
     credentials: [
       "LL.M. Admiralty Law, Tulane Law School",
       "Profesor de Derecho Marítimo",
       "Liquidador oficial de seguros",
     ],
+    practiceAreas: [
+      "Seguros y Reaseguros",
+      "Derecho Marítimo y Transporte",
+      "Responsabilidad Civil",
+      "Litigios y Arbitrajes",
+    ],
+    experience: [
+      "Fundador de Goñi & Cía. Abogados (1993 a la fecha)",
+      "Liquidador oficial de seguros, Comisión para el Mercado Financiero",
+      "Profesor de Derecho Marítimo y Seguro Marítimo, Pontificia Universidad Católica de Valparaíso",
+      "Miembro del Comité de Averías Gruesas, Cámara Marítima de Chile",
+      "Autor de publicaciones especializadas en seguro marítimo y responsabilidad del transportador",
+    ],
+    education: [
+      "Abogado, Pontificia Universidad Católica de Valparaíso (1988)",
+      "Juramento ante la Corte Suprema, 15 de marzo de 1989",
+      "LL.M. Admiralty Law, Tulane Law School, Nueva Orleans (1992)",
+    ],
+    languages: ["Español", "Inglés"],
+    memberships: [
+      "Colegio de Abogados de Chile A.G.",
+      "Cámara Marítima y Portuaria de Chile",
+      "Comité Marítimo Internacional (CMI) — miembro individual",
+    ],
   },
   {
     slug: "maria-jose-ramirez",
     name: "María José Ramírez",
-    role: "Abogada Jefe · Recuperos y Litigios",
+    role: "Socia",
     bio: "Abogada de la Universidad de Chile, con más de quince años de experiencia en litigios civiles y recuperos para aseguradoras y concesionarias. Lidera el equipo de recuperos masivos del estudio, con foco en eficiencia procesal y métricas para el cliente.",
     photo:
-      "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/8871924/pexels-photo-8871924.jpeg?auto=compress&cs=tinysrgb&w=900",
     credentials: [
       "Universidad de Chile",
       "Diplomado en Seguro de Transporte",
       "+15 años en litigios y recuperos",
     ],
+    practiceAreas: [
+      "Recuperos Legales",
+      "Litigios Civiles",
+      "Litigios Laborales",
+      "Seguros y Reaseguros",
+    ],
+    experience: [
+      "Goñi & Cía. Abogados — Abogada (2009), Socia (2018 a la fecha)",
+      "Clínica Jurídica, Universidad de Chile — Supervisora de casos laborales (2007–2009)",
+      "Coautora, 'Recuperos en el seguro de transporte: criterios prácticos', Revista Chilena de Derecho del Seguro (2022)",
+    ],
+    education: [
+      "Abogada, Universidad de Chile (2007)",
+      "Juramento ante la Corte Suprema, 8 de enero de 2008",
+      "Diplomado en Seguro de Transporte, Universidad de Chile (2011, completado)",
+      "Diplomado en Litigación Civil Estratégica, Universidad Adolfo Ibáñez (2015, completado)",
+    ],
+    languages: ["Español", "Inglés"],
+    memberships: ["Colegio de Abogados de Chile A.G."],
   },
   {
     slug: "felipe-aguirre",
     name: "Felipe Aguirre",
-    role: "Abogado Senior · Derecho Marítimo",
+    role: "Asociado",
     bio: "Abogado de la Pontificia Universidad Católica de Valparaíso, con postgrado en Derecho Marítimo y experiencia en arbitrajes internacionales. Asesora a navieras, operadores logísticos y P&I Clubs en siniestros y disputas contractuales.",
     photo:
-      "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/31112196/pexels-photo-31112196.jpeg?auto=compress&cs=tinysrgb&w=900",
     credentials: [
       "Postgrado en Derecho Marítimo",
       "Arbitrajes internacionales",
       "Asesoría a P&I Clubs",
     ],
+    practiceAreas: [
+      "Derecho Marítimo y Transporte",
+      "Litigios y Arbitrajes",
+      "Seguros y Reaseguros",
+    ],
+    experience: [
+      "Goñi & Cía. Abogados — Abogado asociado (2016 a la fecha)",
+      "Procurador, Juzgado de Letras del Trabajo de Valparaíso (2013–2015)",
+      "Participante en arbitrajes ante la Cámara de Comercio de Santiago (CCS) y la London Court of International Arbitration (LCIA)",
+    ],
+    education: [
+      "Abogado, Pontificia Universidad Católica de Valparaíso (2013)",
+      "Juramento ante la Corte Suprema, 22 de abril de 2014",
+      "Postgrado en Derecho Marítimo Internacional, Universidad de Southampton (2016, completado)",
+      "Diplomado en Arbitraje Comercial Nacional e Internacional, UAI (2019, completado)",
+    ],
+    languages: ["Español", "Inglés"],
+    memberships: [
+      "Colegio de Abogados de Chile A.G.",
+      "Young Members Group, Comité Marítimo Internacional (CMI)",
+    ],
   },
   {
     slug: "antonia-velasco",
     name: "Antonia Velasco",
-    role: "Abogada · Seguros y Responsabilidad Civil",
+    role: "Asociada",
     bio: "Abogada de la Universidad Diego Portales, especializada en responsabilidad civil contractual y extracontractual y en defensa de reclamos de cobertura. Participa activamente en seminarios y publicaciones del estudio.",
     photo:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/4347471/pexels-photo-4347471.jpeg?auto=compress&cs=tinysrgb&w=900",
     credentials: [
       "Universidad Diego Portales",
       "Diplomado en Responsabilidad Civil",
       "Especialista en defensa de coberturas",
     ],
+    practiceAreas: [
+      "Seguros y Reaseguros",
+      "Responsabilidad Civil",
+      "Negligencias Médicas",
+    ],
+    experience: [
+      "Goñi & Cía. Abogados — Abogada asociada (2019 a la fecha)",
+      "Estudio Jurídico Morales & Besa — Abogada (2017–2019)",
+      "Coautora, 'Responsabilidad civil en pólizas CAR/EAR: exclusiones frecuentes', ponencia en Congreso Nacional de Seguros (2023)",
+    ],
+    education: [
+      "Abogada, Universidad Diego Portales (2016)",
+      "Juramento ante la Corte Suprema, 10 de marzo de 2017",
+      "Diplomado en Responsabilidad Civil, Universidad de Chile (2018, completado)",
+      "Magíster en Derecho Privado, Universidad de Chile (cursando)",
+    ],
+    languages: ["Español", "Inglés", "Portugués (básico)"],
+    memberships: ["Colegio de Abogados de Chile A.G."],
   },
   {
     slug: "diego-fuentes",
     name: "Diego Fuentes",
-    role: "Abogado · Corporativo y Transporte",
+    role: "Asociado",
     bio: "Abogado de la Universidad de los Andes, asesora a clientes industriales y logísticos en derecho corporativo, contratos comerciales y operaciones transfronterizas vinculadas al transporte y la cadena logística.",
     photo:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/37409503/pexels-photo-37409503.jpeg?auto=compress&cs=tinysrgb&w=900",
     credentials: [
       "Universidad de los Andes",
       "Diplomado en Derecho Corporativo",
       "Operaciones transfronterizas",
     ],
+    practiceAreas: [
+      "Derecho Corporativo",
+      "Derecho Marítimo y Transporte",
+      "Litigios y Arbitrajes",
+    ],
+    experience: [
+      "Goñi & Cía. Abogados — Abogado asociado (2020 a la fecha)",
+      "Deloitte Legal Chile — Consultor legal, área corporativa (2018–2020)",
+    ],
+    education: [
+      "Abogado, Universidad de los Andes (2018)",
+      "Juramento ante la Corte Suprema, 5 de agosto de 2018",
+      "Diplomado en Derecho Corporativo y Negocios, Universidad de los Andes (2020, completado)",
+      "Diplomado en Comercio Internacional y Aduanas, PUC (2022, completado)",
+    ],
+    languages: ["Español", "Inglés"],
+    memberships: ["Colegio de Abogados de Chile A.G."],
   },
   {
     slug: "valentina-soto",
     name: "Valentina Soto",
-    role: "Coordinadora de Recuperos",
+    role: "Administración y Finanzas",
     bio: "Procuradora con amplia experiencia en gestión judicial de carteras masivas de recuperos. Coordina equipos de procuradores y asistentes en tribunales civiles y de cobranza a lo largo del país.",
     photo:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/7654454/pexels-photo-7654454.jpeg?auto=compress&cs=tinysrgb&w=900",
     credentials: [
       "Procuradora",
       "Gestión de carteras masivas",
       "Coordinación nacional",
     ],
+    practiceAreas: ["Recuperos Legales", "Juzgados de Policía Local"],
+    experience: [
+      "Goñi & Cía. Abogados — Coordinadora de Recuperos y Administración (2014 a la fecha)",
+      "Procuradora independiente en tribunales civiles de Santiago y regiones (2010–2014)",
+    ],
+    education: [
+      "Técnico en Administración de Empresas, INACAP (2009)",
+      "Diplomado en Gestión Judicial, Universidad Central (2016, completado)",
+    ],
+    languages: ["Español"],
+    memberships: [],
   },
 ];
 

@@ -1,0 +1,42 @@
+---
+import Button from "./ui/Button.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  buttonLabel?: string;
+  href?: string;
+}
+
+const {
+  title,
+  description,
+  buttonLabel = "Contáctanos",
+  href = "/contacto",
+} = Astro.props;
+---
+
+<section class="scroll-background-section" data-scroll-background>
+  <div class="container-x py-28 md:py-40">
+    <div class="grid grid-cols-1 md:grid-cols-12">
+      <div class="md:col-span-8">
+        <h2 class="font-display text-4xl md:text-6xl leading-[1.05] reveal">
+          {title}
+        </h2>
+        <p class="mt-8 max-w-xl text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          {description}
+        </p>
+        <div class="mt-10 reveal">
+          <Button href={href}>{buttonLabel}</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initScrollBackgroundSections } from "../scripts/scroll-background";
+
+  initScrollBackgroundSections();
+  document.addEventListener("astro:page-load", initScrollBackgroundSections);
+</script>

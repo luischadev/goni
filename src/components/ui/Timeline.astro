@@ -1,0 +1,53 @@
+---
+type TimelineInput =
+  | string
+  | {
+      title: string;
+      meta?: string;
+      description?: string;
+    };
+
+interface Props {
+  items: TimelineInput[];
+  size?: "sm" | "md";
+  class?: string;
+}
+
+const { items, size = "md", class: className = "" } = Astro.props;
+
+const normalizedItems = items.map((item) =>
+  typeof item === "string" ? { title: item } : item
+);
+
+const textClass =
+  size === "sm"
+    ? "text-sm leading-relaxed"
+    : "text-base leading-relaxed";
+---
+
+<ol class={`mt-5 space-y-5 ${className}`}>
+  {normalizedItems.map((item, index) => (
+    <li class="grid grid-cols-[1rem_1fr] gap-4">
+      <div class="relative flex justify-center" aria-hidden="true">
+        {index > 0 && <span class="absolute top-0 h-[0.45em] w-px bg-line"></span>}
+        {index < normalizedItems.length - 1 && (
+          <span class="absolute top-[calc(0.45em+0.625rem)] bottom-[-1.25rem] w-px bg-line"></span>
+        )}
+        <span class="relative mt-[0.45em] h-2.5 w-2.5 rounded-full border border-fg-accent bg-surface"></span>
+      </div>
+      <div>
+        {item.meta && (
+          <p class="mb-1 text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+            {item.meta}
+          </p>
+        )}
+        <p class={`${textClass} text-fg-soft`}>{item.title}</p>
+        {item.description && (
+          <p class="mt-2 text-sm leading-relaxed text-fg-muted">
+            {item.description}
+          </p>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>

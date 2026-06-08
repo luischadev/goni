@@ -15,10 +15,13 @@ function initScrollBackgroundSection(section: HTMLElement): void {
 
   if (prefersReducedMotion()) return;
 
+  const start = section.dataset.scrollBackgroundStart ?? "top 70%";
+  const end = section.dataset.scrollBackgroundEnd ?? "bottom 30%";
+
   const trigger = ScrollTrigger.create({
     trigger: section,
-    start: "top 70%",
-    end: "bottom 30%",
+    start,
+    end,
     invalidateOnRefresh: true,
     onEnter: () => section.classList.add("scroll-background--active"),
     onEnterBack: () => section.classList.add("scroll-background--active"),

@@ -63,8 +63,8 @@ const wrapperReveal = reveal ? "reveal" : "";
       </div>
     )}
 
-    <div class="flex items-center gap-3 text-xs text-fg-muted">
-      <span class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+    <div class="flex items-center gap-3 text-base text-fg-muted">
+      <span class="text-fg-muted">
         {publication.category}
       </span>
       <span aria-hidden="true">·</span>
@@ -114,8 +114,8 @@ const wrapperReveal = reveal ? "reveal" : "";
           </div>
         </div>
       ) : (
-        <div class="col-span-12 md:col-span-2 text-xs text-fg-muted">
-          <p class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+        <div class="col-span-12 md:col-span-2 text-base text-fg-muted">
+          <p>
             {publication.category}
           </p>
           <time class="mt-2 block" datetime={publication.date}>
@@ -126,8 +126,8 @@ const wrapperReveal = reveal ? "reveal" : "";
 
       <div class={`col-span-12 ${hasCover ? "md:col-span-6" : "md:col-span-7"}`}>
         {hasCover && (
-          <div class="flex items-center gap-3 text-xs text-fg-muted">
-            <span class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+          <div class="flex items-center gap-3 text-base text-fg-muted">
+            <span class="text-fg-muted">
               {publication.category}
             </span>
             <span aria-hidden="true">·</span>
@@ -182,8 +182,8 @@ const wrapperReveal = reveal ? "reveal" : "";
       )}
 
       <div class={hasCover ? "md:col-span-7 md:order-2" : "md:col-span-11"}>
-        <div class="flex items-center gap-3 text-xs text-fg-muted">
-          <span class="uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+        <div class="flex items-center gap-3 text-base text-fg-muted">
+          <span class="text-fg-muted">
             {publication.category}
           </span>
           <span aria-hidden="true">·</span>

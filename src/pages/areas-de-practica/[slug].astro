@@ -1,10 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PracticeAreaCard from "../../components/practice/PracticeAreaCard.astro";
+import CTASection from "../../components/CTASection.astro";
 import PracticeAreaFeatureItem from "../../components/practice/PracticeAreaFeatureItem.astro";
-import Button from "../../components/ui/Button.astro";
-import TextLink from "../../components/ui/TextLink.astro";
 import { cms } from "../../lib/cms";
+import { getPracticeAreaIndicators } from "../../lib/practice-area-indicators";
 import type { PracticeArea } from "../../lib/types";
 
 export async function getStaticPaths() {
@@ -22,45 +21,100 @@ interface Props {
 const { area } = Astro.props;
 
 const allAreas = await cms.getPracticeAreas();
-const otherAreas = allAreas.filter((a) => a.slug !== area.slug).slice(0, 3);
+const otherAreas = allAreas.filter((a) => a.slug !== area.slug);
+const areaHeroImages: Record<string, { src: string; alt: string }> = {
+  "seguros-y-reaseguros": {
+    src: "https://images.pexels.com/photos/7654609/pexels-photo-7654609.jpeg?auto=compress&cs=tinysrgb&w=1800",
+    alt: "Equipo profesional revisando documentos en una oficina moderna",
+  },
+  "recuperos-legales": {
+    src: "https://images.pexels.com/photos/5324856/pexels-photo-5324856.jpeg?auto=compress&cs=tinysrgb&w=1800",
+    alt: "Profesionales trabajando en computadores dentro de una oficina sobria",
+  },
+  "responsabilidad-civil": {
+    src: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1800",
+    alt: "Reunión de trabajo en una oficina luminosa y minimalista",
+  },
+  "derecho-maritimo-y-transporte": {
+    src: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1800",
+    alt: "Equipo conversando alrededor de una mesa de trabajo en oficina",
+  },
+  "derecho-corporativo": {
+    src: "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1800",
+    alt: "Profesionales colaborando en un espacio de oficina contemporáneo",
+  },
+  "litigios-y-arbitrajes": {
+    src: "https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=1800",
+    alt: "Mesa de reunión en oficina con profesionales revisando una estrategia",
+  },
+};
+const heroImage = areaHeroImages[area.slug] ?? areaHeroImages["seguros-y-reaseguros"];
+const heroIndicators = getPracticeAreaIndicators(area);
 ---
 
 <BaseLayout
   title={area.title}
   description={area.shortDescription}
-  headerVariant="transparent"
+  headerVariant="solid"
 >
-  <section class="bg-surface-inverse text-fg-on-inverse">
-    <div class="container-x pt-28 md:pt-36 pb-16 md:pb-24">
+  <section
+    class="scroll-background-section scroll-background--surface-soft text-fg"
+    data-scroll-background
+    data-scroll-background-start="bottom 90%"
+    data-scroll-background-end="bottom top"
+  >
+    <div class="container-x pt-20 md:pt-28 pb-16 md:pb-24">
       <nav
-        class="text-xs text-fg-on-inverse/60 flex items-center gap-2 reveal"
+        class="text-sm text-fg-muted flex items-center gap-2 reveal"
         aria-label="Breadcrumb"
       >
-        <a href="/" class="hover:text-fg-on-inverse transition-colors">Inicio</a>
+        <a href="/" class="hover:text-fg transition-colors">Inicio</a>
         <span aria-hidden="true">/</span>
-        <a href="/areas-de-practica" class="hover:text-fg-on-inverse transition-colors">
+        <a href="/areas-de-practica" class="hover:text-fg transition-colors">
           Áreas de práctica
         </a>
         <span aria-hidden="true">/</span>
-        <span class="text-fg-on-inverse/75">{area.title}</span>
+        <span class="text-fg">{area.title}</span>
       </nav>
 
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 mt-16 md:mt-20">
-        <div class="md:col-span-8">
-          <p class="font-display text-3xl text-fg-on-inverse-accent reveal">{area.number}</p>
-          <h1 class="font-display text-5xl md:text-7xl lg:text-[80px] leading-[1.02] mt-6 text-fg-on-inverse reveal">
+      <div class="mt-16 md:mt-20">
+        <div class="max-w-5xl">
+          <h1 class="font-display text-6xl md:text-8xl lg:text-[104px] leading-[0.95] tracking-[-0.035em] reveal">
             {area.title}
           </h1>
-          <p class="mt-10 max-w-2xl text-lg md:text-xl text-fg-on-inverse/75 leading-relaxed reveal">
+          <p class="mt-10 max-w-4xl text-xl md:text-2xl leading-relaxed text-fg-soft reveal">
             {area.intro}
           </p>
+        </div>
+
+        <figure class="mt-16 aspect-video overflow-hidden bg-surface-soft">
+          <img
+            src={heroImage.src}
+            alt={heroImage.alt}
+            width="1800"
+            height="1013"
+            class="h-full w-full object-cover"
+          />
+        </figure>
+
+        <div class="mt-10 grid grid-cols-2 gap-8 md:flex md:justify-start md:gap-14 reveal">
+          {heroIndicators.map((indicator) => (
+            <div>
+              <p class="font-display text-5xl md:text-7xl lg:text-8xl leading-none tracking-[-0.04em] text-fg">
+                {indicator.value}
+              </p>
+              <p class="mt-4 max-w-[10rem] text-sm md:text-base leading-snug text-fg-muted">
+                {indicator.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   </section>
 
   {area.features && area.features.length > 0 && (
-    <section class="border-y border-line bg-surface-soft">
+    <section class="border-b border-line bg-surface-soft">
       <div class="container-x py-20 md:py-28">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
           <div class="md:col-span-4">
@@ -84,32 +138,31 @@ const otherAreas = allAreas.filter((a) => a.slug !== area.slug).slice(0, 3);
     </section>
   )}
 
-  <section class="container-x py-24 md:py-32">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
-      <div class="md:col-span-8">
-        <p class="eyebrow reveal">Próximo paso</p>
-        <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
-          Conversemos sobre cómo {area.title.toLowerCase()} aplica a su operación.
-        </h2>
-      </div>
-      <div class="md:col-span-4 md:text-right reveal">
-        <Button href="/contacto">Agendar consulta</Button>
-      </div>
-    </div>
-  </section>
+  <CTASection
+    title={`Conversemos sobre cómo ${area.title.toLowerCase()} aplica a su operación.`}
+    description={`Coordinamos una reunión inicial para evaluar el contexto de su empresa, los riesgos críticos y la mejor forma de abordar ${area.title.toLowerCase()} con una estrategia clara.`}
+    buttonLabel="Contáctanos"
+  />
 
   <section class="border-t border-line bg-surface-soft">
     <div class="container-x py-20 md:py-28">
       <div class="flex items-end justify-between mb-12">
         <p class="eyebrow">Otras áreas del estudio</p>
-        <TextLink href="/areas-de-practica" variant="subtle" class="hidden md:inline-flex">
-          Ver todas las áreas
-        </TextLink>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-20">
         {otherAreas.map((other) => (
-          <PracticeAreaCard area={other} />
+          <a
+            href={`/areas-de-practica/${other.slug}`}
+            class="group block border-t border-line py-8 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong"
+          >
+            <h3 class="link-underline font-display text-3xl md:text-4xl leading-[1.05] text-fg transition-colors group-hover:text-fg-accent">
+              {other.title}
+            </h3>
+            <p class="mt-4 max-w-xl text-base leading-relaxed text-fg-muted">
+              {other.shortDescription}
+            </p>
+          </a>
         ))}
       </div>
     </div>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CTASection from "../components/CTASection.astro";
 import PageHero from "../components/PageHero.astro";
 import PracticeAreaStackSection from "../components/practice/PracticeAreaStackSection.astro";
 import TestimonialHorizontalSection from "../components/testimonials/TestimonialHorizontalSection.astro";
@@ -126,30 +127,9 @@ const featuredPublications = publications.slice(0, 3);
     </div>
   </section>
 
-  <section class="scroll-background-section" data-scroll-background>
-    <div class="container-x py-28 md:py-40">
-      <div class="grid grid-cols-1 md:grid-cols-12">
-        <div class="md:col-span-8">
-          <h2 class="font-display text-4xl md:text-6xl leading-[1.05] reveal">
-            ¿Tiene un caso o un programa de seguros<br />que evaluar con nosotros?
-          </h2>
-          <p class="mt-8 max-w-xl text-base md:text-lg text-fg-muted leading-relaxed reveal">
-            Coordinamos una reunión inicial para entender el contexto de su empresa
-            o aseguradora, los riesgos críticos y la mejor forma de articular una
-            asesoría que aporte valor desde el primer día.
-          </p>
-          <div class="mt-10 reveal">
-            <Button href="/contacto">Contáctanos</Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <CTASection
+    title="¿Tiene un caso o un programa de seguros que evaluar con nosotros?"
+    description="Coordinamos una reunión inicial para entender el contexto de su empresa o aseguradora, los riesgos críticos y la mejor forma de articular una asesoría que aporte valor desde el primer día."
+    buttonLabel="Contáctanos"
+  />
 </BaseLayout>
-
-<script>
-  import { initScrollBackgroundSections } from "../scripts/scroll-background";
-
-  initScrollBackgroundSections();
-  document.addEventListener("astro:page-load", initScrollBackgroundSections);
-</script>

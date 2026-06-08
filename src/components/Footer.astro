@@ -5,6 +5,8 @@ const settings = await cms.getSiteSettings();
 const areas = await cms.getPracticeAreas();
 
 const currentYear = new Date().getFullYear();
+const footerLinkClass =
+  "text-base leading-snug text-fg-on-inverse/85 transition-colors hover:text-fg-on-inverse";
 ---
 
 <footer class="bg-surface-inverse text-fg-on-inverse">
@@ -29,7 +31,7 @@ const currentYear = new Date().getFullYear();
             <li>
               <a
                 href={`/areas-de-practica/${area.slug}`}
-                class="text-sm text-fg-on-inverse/85 transition-colors hover:text-fg-on-inverse"
+                class={footerLinkClass}
               >
                 {area.title}
               </a>
@@ -38,7 +40,7 @@ const currentYear = new Date().getFullYear();
           <li>
             <a
               href="/areas-de-practica"
-              class="text-sm text-fg-on-inverse/85 transition-colors hover:text-fg-on-inverse"
+              class={footerLinkClass}
             >
               Ver todas las áreas
             </a>
@@ -48,16 +50,16 @@ const currentYear = new Date().getFullYear();
 
       <div class="md:col-span-2">
         <p class="eyebrow text-fg-on-inverse/55">Estudio</p>
-        <ul class="mt-6 space-y-3.5 text-sm text-fg-on-inverse/85">
-          <li><a href="/nosotros" class="transition-colors hover:text-fg-on-inverse">Nosotros</a></li>
-          <li><a href="/publicaciones" class="transition-colors hover:text-fg-on-inverse">Publicaciones</a></li>
-          <li><a href="/contacto" class="transition-colors hover:text-fg-on-inverse">Contacto</a></li>
+        <ul class="mt-6 space-y-3.5">
+          <li><a href="/nosotros" class={footerLinkClass}>Nosotros</a></li>
+          <li><a href="/publicaciones" class={footerLinkClass}>Publicaciones</a></li>
+          <li><a href="/contacto" class={footerLinkClass}>Contacto</a></li>
         </ul>
       </div>
 
       <div class="md:col-span-4">
         <p class="eyebrow text-fg-on-inverse/55">Contacto</p>
-        <address class="mt-6 space-y-3.5 text-sm not-italic leading-relaxed text-fg-on-inverse/85">
+        <address class="mt-6 space-y-3.5 text-base not-italic leading-relaxed text-fg-on-inverse/85">
           <p>
             {settings.address.street}<br />
             {settings.address.city}, {settings.address.region}<br />
