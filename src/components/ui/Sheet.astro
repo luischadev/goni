@@ -34,7 +34,7 @@ const { id, label = "Detalle" } = Astro.props;
   <!-- Panel -->
   <div class="sheet__panel">
     <!-- Mobile drag handle -->
-    <div class="sheet__handle md:hidden" aria-hidden="true"></div>
+    <div class="sheet__handle md:hidden" data-sheet-drag-handle aria-hidden="true"></div>
 
     <!-- Desktop close button -->
     <button
@@ -111,6 +111,12 @@ const { id, label = "Detalle" } = Astro.props;
     border-radius: 9999px;
     margin: 0.875rem auto 0;
     flex-shrink: 0;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .sheet[data-sheet-dragging="true"] .sheet__handle {
+    cursor: grabbing;
   }
 
   /* ── Scrollable body ──────────────────────────────────── */
@@ -202,6 +208,70 @@ const { id, label = "Detalle" } = Astro.props;
     if (!anyOpen) document.body.style.overflow = "";
   }
 
+  function isMobileSheet(): boolean {
+    return window.matchMedia("(max-width: 767px)").matches;
+  }
+
+  function resetPanelDrag(panel: HTMLElement): void {
+    panel.style.transform = "";
+    panel.style.transition = "";
+  }
+
+  function handleDragStart(e: PointerEvent): void {
+    const handle = (e.target as Element).closest<HTMLElement>("[data-sheet-drag-handle]");
+    if (!handle || !isMobileSheet()) return;
+
+    const sheet = handle.closest<HTMLElement>("[data-sheet]");
+    const panel = sheet?.querySelector<HTMLElement>(".sheet__panel");
+    if (!sheet || !panel || sheet.getAttribute("aria-hidden") === "true") return;
+
+    const startY = e.clientY;
+    let currentY = startY;
+    let isDragging = true;
+
+    sheet.dataset.sheetDragging = "true";
+    panel.style.transition = "none";
+    handle.setPointerCapture(e.pointerId);
+
+    function handleDragMove(moveEvent: PointerEvent): void {
+      if (!isDragging) return;
+
+      currentY = moveEvent.clientY;
+      const deltaY = Math.max(0, currentY - startY);
+      panel.style.transform = `translateY(${deltaY}px)`;
+    }
+
+    function handleDragEnd(endEvent: PointerEvent): void {
+      if (!isDragging) return;
+
+      isDragging = false;
+      const deltaY = Math.max(0, currentY - startY);
+      const shouldClose = deltaY > 90;
+
+      delete sheet.dataset.sheetDragging;
+      handle.releasePointerCapture(endEvent.pointerId);
+      window.removeEventListener("pointermove", handleDragMove);
+      window.removeEventListener("pointerup", handleDragEnd);
+      window.removeEventListener("pointercancel", handleDragEnd);
+
+      if (shouldClose) {
+        panel.style.transition = "";
+        panel.style.transform = `translateY(${deltaY}px)`;
+        requestAnimationFrame(() => {
+          closeSheet(sheet);
+          panel.style.transform = "";
+        });
+        return;
+      }
+
+      resetPanelDrag(panel);
+    }
+
+    window.addEventListener("pointermove", handleDragMove);
+    window.addEventListener("pointerup", handleDragEnd);
+    window.addEventListener("pointercancel", handleDragEnd);
+  }
+
   function handleClick(e: MouseEvent): void {
     const trigger = (e.target as Element).closest<HTMLElement>("[data-sheet-trigger]");
     if (trigger) {
@@ -224,8 +294,10 @@ const { id, label = "Detalle" } = Astro.props;
   function init(): void {
     document.removeEventListener("click", handleClick);
     document.removeEventListener("keydown", handleKeydown);
+    document.removeEventListener("pointerdown", handleDragStart);
     document.addEventListener("click", handleClick);
     document.addEventListener("keydown", handleKeydown);
+    document.addEventListener("pointerdown", handleDragStart);
   }
 
   init();
