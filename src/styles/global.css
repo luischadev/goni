@@ -128,7 +128,7 @@
   .container-x {
     width: 100%;
     margin-inline: auto;
-    padding-inline: 1.5rem;
+    padding-inline: 1rem;
     max-width: 90rem;
   }
 
@@ -316,7 +316,7 @@
 
   .scroll-stack-stage {
     position: relative;
-    padding-bottom: clamp(4rem, 12vh, 8rem);
+    padding-bottom: clamp(1.25rem, 4vh, 2.5rem);
   }
 
   .scroll-stack-track {
@@ -341,7 +341,17 @@
   }
 
   .scroll-stack-item {
-    padding-bottom: clamp(5rem, 28vh, 14rem);
+    padding-bottom: clamp(1.25rem, 8vh, 3.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .scroll-stack-stage {
+      padding-bottom: clamp(4rem, 12vh, 8rem);
+    }
+
+    .scroll-stack-item {
+      padding-bottom: clamp(5rem, 28vh, 14rem);
+    }
   }
 
   .scroll-stack--static .scroll-stack-item {
@@ -435,6 +445,72 @@
 
   .horizontal-scroll-track::after {
     width: clamp(8rem, 30vw, 24rem);
+  }
+
+  .testimonial-carousel-control {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid color-mix(in srgb, var(--color-line-on-inverse) 22%, transparent);
+    color: var(--color-fg-on-inverse);
+    background-color: transparent;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .testimonial-carousel-control:hover {
+    border-color: var(--color-line-on-inverse);
+    color: var(--color-fg-on-inverse-interaction);
+    background-color: color-mix(in srgb, var(--color-line-on-inverse) 8%, transparent);
+  }
+
+  @media (max-width: 767px) {
+    .horizontal-scroll--carousel {
+      overflow: hidden;
+    }
+
+    .horizontal-scroll--carousel .horizontal-scroll-pin {
+      min-height: 0;
+      display: block;
+      overflow: visible;
+      padding-bottom: 4rem;
+    }
+
+    .horizontal-scroll--carousel .horizontal-scroll-viewport {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 1.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .horizontal-scroll--carousel .horizontal-scroll-viewport::-webkit-scrollbar {
+      display: none;
+    }
+
+    .horizontal-scroll--carousel .horizontal-scroll-track {
+      width: max-content;
+      gap: 1rem;
+      will-change: auto;
+    }
+
+    .horizontal-scroll--carousel .horizontal-scroll-track::before,
+    .horizontal-scroll--carousel .horizontal-scroll-track::after {
+      display: none;
+    }
+
+    .horizontal-scroll--carousel .testimonial-carousel-card {
+      width: calc(100vw - 3rem);
+      min-height: 21rem;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
   }
 
   @media (min-width: 768px) {

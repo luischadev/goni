@@ -13,8 +13,8 @@ const { testimonials } = Astro.props;
   class="horizontal-scroll-section bg-surface-inverse-soft text-fg-on-inverse"
   data-horizontal-scroll
 >
-  <div class="container-x pt-28 md:pt-40 pb-14 md:pb-16">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-end">
+  <div class="container-x pt-16 md:pt-40 pb-10 md:pb-16">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-16 items-end">
       <div class="md:col-span-7">
         <p class="eyebrow text-fg-on-inverse-accent reveal">
           Voces del mercado
@@ -43,11 +43,10 @@ const { testimonials } = Astro.props;
         <div class="horizontal-scroll-track" data-horizontal-scroll-track>
         {
           testimonials.map((testimonial) => (
-            <figure class="flex min-h-[28rem] w-[82vw] max-w-[42rem] shrink-0 flex-col bg-surface-inverse text-fg-on-inverse p-8 md:w-[42rem] md:p-12 lg:p-14 shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+            <figure class="testimonial-carousel-card flex min-h-[28rem] w-[82vw] max-w-[42rem] shrink-0 flex-col bg-surface-inverse text-fg-on-inverse p-6 md:w-[42rem] md:p-12 lg:p-14 shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
               <span
-                class="material-symbols-sharp text-fg-on-inverse-accent leading-none"
+                class="material-symbols-sharp text-4xl md:text-fg-on-inverse-accent md:leading-none"
                 style={{
-                  fontSize: "56px",
                   fontVariationSettings:
                     '"FILL" 0, "wght" 200, "GRAD" 0, "opsz" 48',
                 }}
@@ -56,11 +55,11 @@ const { testimonials } = Astro.props;
                 format_quote
               </span>
 
-              <blockquote class="mt-6 md:mt-8 font-display text-2xl md:text-3xl leading-relaxed text-fg-on-inverse">
+              <blockquote class="mt-5 md:mt-8 font-display text-xl md:text-3xl leading-relaxed text-fg-on-inverse">
                 “{testimonial.quote}”
               </blockquote>
 
-              <figcaption class="mt-auto flex items-center gap-4 pt-8 md:pt-10">
+              <figcaption class="mt-auto flex items-center gap-4 pt-4 md:pt-10">
                 <img
                   src={testimonial.avatar}
                   alt=""
@@ -85,12 +84,61 @@ const { testimonials } = Astro.props;
         </div>
       </div>
     </div>
+
+    <div class="container-x mt-6 flex gap-3 md:hidden" aria-label="Controles del carrusel de testimonios">
+      <button
+        type="button"
+        class="testimonial-carousel-control"
+        data-testimonial-carousel-prev
+        aria-label="Testimonio anterior"
+      >
+        <span class="material-symbols-sharp text-xl" aria-hidden="true">arrow_back</span>
+      </button>
+      <button
+        type="button"
+        class="testimonial-carousel-control"
+        data-testimonial-carousel-next
+        aria-label="Testimonio siguiente"
+      >
+        <span class="material-symbols-sharp text-xl" aria-hidden="true">arrow_forward</span>
+      </button>
+    </div>
   </div>
 </section>
 
 <script>
   import { initHorizontalScrollSections } from "../../scripts/horizontal-scroll";
 
+  function initTestimonialCarouselControls() {
+    const sections = document.querySelectorAll<HTMLElement>("[data-horizontal-scroll]");
+
+    sections.forEach((section) => {
+      if (section.dataset.carouselControlsInitialized === "true") return;
+      section.dataset.carouselControlsInitialized = "true";
+
+      const viewport = section.querySelector<HTMLElement>("[data-horizontal-scroll-viewport]");
+      const prev = section.querySelector<HTMLButtonElement>("[data-testimonial-carousel-prev]");
+      const next = section.querySelector<HTMLButtonElement>("[data-testimonial-carousel-next]");
+
+      if (!viewport || !prev || !next) return;
+
+      const getStep = () => {
+        const card = section.querySelector<HTMLElement>(".testimonial-carousel-card");
+        return card ? card.offsetWidth + 24 : viewport.clientWidth;
+      };
+
+      prev.addEventListener("click", () => {
+        viewport.scrollBy({ left: -getStep(), behavior: "smooth" });
+      });
+
+      next.addEventListener("click", () => {
+        viewport.scrollBy({ left: getStep(), behavior: "smooth" });
+      });
+    });
+  }
+
   initHorizontalScrollSections();
+  initTestimonialCarouselControls();
   document.addEventListener("astro:page-load", initHorizontalScrollSections);
+  document.addEventListener("astro:page-load", initTestimonialCarouselControls);
 </script>

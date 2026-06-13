@@ -92,7 +92,7 @@ function initScrollStack(root: HTMLElement): void {
 
     const trigger = ScrollTrigger.create({
       trigger: nextItem,
-      start: mobile ? `top bottom-=${HEADER_OFFSET}` : "top 80%",
+      start: mobile ? "top 55%" : "top 80%",
       end: mobile
         ? `top top+=${HEADER_OFFSET + index * 8}`
         : `top top+=${HEADER_OFFSET}`,

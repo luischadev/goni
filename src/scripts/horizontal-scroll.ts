@@ -9,6 +9,10 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function isMobileViewport(): boolean {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+
 function killHorizontalTriggers(root: HTMLElement): void {
   const existing = horizontalTriggers.get(root);
   if (!existing) return;
@@ -33,6 +37,12 @@ function initHorizontalScroll(root: HTMLElement): void {
 
   gsap.set(track, { clearProps: "transform" });
   root.classList.remove("horizontal-scroll--static");
+  root.classList.remove("horizontal-scroll--carousel");
+
+  if (isMobileViewport()) {
+    root.classList.add("horizontal-scroll--carousel");
+    return;
+  }
 
   if (prefersReducedMotion()) {
     root.classList.add("horizontal-scroll--static");
