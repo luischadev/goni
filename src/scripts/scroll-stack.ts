@@ -6,6 +6,8 @@ gsap.registerPlugin(ScrollTrigger);
 const HEADER_OFFSET = 96;
 const SCALE_DELTA = 0.11;
 const SHADOW_ALPHA = 0.08;
+const STACK_BACKGROUND_BLUE = "var(--palette-blue-light)";
+const STACK_BACKGROUND_CREAM = "var(--color-surface-soft)";
 
 const stackTriggers = new WeakMap<HTMLElement, ScrollTrigger[]>();
 
@@ -26,6 +28,7 @@ function killStackTriggers(root: HTMLElement): void {
 
 function initScrollStack(root: HTMLElement): void {
   killStackTriggers(root);
+  root.style.removeProperty("--scroll-stack-background");
 
   const items = Array.from(
     root.querySelectorAll<HTMLElement>("[data-scroll-stack-item]")
@@ -45,7 +48,6 @@ function initScrollStack(root: HTMLElement): void {
   });
 
   root.classList.remove("scroll-stack--static");
-  root.classList.remove("scroll-stack--blue-bg");
 
   if (prefersReducedMotion()) {
     root.classList.add("scroll-stack--static");
@@ -54,21 +56,33 @@ function initScrollStack(root: HTMLElement): void {
 
   const mobile = isMobileViewport();
   const created: ScrollTrigger[] = [];
-  const backgroundStartItem = items[1] ?? items[0];
 
-  const backgroundTrigger = ScrollTrigger.create({
-    trigger: backgroundStartItem,
+  const setBackground = (color: string) => {
+    root.style.setProperty("--scroll-stack-background", color);
+  };
+
+  setBackground(STACK_BACKGROUND_CREAM);
+
+  const initialBackgroundTrigger = ScrollTrigger.create({
+    trigger: items[0],
     start: mobile ? `top bottom-=${HEADER_OFFSET}` : "top 80%",
-    endTrigger: root,
-    end: "bottom 35%",
     invalidateOnRefresh: true,
-    onEnter: () => root.classList.add("scroll-stack--blue-bg"),
-    onEnterBack: () => root.classList.add("scroll-stack--blue-bg"),
-    onLeave: () => root.classList.remove("scroll-stack--blue-bg"),
-    onLeaveBack: () => root.classList.remove("scroll-stack--blue-bg"),
+    onEnter: () => setBackground(STACK_BACKGROUND_BLUE),
+    onEnterBack: () => setBackground(STACK_BACKGROUND_BLUE),
+    onLeaveBack: () => setBackground(STACK_BACKGROUND_CREAM),
   });
 
-  created.push(backgroundTrigger);
+  const finalBackgroundTrigger = ScrollTrigger.create({
+    trigger: items[items.length - 1],
+    start: mobile ? `top bottom-=${HEADER_OFFSET}` : "top 80%",
+    invalidateOnRefresh: true,
+    onEnter: () => setBackground(STACK_BACKGROUND_CREAM),
+    onEnterBack: () => setBackground(STACK_BACKGROUND_CREAM),
+    onLeaveBack: () => setBackground(STACK_BACKGROUND_BLUE),
+  });
+
+  created.push(initialBackgroundTrigger);
+  created.push(finalBackgroundTrigger);
 
   items.forEach((item, index) => {
     if (index === items.length - 1) return;

@@ -1,11 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/ui/Button.astro";
-import TextLink from "../components/ui/TextLink.astro";
 import { cms } from "../lib/cms";
 
 const settings = await cms.getSiteSettings();
 const areas = await cms.getPracticeAreas();
+
+const fieldGroupClass = "space-y-2";
+const labelClass = "block text-sm font-medium leading-none text-fg-muted";
+const helperClass = "text-xs leading-relaxed text-fg-muted";
+const fieldClass =
+  "contact-field-input w-full min-h-12 bg-surface-soft border border-transparent border-b-line px-4 py-3 text-base leading-normal text-fg outline-none transition-colors duration-200 placeholder:text-fg-subtle hover:border-b-line-strong focus:[border-color:var(--color-fg-accent)] focus:hover:[border-color:var(--color-fg-accent)] disabled:cursor-not-allowed disabled:bg-surface-soft/60 disabled:text-fg-subtle";
+const textareaClass = `${fieldClass} min-h-36 resize-none overflow-hidden`;
+const contactFieldClass = `${fieldGroupClass} contact-field`;
+const selectClass = `${fieldClass} appearance-none pr-12`;
 ---
 
 <BaseLayout
@@ -86,14 +94,16 @@ const areas = await cms.getPracticeAreas();
           <p class="eyebrow reveal">Formulario de consulta</p>
 
           <form
-            class="mt-10 space-y-7 reveal"
+            class="contact-form mt-10 space-y-7 reveal"
             method="POST"
             action="#"
             name="contact"
+            data-contact-form
+            novalidate
           >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="name" class="block text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-muted mb-3">
+              <div class={contactFieldClass} data-contact-field>
+                <label for="name" class={labelClass}>
                   Nombre completo
                 </label>
                 <input
@@ -101,27 +111,39 @@ const areas = await cms.getPracticeAreas();
                   id="name"
                   name="name"
                   required
-                  class="w-full bg-transparent border-b border-fg-subtle/40 focus:border-line-strong py-3 text-base text-fg outline-none transition-colors placeholder:text-fg-subtle"
+                  class={fieldClass}
+                  data-contact-input
                   placeholder="Nombre y apellido"
+                  aria-describedby="name-helper name-error-helper"
                 />
+                <p id="name-helper" class={`${helperClass} contact-helper-default`}>
+                  Ingrese nombre y apellido.
+                </p>
+                <p id="name-error-helper" class={`${helperClass} contact-helper-invalid`}>
+                  Ingrese su nombre completo.
+                </p>
               </div>
-              <div>
-                <label for="company" class="block text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-muted mb-3">
-                  Empresa
+              <div class={fieldGroupClass}>
+                <label for="company" class={labelClass}>
+                  Empresa <span class="text-fg-subtle">(opcional)</span>
                 </label>
                 <input
                   type="text"
                   id="company"
                   name="company"
-                  class="w-full bg-transparent border-b border-fg-subtle/40 focus:border-line-strong py-3 text-base text-fg outline-none transition-colors placeholder:text-fg-subtle"
+                  class={fieldClass}
                   placeholder="Empresa u organización"
+                  aria-describedby="company-helper"
                 />
+                <p id="company-helper" class={helperClass}>
+                  Indique su empresa u organización si corresponde.
+                </p>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="email" class="block text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-muted mb-3">
+              <div class={contactFieldClass} data-contact-field>
+                <label for="email" class={labelClass}>
                   Email
                 </label>
                 <input
@@ -129,43 +151,67 @@ const areas = await cms.getPracticeAreas();
                   id="email"
                   name="email"
                   required
-                  class="w-full bg-transparent border-b border-fg-subtle/40 focus:border-line-strong py-3 text-base text-fg outline-none transition-colors placeholder:text-fg-subtle"
+                  class={fieldClass}
+                  data-contact-input
                   placeholder="nombre@empresa.cl"
+                  aria-describedby="email-helper email-format-helper"
                 />
+                <p id="email-helper" class={`${helperClass} contact-helper-default`}>
+                  Usaremos este correo para responder su consulta.
+                </p>
+                <p id="email-format-helper" class={`${helperClass} contact-helper-invalid`}>
+                  Ingrese un email válido, por ejemplo nombre@empresa.cl.
+                </p>
               </div>
-              <div>
-                <label for="phone" class="block text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-muted mb-3">
-                  Teléfono
+              <div class={fieldGroupClass}>
+                <label for="phone" class={labelClass}>
+                  Teléfono <span class="text-fg-subtle">(opcional)</span>
                 </label>
                 <input
                   type="tel"
                   id="phone"
                   name="phone"
-                  class="w-full bg-transparent border-b border-fg-subtle/40 focus:border-line-strong py-3 text-base text-fg outline-none transition-colors placeholder:text-fg-subtle"
+                  class={fieldClass}
                   placeholder="+56 9 0000 0000"
+                  aria-describedby="phone-helper"
                 />
+                <p id="phone-helper" class={helperClass}>
+                  Incluya código de país si corresponde.
+                </p>
               </div>
             </div>
 
-            <div>
-              <label for="area" class="block text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-muted mb-3">
-                Área de interés
+            <div class={fieldGroupClass}>
+              <label for="area" class={labelClass}>
+                Área de interés <span class="text-fg-subtle">(opcional)</span>
               </label>
-              <select
-                id="area"
-                name="area"
-                class="w-full bg-transparent border-b border-fg-subtle/40 focus:border-line-strong py-3 text-base text-fg outline-none transition-colors"
-              >
-                <option value="">Seleccione un área</option>
-                {areas.map((area) => (
-                  <option value={area.slug}>{area.title}</option>
-                ))}
-                <option value="otro">Otra consulta</option>
-              </select>
+              <div class="relative">
+                <select
+                  id="area"
+                  name="area"
+                  class={selectClass}
+                  aria-describedby="area-helper"
+                >
+                  <option value="">Seleccione un área</option>
+                  {areas.map((area) => (
+                    <option value={area.slug}>{area.title}</option>
+                  ))}
+                  <option value="otro">Otra consulta</option>
+                </select>
+                <span
+                  class="material-symbols-sharp pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xl leading-none text-fg-muted"
+                  aria-hidden="true"
+                >
+                  expand_more
+                </span>
+              </div>
+              <p id="area-helper" class={helperClass}>
+                Seleccione el frente principal de su consulta.
+              </p>
             </div>
 
-            <div>
-              <label for="message" class="block text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-muted mb-3">
+            <div class={contactFieldClass} data-contact-field>
+              <label for="message" class={labelClass}>
                 Cuéntenos brevemente su caso
               </label>
               <textarea
@@ -173,15 +219,18 @@ const areas = await cms.getPracticeAreas();
                 name="message"
                 rows="5"
                 required
-                class="w-full bg-transparent border-b border-fg-subtle/40 focus:border-line-strong py-3 text-base text-fg outline-none transition-colors placeholder:text-fg-subtle resize-none"
+                class={textareaClass}
+                data-contact-input
                 placeholder="Describa el contexto, los actores involucrados y el resultado esperado."
+                aria-describedby="message-helper message-error-helper"
               ></textarea>
+              <p id="message-helper" class={`${helperClass} contact-helper-default`}>
+                Resuma el contexto, los actores involucrados y el resultado esperado.
+              </p>
+              <p id="message-error-helper" class={`${helperClass} contact-helper-invalid`}>
+                Cuéntenos brevemente su caso para poder responderle.
+              </p>
             </div>
-
-            <p class="text-xs text-fg-muted leading-relaxed">
-              Al enviar este formulario acepta nuestra política de confidencialidad.
-              Le responderemos en un plazo máximo de 48 horas hábiles.
-            </p>
 
             <Button type="submit" size="lg">Enviar consulta</Button>
           </form>
@@ -190,33 +239,112 @@ const areas = await cms.getPracticeAreas();
     </div>
   </section>
 
-  <section class="bg-surface-inverse text-fg-on-inverse">
-    <div class="container-x py-20 md:py-28">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
-        <div class="md:col-span-7">
-          <p class="eyebrow text-fg-on-inverse-accent reveal">Ubicación</p>
-          <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] text-fg-on-inverse reveal">
-            {settings.address.street}<br />
-            {settings.address.city}, {settings.address.country}
-          </h2>
-          <p class="mt-8 max-w-xl text-fg-on-inverse/75 leading-relaxed reveal">
-            Nuestras oficinas se ubican en el corazón financiero y legal de
-            Providencia, con acceso directo a metro y estacionamientos cercanos.
-          </p>
-        </div>
-        <div class="md:col-span-4 md:col-start-9 reveal">
-          <TextLink
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              `${settings.address.street}, ${settings.address.city}, ${settings.address.country}`
-            )}`}
-            variant="inverse"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Ver en Google Maps
-          </TextLink>
-        </div>
-      </div>
-    </div>
-  </section>
 </BaseLayout>
+
+<style is:global>
+  .contact-form {
+    --contact-error-color: #7a1f2b;
+  }
+
+  .contact-field .contact-helper-invalid {
+    color: var(--contact-error-color);
+    display: none;
+  }
+
+  .contact-field.field-error .contact-field-input {
+    border-color: var(--contact-error-color);
+  }
+
+  .contact-field.field-error .contact-field-input:hover,
+  .contact-field.field-error .contact-field-input:focus,
+  .contact-field.field-error .contact-field-input:focus:hover {
+    border-color: var(--contact-error-color);
+  }
+
+  .contact-field.field-error .contact-helper-default {
+    display: none;
+  }
+
+  .contact-field.field-error .contact-helper-invalid {
+    display: block;
+  }
+</style>
+
+<script>
+  function initContactForm() {
+    const form = document.querySelector("[data-contact-form]");
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.dataset.initialized === "true") return;
+    form.dataset.initialized = "true";
+
+    const fields = form.querySelectorAll("[data-contact-input][required]");
+
+    const resizeTextarea = (field) => {
+      if (!(field instanceof HTMLTextAreaElement)) return;
+
+      field.style.height = "auto";
+      field.style.height = `${field.scrollHeight}px`;
+    };
+
+    const validateField = (field, showAll = false) => {
+      if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
+        return false;
+      }
+
+      const group = field.closest("[data-contact-field]");
+      if (!(group instanceof HTMLElement)) return false;
+
+      const hasValue = field.value.trim() !== "";
+      const isTouched = field.dataset.touched === "true";
+      const isInvalid = !field.checkValidity();
+      const showError =
+        showAll ? isInvalid : isInvalid && (hasValue || (isTouched && field.required));
+
+      group.classList.toggle("field-error", showError);
+      field.setAttribute("aria-invalid", showError ? "true" : "false");
+
+      return showError;
+    };
+
+    fields.forEach((field) => {
+      resizeTextarea(field);
+
+      field.addEventListener("input", () => {
+        if (field.value.trim() !== "") {
+          field.dataset.touched = "true";
+        }
+        resizeTextarea(field);
+        validateField(field);
+      });
+
+      field.addEventListener("blur", () => {
+        field.dataset.touched = "true";
+        validateField(field);
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      let hasError = false;
+
+      fields.forEach((field) => {
+        field.dataset.touched = "true";
+        if (validateField(field, true)) {
+          hasError = true;
+        }
+      });
+
+      if (hasError) {
+        event.preventDefault();
+        const firstInvalid = form.querySelector(
+          "[data-contact-field].field-error [data-contact-input]"
+        );
+        if (firstInvalid instanceof HTMLElement) {
+          firstInvalid.focus();
+        }
+      }
+    });
+  }
+
+  initContactForm();
+  document.addEventListener("astro:page-load", initContactForm);
+</script>

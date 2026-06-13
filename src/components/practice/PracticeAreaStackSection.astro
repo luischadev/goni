@@ -76,13 +76,13 @@ const { areas } = Astro.props;
               </Button>
             </div>
 
-            <div class="order-1 grid grid-cols-2 gap-0 self-stretch md:order-2 md:self-end">
-              {indicators.map((indicator, indicatorIndex) => (
-                <div class={indicatorIndex === 0 ? "pr-8" : ""}>
+            <div class="order-1 grid grid-cols-2 gap-x-8 gap-y-8 self-stretch md:order-2 md:grid-cols-4 md:self-end">
+              {indicators.map((indicator) => (
+                <div>
                   <p class="font-display text-4xl lg:text-6xl leading-none tracking-[-0.04em] text-fg">
                     {indicator.value}
                   </p>
-                  <p class="mt-3 max-w-[8rem] text-xs lg:text-sm leading-snug text-fg-muted">
+                  <p class="mt-3 max-w-[7rem] text-xs lg:text-sm leading-snug text-fg-muted">
                     {indicator.label}
                   </p>
                 </div>
