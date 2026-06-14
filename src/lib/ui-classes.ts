@@ -10,7 +10,7 @@ const focusRingCurrent =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
 
 export const buttonBase =
-  "inline-flex items-center justify-center gap-2 text-md font-bold transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 font-bold transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
 
 export const buttonVariants = {
   primary: {
@@ -18,19 +18,19 @@ export const buttonVariants = {
     inverse: `${buttonBase} ${focusRingInverse} bg-surface-soft text-fg hover:bg-white active:bg-white`,
   },
   secondary: {
-    default: `${buttonBase} ${focusRing} text-fg border-b border-line-strong pb-1 hover:gap-3 active:opacity-80`,
-    inverse: `${buttonBase} ${focusRingInverse} text-fg-on-inverse border-b border-line-on-inverse pb-1 hover:gap-3 active:opacity-80`,
+    default: `${buttonBase} ${focusRing} text-sm md:text-base text-fg border-b border-line-strong pb-1 hover:gap-3 active:opacity-80`,
+    inverse: `${buttonBase} ${focusRingInverse} text-sm md:text-base text-fg-on-inverse border-b border-line-on-inverse pb-1 hover:gap-3 active:opacity-80`,
   },
   ghost: {
-    default: `${buttonBase} ${focusRing} text-fg-muted hover:text-fg active:opacity-80`,
-    inverse: `${buttonBase} ${focusRingInverse} text-fg-on-inverse/75 hover:text-fg-on-inverse active:opacity-80`,
+    default: `${buttonBase} ${focusRing} text-sm md:text-base text-fg-muted hover:text-fg active:opacity-80`,
+    inverse: `${buttonBase} ${focusRingInverse} text-sm md:text-base text-fg-on-inverse/75 hover:text-fg-on-inverse active:opacity-80`,
   },
 } as const;
 
 export const buttonSizes = {
-  md: "px-8 py-4",
-  lg: "px-10 py-4",
-  sm: "text-xs",
+  md: "px-6 py-3 text-sm md:px-8 md:py-4 md:text-base",
+  lg: "px-7 py-3 text-sm md:px-10 md:py-4 md:text-base",
+  sm: "px-4 py-2 text-xs",
   none: "",
 } as const;
 

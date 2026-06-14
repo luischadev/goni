@@ -36,9 +36,9 @@ const { id, label = "Detalle" } = Astro.props;
     <!-- Mobile drag handle -->
     <div class="sheet__handle md:hidden" data-sheet-drag-handle aria-hidden="true"></div>
 
-    <!-- Desktop close button -->
+    <!-- Close button -->
     <button
-      class="sheet__close-btn hidden md:flex"
+      class="sheet__close-btn flex"
       data-sheet-close
       aria-label="Cerrar"
       type="button"
@@ -160,7 +160,7 @@ const { id, label = "Detalle" } = Astro.props;
     .sheet__panel {
       width: min(92vw, 61rem);
       max-width: 61rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-sm);
       max-height: 88dvh;
       transform: translateY(16px) scale(0.97);
       opacity: 0;
@@ -176,7 +176,8 @@ const { id, label = "Detalle" } = Astro.props;
     }
 
     .sheet__body {
-      padding: 4rem 4rem 4.5rem;
+      overflow: hidden;
+      padding: 4rem;
     }
   }
 </style>

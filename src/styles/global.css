@@ -12,9 +12,9 @@
   --palette-ink-soft:     #1d2630;
   --palette-stone-deep:   #4a525d;
   --palette-stone:        #8a8f99;
-  --palette-hairline:     #e3e1dc;
-  --palette-cream:        #f6f3ee;
-  --palette-paper:        #fbfaf7;
+  --palette-hairline:     #dfe3e6;
+  --palette-cream:        #f2f4f6;
+  --palette-paper:        #fdfeff;
   --palette-bronze:       #8a6a3f;
   --palette-bronze-soft:  #b89a6c;
   --palette-bronze-light: #d6bd8d;
@@ -67,6 +67,19 @@
 
   --tracking-display: -0.015em;
   --tracking-eyebrow: 0.22em;
+
+  /* ────────────────────────────────────────────────────────────
+     ELEVATION — shadows.
+     Tailwind utilities: shadow-xs, shadow-sm, shadow-md,
+     shadow-lg, shadow-xl, shadow-inverse-md, shadow-inverse-lg
+     ──────────────────────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px color-mix(in srgb, var(--palette-ink) 8%, transparent);
+  --shadow-sm: 0 4px 12px color-mix(in srgb, var(--palette-ink) 8%, transparent);
+  --shadow-md: 0 12px 32px color-mix(in srgb, var(--palette-ink) 10%, transparent);
+  --shadow-lg: 0 24px 64px color-mix(in srgb, var(--palette-ink) 12%, transparent);
+  --shadow-xl: 0 32px 96px color-mix(in srgb, var(--palette-ink) 16%, transparent);
+  --shadow-inverse-md: 0 18px 48px rgba(0, 0, 0, 0.22);
+  --shadow-inverse-lg: 0 30px 90px rgba(0, 0, 0, 0.28);
 }
 
 @layer base {
@@ -188,6 +201,24 @@
   .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  [data-scroll-text-reveal] {
+    --scroll-text-reveal-active-color: var(--color-fg);
+    --scroll-text-reveal-muted-color: color-mix(in srgb, var(--color-fg) 50%, transparent);
+  }
+
+  .scroll-text-reveal__word {
+    --scroll-text-word-progress: 0%;
+    color: transparent;
+    background-image: linear-gradient(
+      90deg,
+      var(--scroll-text-reveal-active-color) var(--scroll-text-word-progress),
+      var(--scroll-text-reveal-muted-color) calc(var(--scroll-text-word-progress) + 0.005em)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .scroll-background-section {
@@ -466,6 +497,16 @@
     border-color: var(--color-line-on-inverse);
     color: var(--color-fg-on-inverse-interaction);
     background-color: color-mix(in srgb, var(--color-line-on-inverse) 8%, transparent);
+  }
+
+  .testimonial-quote-icon {
+    font-size: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .testimonial-quote-icon {
+      font-size: 28px;
+    }
   }
 
   @media (max-width: 767px) {

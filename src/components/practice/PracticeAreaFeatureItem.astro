@@ -27,7 +27,7 @@ const { feature, class: className = "" } = Astro.props;
       {feature.description}
     </p>
     {feature.bullets && feature.bullets.length > 0 && (
-      <ul class="mt-6 space-y-3 text-sm md:text-base leading-relaxed text-fg-muted">
+      <ul class="mt-6 text-sm md:text-base leading-relaxed text-fg-muted">
         {feature.bullets.map((bullet) => (
           <li class="flex gap-3">
             <span

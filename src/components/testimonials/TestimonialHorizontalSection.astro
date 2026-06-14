@@ -13,7 +13,7 @@ const { testimonials } = Astro.props;
   class="horizontal-scroll-section bg-surface-inverse-soft text-fg-on-inverse"
   data-horizontal-scroll
 >
-  <div class="container-x pt-16 md:pt-40 pb-10 md:pb-16">
+  <div class="container-x pt-16 md:pt-32 pb-10 md:pb-16">
     <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-16 items-end">
       <div class="md:col-span-7">
         <p class="eyebrow text-fg-on-inverse-accent reveal">
@@ -45,7 +45,7 @@ const { testimonials } = Astro.props;
           testimonials.map((testimonial) => (
             <figure class="testimonial-carousel-card flex min-h-[28rem] w-[82vw] max-w-[42rem] shrink-0 flex-col bg-surface-inverse text-fg-on-inverse p-6 md:w-[42rem] md:p-12 lg:p-14 shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
               <span
-                class="material-symbols-sharp text-4xl md:text-fg-on-inverse-accent md:leading-none"
+                class="testimonial-quote-icon material-symbols-sharp leading-none text-fg-on-inverse-accent"
                 style={{
                   fontVariationSettings:
                     '"FILL" 0, "wght" 200, "GRAD" 0, "opsz" 48',

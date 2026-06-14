@@ -15,8 +15,25 @@ interface Props {
 
 const { items, size = "md", class: className = "" } = Astro.props;
 
+function splitTimelineItem(item: string) {
+  const trailingMeta = item.match(/\s*\(([^)]+)\)\s*$/);
+  let title = trailingMeta ? item.slice(0, trailingMeta.index).trim() : item;
+  const meta: string[] = trailingMeta ? [trailingMeta[1]] : [];
+
+  if (title.includes(", ")) {
+    const [core, ...rest] = title.split(", ");
+    title = core.trim();
+    meta.unshift(rest.join(", ").trim());
+  }
+
+  return {
+    title,
+    meta: meta.filter(Boolean).join(" · "),
+  };
+}
+
 const normalizedItems = items.map((item) =>
-  typeof item === "string" ? { title: item } : item
+  typeof item === "string" ? splitTimelineItem(item) : item
 );
 
 const textClass =
@@ -36,12 +53,12 @@ const textClass =
         <span class="relative mt-[0.45em] h-2.5 w-2.5 rounded-full border border-fg-accent bg-surface"></span>
       </div>
       <div>
+        <p class={`${textClass} font-medium text-fg`}>{item.title}</p>
         {item.meta && (
-          <p class="mb-1 text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-accent">
+          <p class="mt-0.5 text-sm leading-relaxed text-fg-muted">
             {item.meta}
           </p>
         )}
-        <p class={`${textClass} text-fg-soft`}>{item.title}</p>
         {item.description && (
           <p class="mt-2 text-sm leading-relaxed text-fg-muted">
             {item.description}

@@ -138,7 +138,6 @@ export const cms = {
           description: practiceAreaNavDescriptions[area.slug],
         })),
       },
-      { label: "Publicaciones", href: "/publicaciones" },
       { label: "Nosotros", href: "/nosotros" },
       { label: "Contacto", href: "/contacto" },
     ];

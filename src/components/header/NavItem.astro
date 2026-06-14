@@ -16,17 +16,15 @@ const desktopLinkClasses = `header-nav-item text-sm tracking-wide transition-col
   active ? "text-current" : "text-current hover:text-[var(--header-nav-hover)]"
 }`;
 
-const mobileLinkClasses = `text-2xl ${
-  active ? "text-fg" : "text-fg-muted"
-}`;
+const mobileLinkClasses =
+  "font-display text-3xl leading-[1.05] tracking-[-0.02em] text-fg";
 
 const desktopTriggerClasses = `header-nav-item inline-flex items-center gap-1.5 text-sm tracking-wide transition-colors cursor-pointer ${
   active ? "text-current" : "text-current hover:text-[var(--header-nav-hover)]"
 }`;
 
-const mobileTriggerClasses = `flex w-full items-center justify-between text-2xl cursor-pointer ${
-  active ? "text-fg" : "text-fg-muted"
-}`;
+const mobileTriggerClasses =
+  "font-display flex w-full items-center justify-between text-3xl leading-[1.05] tracking-[-0.02em] text-fg cursor-pointer";
 ---
 
 {hasChildren ? (

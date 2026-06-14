@@ -49,12 +49,13 @@ function initScrollStack(root: HTMLElement): void {
 
   root.classList.remove("scroll-stack--static");
 
-  if (prefersReducedMotion()) {
+  const mobile = isMobileViewport();
+
+  if (mobile || prefersReducedMotion()) {
     root.classList.add("scroll-stack--static");
     return;
   }
 
-  const mobile = isMobileViewport();
   const created: ScrollTrigger[] = [];
 
   const setBackground = (color: string) => {

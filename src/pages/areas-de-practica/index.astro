@@ -1,9 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Button from "../../components/ui/Button.astro";
-import TextLink from "../../components/ui/TextLink.astro";
+import CTASection from "../../components/CTASection.astro";
 import { cms } from "../../lib/cms";
-import { getPracticeAreaIndicators } from "../../lib/practice-area-indicators";
+import { getPracticeAreaHeroImage } from "../../lib/practice-area-hero-images";
 
 const areas = await cms.getPracticeAreas();
 ---
@@ -15,11 +14,11 @@ const areas = await cms.getPracticeAreas();
 >
   <section class="bg-surface-inverse text-fg-on-inverse">
     <div class="container-x pt-28 md:pt-36 pb-16 md:pb-24">
-      <div class="grid grid-cols-1 gap-16 md:grid-cols-12 md:gap-y-20">
+      <div class="grid grid-cols-1 md:grid-cols-12 md:gap-y-20">
         <h1 class="font-display text-5xl md:col-span-10 md:text-7xl lg:text-[88px] leading-[0.95] tracking-[-0.035em] text-fg-on-inverse reveal">
           Profundidad técnica en los frentes que definen su industria.
         </h1>
-        <p class="text-xl md:col-span-8 md:col-start-5 md:text-2xl leading-relaxed text-fg-on-inverse/75 reveal">
+        <p class="mt-5 text-xl md:mt-0 md:col-span-8 md:col-start-5 md:text-xl leading-relaxed text-fg-on-inverse/75 reveal">
           Hemos construido nuestra práctica alrededor de los riesgos más complejos
           del mercado asegurador, logístico y marítimo. Cada área del estudio combina
           conocimiento académico de alto nivel con experiencia forense intensiva.
@@ -28,85 +27,46 @@ const areas = await cms.getPracticeAreas();
     </div>
   </section>
 
-  <section class="border-y border-line">
-    <div class="container-x divide-y divide-line">
-      {areas.map((area) => {
-        const indicators = getPracticeAreaIndicators(area);
+  <section class="border-y border-line bg-surface-soft">
+    <div class="container-x py-16 md:py-32">
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-5 lg:gap-6">
+        {areas.map((area) => {
+          const heroImage = getPracticeAreaHeroImage(area.slug);
 
-        return (
-          <article class="py-20 md:py-28">
-            <div class="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-x-16 md:gap-y-14">
-              <div class="md:col-span-5">
-                <a
-                  href={`/areas-de-practica/${area.slug}`}
-                  class="group/title inline-block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong"
-                >
-                  <h2 class="link-underline font-display text-5xl md:text-7xl leading-[0.98] tracking-[-0.035em] text-fg transition-colors group-hover/title:text-fg-accent">
-                    {area.title}
-                  </h2>
-                </a>
+          return (
+            <a
+              href={`/areas-de-practica/${area.slug}`}
+              class="group reveal relative block min-h-[28rem] overflow-hidden bg-surface-inverse shadow-[0_24px_80px_rgba(15,24,34,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong md:min-h-[32rem]"
+            >
+              <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                <img
+                  src={heroImage.src}
+                  alt=""
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-surface-inverse/95 via-surface-inverse/62 to-surface-inverse/10"></div>
               </div>
 
-              <div class="md:col-span-6 md:col-start-7">
-                <p class="max-w-3xl text-xl md:text-2xl leading-relaxed text-fg-soft">
-                  {area.intro}
+              <div class="relative z-10 flex min-h-[28rem] flex-col justify-end p-6 text-fg-on-inverse sm:p-8 md:min-h-[32rem] md:p-10 lg:p-12">
+                <h2 class="link-underline [text-decoration-line:underline] md:[text-decoration-line:none] md:group-hover:[text-decoration-line:underline] font-display text-3xl sm:text-4xl md:text-4xl lg:text-5xl leading-[1.04] tracking-[-0.03em] text-fg-on-inverse transition-colors group-hover:text-fg-on-inverse-interaction">
+                  {area.title}
+                </h2>
+
+                <p class="mt-4 max-w-xl text-sm sm:text-base md:text-base lg:text-lg text-fg-on-inverse/85 leading-relaxed md:leading-snug">
+                  {area.shortDescription}
                 </p>
               </div>
-
-              <div class="md:col-span-4">
-                <div class="grid grid-cols-2 gap-8 md:gap-10">
-                  {indicators.map((indicator) => (
-                    <div>
-                      <p class="font-display text-5xl md:text-6xl leading-none tracking-[-0.04em] text-fg">
-                        {indicator.value}
-                      </p>
-                      <p class="mt-4 max-w-[10rem] text-sm md:text-base leading-snug text-fg-muted">
-                        {indicator.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div class="md:col-span-6 md:col-start-7">
-                <p class="flex max-w-3xl flex-wrap items-center text-sm md:text-base leading-relaxed text-fg-subtle">
-                  {area.industries.map((industry, industryIndex) => (
-                    <>
-                      {industryIndex > 0 && (
-                        <span aria-hidden="true" class="mx-2">
-                          ·
-                        </span>
-                      )}
-                      <span>{industry}</span>
-                    </>
-                  ))}
-                </p>
-              </div>
-
-              <div class="md:col-span-12">
-                <Button href={`/areas-de-practica/${area.slug}`}>
-                  Más sobre el servicio
-                </Button>
-              </div>
-            </div>
-          </article>
-        );
-      })}
-    </div>
-  </section>
-
-  <section class="container-x py-24 md:py-32">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
-      <div class="md:col-span-8">
-        <p class="eyebrow reveal">¿No encuentra su frente?</p>
-        <h2 class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
-          También asesoramos en operaciones donde la complejidad técnica<br class="hidden md:block" />
-          y regulatoria exige una mirada experta.
-        </h2>
-      </div>
-      <div class="md:col-span-4 md:text-right reveal">
-        <TextLink href="/contacto">Conversar con el estudio</TextLink>
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>
+
+  <CTASection
+    title="¿Necesita evaluar un asunto con nuestro equipo?"
+    description="Coordinamos una conversación inicial para entender el contexto, identificar los riesgos relevantes y orientar la mejor forma de abordar su caso."
+    buttonLabel="Contáctanos"
+  />
 </BaseLayout>

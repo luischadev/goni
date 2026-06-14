@@ -62,12 +62,12 @@ const { id, variant, items, parent } = Astro.props;
     id={id}
     data-nav-panel={id}
     hidden
-    class="nav-dropdown mt-3 pl-4 border-l border-line space-y-4"
+    class="nav-dropdown py-5 space-y-4"
   >
     {items.map((child) => (
       <a
         href={child.href}
-        class="block text-xl text-fg-muted hover:text-fg transition-colors"
+        class="block text-base text-fg-muted hover:text-fg transition-colors"
       >
         {child.label}
       </a>
@@ -75,7 +75,7 @@ const { id, variant, items, parent } = Astro.props;
     {parent.href && (
       <a
         href={parent.href}
-        class="block text-base text-fg-accent hover:text-fg transition-colors pt-1"
+        class="block text-sm text-fg-accent hover:text-fg transition-colors pt-2"
       >
         Ver todas →
       </a>

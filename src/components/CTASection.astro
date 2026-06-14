@@ -17,10 +17,13 @@ const {
 ---
 
 <section class="scroll-background-section" data-scroll-background>
-  <div class="container-x py-16 md:py-40">
+  <div class="container-x py-16 md:py-32">
     <div class="grid grid-cols-1 md:grid-cols-12">
       <div class="md:col-span-8">
-        <h2 class="font-display text-4xl md:text-6xl leading-[1.05] reveal">
+        <h2
+          class="font-display text-4xl md:text-6xl leading-[1.05] reveal"
+          data-scroll-text-reveal
+        >
           {title}
         </h2>
         <p class="mt-4 md:mt-8 max-w-xl text-base md:text-lg text-fg-muted leading-relaxed reveal">
@@ -36,7 +39,10 @@ const {
 
 <script>
   import { initScrollBackgroundSections } from "../scripts/scroll-background";
+  import { initScrollTextReveals } from "../scripts/scroll-text-reveal";
 
   initScrollBackgroundSections();
+  initScrollTextReveals();
   document.addEventListener("astro:page-load", initScrollBackgroundSections);
+  document.addEventListener("astro:page-load", initScrollTextReveals);
 </script>

@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CTASection from "../../components/CTASection.astro";
+import Button from "../../components/ui/Button.astro";
 import PracticeAreaFeatureItem from "../../components/practice/PracticeAreaFeatureItem.astro";
 import { cms } from "../../lib/cms";
 import { getPracticeAreaHeroImage } from "../../lib/practice-area-hero-images";
-import { getPracticeAreaIndicators } from "../../lib/practice-area-indicators";
 import type { PracticeArea } from "../../lib/types";
 
 export async function getStaticPaths() {
@@ -24,7 +24,42 @@ const { area } = Astro.props;
 const allAreas = await cms.getPracticeAreas();
 const otherAreas = allAreas.filter((a) => a.slug !== area.slug);
 const heroImage = getPracticeAreaHeroImage(area.slug);
-const heroIndicators = getPracticeAreaIndicators(area);
+const heroHighlights = [
+  {
+    icon: "architecture",
+    title: "Profundidad técnica",
+    description:
+      "Nuestra práctica nace del conocimiento profundo de las industrias que asesoramos. Hablamos el lenguaje del negocio, no solo el del derecho.",
+  },
+  {
+    icon: "handshake",
+    title: "Trato cercano",
+    description:
+      "Como estudio boutique, cada cliente tiene acceso directo a los socios y a un equipo que conoce su operación de extremo a extremo.",
+  },
+  {
+    icon: "verified",
+    title: "Resultados consistentes",
+    description:
+      "Más de tres décadas asesorando al mercado asegurador y logístico nos han enseñado que la consistencia es el mejor capital de un estudio.",
+  },
+  {
+    icon: "query_stats",
+    title: "Criterio estratégico",
+    description:
+      "Ordenamos escenarios complejos para que cada decisión legal tenga una lectura clara de riesgos, tiempos y efectos comerciales.",
+  },
+];
+const featureSections = [
+  {
+    eyebrow: "Cómo trabajamos",
+    title: "Una forma de trabajo pensada para casos complejos.",
+  },
+  {
+    eyebrow: "Ámbitos clave",
+    title: "Acompañamiento focalizado en las decisiones que definen cada caso.",
+  },
+];
 ---
 
 <BaseLayout
@@ -38,9 +73,19 @@ const heroIndicators = getPracticeAreaIndicators(area);
     data-scroll-background-start="bottom 90%"
     data-scroll-background-end="bottom top"
   >
-    <div class="container-x pt-20 md:pt-28 pb-16 md:pb-24">
+    <div class="container-x pt-14 md:pt-28 pb-0">
       <nav
-        class="text-sm text-fg-muted flex items-center gap-2 reveal"
+        class="flex items-center reveal md:hidden"
+        aria-label="Página padre"
+      >
+        <Button href="/areas-de-practica" variant="ghost" showArrow={false}>
+          <span aria-hidden="true">←</span>
+          Áreas de práctica
+        </Button>
+      </nav>
+
+      <nav
+        class="text-sm text-fg-muted hidden md:flex items-center gap-2 reveal"
         aria-label="Breadcrumb"
       >
         <a href="/" class="hover:text-fg transition-colors">Inicio</a>
@@ -52,51 +97,65 @@ const heroIndicators = getPracticeAreaIndicators(area);
         <span class="text-fg">{area.title}</span>
       </nav>
 
-      <div class="mt-16 md:mt-20">
+      <div class="mt-10 md:mt-20">
         <div class="max-w-5xl">
-          <h1 class="font-display text-6xl md:text-8xl lg:text-[104px] leading-[0.95] tracking-[-0.035em] reveal">
+          <h1 class="font-display text-5xl md:text-8xl lg:text-[104px] leading-[0.95] tracking-[-0.035em] reveal">
             {area.title}
           </h1>
-          <p class="mt-10 max-w-4xl text-xl md:text-2xl leading-relaxed text-fg-soft reveal">
+          <p class="mt-5 md:mt-10 max-w-4xl text-xl md:text-2xl leading-relaxed text-fg-soft reveal">
             {area.intro}
           </p>
         </div>
 
-        <figure class="mt-16 aspect-video overflow-hidden bg-surface-soft">
-          <img
-            src={heroImage.src}
-            alt={heroImage.alt}
-            width="1800"
-            height="1013"
-            class="h-full w-full object-cover"
-          />
-        </figure>
+        <figure class="relative left-1/2 mt-16 w-screen -translate-x-1/2 bg-surface-inverse md:left-auto md:w-auto md:translate-x-0">
+          <div class="relative aspect-[3/4] overflow-hidden md:aspect-video">
+            <img
+              src={heroImage.src}
+              alt={heroImage.alt}
+              width="1800"
+              height="1013"
+              class="absolute inset-0 h-full w-full object-cover"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-surface-inverse via-surface-inverse/62 to-surface-inverse/10"
+              aria-hidden="true"
+            ></div>
+          </div>
 
-        <div class="mt-10 grid grid-cols-2 gap-8 md:flex md:justify-start md:gap-14 reveal">
-          {heroIndicators.map((indicator) => (
-            <div>
-              <p class="font-display text-5xl md:text-7xl lg:text-8xl leading-none tracking-[-0.04em] text-fg">
-                {indicator.value}
-              </p>
-              <p class="mt-4 max-w-[10rem] text-sm md:text-base leading-snug text-fg-muted">
-                {indicator.label}
-              </p>
+          <figcaption
+            class="relative -mt-80 px-5 pb-16 pt-28 text-fg-on-inverse md:-mt-64 md:px-8 md:pb-12 md:pt-28 lg:px-10 lg:pb-14"
+            style="background: linear-gradient(to bottom, transparent 0, transparent 4rem, color-mix(in srgb, var(--color-surface-inverse) 72%, transparent) 9rem, var(--color-surface-inverse) 13rem, var(--color-surface-inverse) 100%);"
+          >
+            <div class="grid grid-cols-2 gap-x-5 gap-y-8 reveal md:grid-cols-4 md:gap-8">
+              {heroHighlights.map((highlight) => (
+                <div>
+                  <span class="material-symbols-sharp text-3xl md:text-5xl text-fg-on-inverse/85 leading-none" aria-hidden="true">
+                    {highlight.icon}
+                  </span>
+                  <h3 class="font-display text-xl md:text-2xl mt-4 md:mt-6 leading-[1.15] text-fg-on-inverse">
+                    {highlight.title}
+                  </h3>
+                  <p class="mt-3 md:mt-4 text-xs md:text-sm leading-relaxed text-fg-on-inverse/75">
+                    {highlight.description}
+                  </p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
-  {area.features && area.features.length > 0 && (
+  {area.features && area.features.length > 0 && featureSections.map((featureSection) => (
     <section class="border-b border-line bg-surface-soft">
       <div class="container-x py-20 md:py-28">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
           <div class="md:col-span-4">
             <div class="md:sticky md:top-32 md:pb-8">
-              <p class="eyebrow reveal">Cómo trabajamos</p>
+              <p class="eyebrow reveal">{featureSection.eyebrow}</p>
               <h2 class="font-display text-4xl md:text-5xl mt-6 leading-[1.05] reveal">
-                Una forma de trabajo pensada para casos complejos.
+                {featureSection.title}
               </h2>
             </div>
           </div>
@@ -111,7 +170,7 @@ const heroIndicators = getPracticeAreaIndicators(area);
         </div>
       </div>
     </section>
-  )}
+  ))}
 
   <CTASection
     title={`Conversemos sobre cómo ${area.title.toLowerCase()} aplica a su operación.`}
@@ -131,10 +190,10 @@ const heroIndicators = getPracticeAreaIndicators(area);
             href={`/areas-de-practica/${other.slug}`}
             class="group block border-t border-line py-8 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong"
           >
-            <h3 class="link-underline font-display text-3xl md:text-4xl leading-[1.05] text-fg transition-colors group-hover:text-fg-accent">
+            <h3 class="link-underline [text-decoration-line:underline] font-display text-2xl md:text-4xl leading-[1.05] text-fg transition-colors group-hover:text-fg-accent">
               {other.title}
             </h3>
-            <p class="mt-4 max-w-xl text-base leading-relaxed text-fg-muted">
+            <p class="mt-4 max-w-xl text-sm md:text-base leading-relaxed text-fg-muted">
               {other.shortDescription}
             </p>
           </a>
