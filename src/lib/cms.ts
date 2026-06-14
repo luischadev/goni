@@ -10,6 +10,7 @@ import {
   getTestimonials,
 } from "./content";
 import {
+  getVideoPosterPath,
   isExternalMediaUrl,
   resolveMediaAsset,
   resolveMediaUrl,
@@ -51,9 +52,16 @@ function resolveHero(hero: HeroContent): HeroContent {
     backgroundVideo = undefined;
   }
 
+  const resolvedBackgroundImage = backgroundVideo
+    ? {
+        ...backgroundImage,
+        url: getVideoPosterPath(backgroundVideo.url),
+      }
+    : backgroundImage;
+
   return {
     ...hero,
-    backgroundImage,
+    backgroundImage: resolvedBackgroundImage,
     backgroundVideo,
   };
 }

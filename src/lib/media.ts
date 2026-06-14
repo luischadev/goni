@@ -33,3 +33,10 @@ export function resolveMediaAsset(asset: MediaAsset): MediaAsset {
 export function isExternalMediaUrl(url: string): boolean {
   return /^https?:\/\//i.test(url);
 }
+
+/** Derives the poster path for a video, e.g. `/hero.mp4` → `/hero-poster.jpg`. */
+export function getVideoPosterPath(videoUrlOrPath: string): string {
+  const pathname = videoUrlOrPath.replace(/^https?:\/\/[^/]+/i, "");
+  if (!/\.mp4$/i.test(pathname)) return pathname;
+  return pathname.replace(/\.mp4$/i, "-poster.jpg");
+}

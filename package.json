@@ -7,9 +7,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run generate:hero-poster && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate:hero-poster": "node scripts/generate-hero-poster.mjs",
+    "predev": "npm run generate:hero-poster"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",

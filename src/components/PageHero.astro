@@ -35,6 +35,7 @@ const {
 } = Astro.props;
 
 const hasMedia = Boolean(imgSrc || videoSrc);
+const posterSrc = videoSrc ? imgSrc : undefined;
 ---
 
 <section
@@ -42,14 +43,27 @@ const hasMedia = Boolean(imgSrc || videoSrc);
   aria-label="Hero"
 >
   <!-- ── Background media ───────────────────────────────────── -->
+  {posterSrc && (
+    <img
+      src={posterSrc}
+      alt=""
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
+      aria-hidden="true"
+      class="absolute inset-0 h-full w-full object-cover pointer-events-none"
+    />
+  )}
+
   {videoSrc ? (
     <video
       autoplay
       muted
       loop
       playsinline
+      poster={posterSrc}
       aria-hidden="true"
-      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      class="page-hero__video absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out pointer-events-none"
     >
       <source src={videoSrc} type="video/mp4" />
     </video>
@@ -60,7 +74,7 @@ const hasMedia = Boolean(imgSrc || videoSrc);
       fetchpriority="high"
       loading="eager"
       decoding="async"
-      class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      class="absolute inset-0 h-full w-full object-cover pointer-events-none"
     />
   ) : null}
 
@@ -87,3 +101,29 @@ const hasMedia = Boolean(imgSrc || videoSrc);
     <slot />
   </div>
 </section>
+
+{videoSrc && (
+  <script>
+    function initHeroVideos() {
+      document.querySelectorAll<HTMLVideoElement>(".page-hero__video").forEach((video) => {
+        const reveal = () => video.classList.add("is-ready");
+
+        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+          reveal();
+          return;
+        }
+
+        video.addEventListener("loadeddata", reveal, { once: true });
+      });
+    }
+
+    initHeroVideos();
+    document.addEventListener("astro:page-load", initHeroVideos);
+  </script>
+)}
+
+<style>
+  .page-hero__video.is-ready {
+    opacity: 1;
+  }
+</style>
