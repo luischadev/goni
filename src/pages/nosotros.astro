@@ -35,74 +35,11 @@ function splitProfileDetail(item: string) {
   description="Conozca al equipo de Goñi & Cía. Abogados: socios, abogados jefes y especialistas con trayectoria en seguros, responsabilidad civil y derecho de transporte."
 >
   <!-- ── Hero ────────────────────────────────────────────────── -->
-  <section class="container-x pt-20 md:pt-32 pb-16 md:pb-32">
+  <section class="container-x pt-20 md:pt-32 pb-16">
     <div class="max-w-5xl">
       <h1 class="font-display text-5xl md:text-7xl leading-[1.02] reveal">
         Un estudio boutique, construido sobre conocimiento técnico y trato cercano.
       </h1>
-    </div>
-
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12 md:gap-12 mt-16 md:mt-24 pt-16 border-t border-line">
-      <div class="reveal">
-        <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
-          architecture
-        </span>
-        <h3 class="font-display text-2xl mt-6 leading-[1.15]">Profundidad técnica</h3>
-        <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
-          Nuestra práctica nace del conocimiento profundo de las industrias que
-          asesoramos. Hablamos el lenguaje del negocio, no solo el del derecho.
-        </p>
-      </div>
-      <div class="reveal">
-        <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
-          handshake
-        </span>
-        <h3 class="font-display text-2xl mt-6 leading-[1.15]">Trato cercano</h3>
-        <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
-          Como estudio boutique, cada cliente tiene acceso directo a los socios
-          y a un equipo que conoce su operación de extremo a extremo.
-        </p>
-      </div>
-      <div class="reveal">
-        <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
-          verified
-        </span>
-        <h3 class="font-display text-2xl mt-6 leading-[1.15]">Resultados consistentes</h3>
-        <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
-          Más de tres décadas asesorando al mercado asegurador y logístico nos
-          han enseñado que la consistencia es el mejor capital de un estudio.
-        </p>
-      </div>
-      <div class="reveal">
-        <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
-          query_stats
-        </span>
-        <h3 class="font-display text-2xl mt-6 leading-[1.15]">Criterio estratégico</h3>
-        <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
-          Ordenamos escenarios complejos para que cada decisión legal tenga una
-          lectura clara de riesgos, tiempos y efectos comerciales.
-        </p>
-      </div>
-      <div class="reveal">
-        <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
-          groups
-        </span>
-        <h3 class="font-display text-2xl mt-6 leading-[1.15]">Equipo involucrado</h3>
-        <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
-          Cada asunto se trabaja con socios y abogados que conocen el caso,
-          evitando capas innecesarias entre el cliente y la estrategia.
-        </p>
-      </div>
-      <div class="reveal">
-        <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
-          timeline
-        </span>
-        <h3 class="font-display text-2xl mt-6 leading-[1.15]">Seguimiento constante</h3>
-        <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
-          Mantenemos una gestión ordenada de hitos, antecedentes y próximos pasos
-          para que el cliente siempre sepa dónde está parado.
-        </p>
-      </div>
     </div>
   </section>
 
@@ -114,13 +51,6 @@ function splitProfileDetail(item: string) {
     data-scroll-background-end="bottom 30%"
   >
     <div class="container-x py-16 md:py-32">
-      <div class="mb-16 md:mb-20">
-        <p class="eyebrow reveal">El equipo</p>
-        <h2 class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal max-w-2xl">
-          Abogados que dedican su carrera a entender, no solo a litigar.
-        </h2>
-      </div>
-
       <div class="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-12 sm:gap-x-10 md:gap-y-20">
         {team.map((member) => {
           const sheetId = `sheet-${member.slug}`;
@@ -326,6 +256,81 @@ function splitProfileDetail(item: string) {
             </>
           );
         })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Características ─────────────────────────────────────── -->
+  <section class="container-x pb-16 md:pb-32">
+    <div class="pt-16">
+      <div class="mb-16 md:mb-20">
+        <p class="eyebrow reveal">Nuestro enfoque</p>
+        <h2 class="font-display text-4xl md:text-6xl mt-6 leading-[1.05] reveal max-w-3xl">
+          Una forma de trabajar construida sobre técnica, cercanía y criterio.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12 md:gap-12">
+        <div class="reveal">
+          <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
+            architecture
+          </span>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Profundidad técnica</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Nuestra práctica nace del conocimiento profundo de las industrias que
+            asesoramos. Hablamos el lenguaje del negocio, no solo el del derecho.
+          </p>
+        </div>
+        <div class="reveal">
+          <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
+            handshake
+          </span>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Trato cercano</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Como estudio boutique, cada cliente tiene acceso directo a los socios
+            y a un equipo que conoce su operación de extremo a extremo.
+          </p>
+        </div>
+        <div class="reveal">
+          <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
+            verified
+          </span>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Resultados consistentes</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Más de tres décadas asesorando al mercado asegurador y logístico nos
+            han enseñado que la consistencia es el mejor capital de un estudio.
+          </p>
+        </div>
+        <div class="reveal">
+          <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
+            query_stats
+          </span>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Criterio estratégico</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Ordenamos escenarios complejos para que cada decisión legal tenga una
+            lectura clara de riesgos, tiempos y efectos comerciales.
+          </p>
+        </div>
+        <div class="reveal">
+          <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
+            groups
+          </span>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Equipo involucrado</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Cada asunto se trabaja con socios y abogados que conocen el caso,
+            evitando capas innecesarias entre el cliente y la estrategia.
+          </p>
+        </div>
+        <div class="reveal">
+          <span class="material-symbols-sharp text-5xl text-fg-accent leading-none" aria-hidden="true">
+            timeline
+          </span>
+          <h3 class="font-display text-2xl mt-6 leading-[1.15]">Seguimiento constante</h3>
+          <p class="mt-4 text-sm md:text-base text-fg-muted leading-relaxed">
+            Mantenemos una gestión ordenada de hitos, antecedentes y próximos pasos
+            para que el cliente siempre sepa dónde está parado.
+          </p>
+        </div>
       </div>
     </div>
   </section>
