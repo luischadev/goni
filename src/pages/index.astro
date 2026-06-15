@@ -35,13 +35,22 @@ const featuredPublications = publications.slice(0, 3);
   >
     <div class="grid grid-cols-1 md:grid-cols-12">
       <div class="md:col-span-10">
-        <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] tracking-[-0.02em] text-fg-on-inverse reveal">
+        <h1
+          class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] tracking-[-0.02em] text-fg-on-inverse"
+          data-home-hero-item="title"
+        >
           {hero.title}
         </h1>
-        <p class="mt-6 md:mt-10 max-w-xl text-lg md:text-xl text-fg-on-inverse/75 leading-relaxed reveal">
+        <p
+          class="mt-6 md:mt-10 max-w-xl text-lg md:text-xl text-fg-on-inverse/75 leading-relaxed"
+          data-home-hero-item="subtitle"
+        >
           {hero.subtitle}
         </p>
-        <div class="mt-8 md:mt-12 flex flex-col sm:flex-row gap-6 sm:items-center reveal">
+        <div
+          class="mt-8 md:mt-12 flex flex-col sm:flex-row gap-6 sm:items-center"
+          data-home-hero-item="actions"
+        >
           <Button href="/contacto" tone="inverse" class="md:min-w-[240px]">Contactar</Button>
           <TextLink href="/areas-de-practica" variant="inverse" size="lg" class="self-start sm:self-auto">
             Áreas de práctica
