@@ -43,7 +43,7 @@ const { testimonials } = Astro.props;
         <div class="horizontal-scroll-track" data-horizontal-scroll-track>
         {
           testimonials.map((testimonial) => (
-            <figure class="testimonial-carousel-card flex min-h-[28rem] w-[82vw] max-w-[42rem] shrink-0 flex-col bg-surface-inverse text-fg-on-inverse p-6 md:w-[42rem] md:p-12 lg:p-14 shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+            <figure class="testimonial-carousel-card flex min-h-[28rem] w-[82vw] max-w-[42rem] shrink-0 flex-col rounded-card bg-surface-inverse p-6 text-fg-on-inverse md:w-[42rem] md:p-12 lg:p-14">
               <span
                 class="testimonial-quote-icon material-symbols-sharp leading-none text-fg-on-inverse-accent"
                 style={{
@@ -67,7 +67,7 @@ const { testimonials } = Astro.props;
                   height="48"
                   loading="lazy"
                   decoding="async"
-                  class="size-12 shrink-0 rounded-full object-cover ring-1 ring-line-on-inverse/10"
+                  class="size-12 shrink-0 rounded-media object-cover ring-1 ring-line-on-inverse/10"
                 />
                 <div>
                   <p class="text-sm md:text-base text-fg-on-inverse">

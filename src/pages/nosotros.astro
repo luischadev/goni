@@ -65,7 +65,7 @@ function splitProfileDetail(item: string) {
                 aria-haspopup="dialog"
                 aria-controls={sheetId}
               >
-                <div class="aspect-[4/5] overflow-hidden bg-surface-soft mb-6">
+                <div class="aspect-[4/5] overflow-hidden rounded-media bg-surface-soft mb-6">
                   <img
                     src={member.photo}
                     alt={`Retrato de ${member.name}`}
@@ -92,7 +92,7 @@ function splitProfileDetail(item: string) {
               <!-- Mobile layout -->
               <div class="md:hidden">
                 <div class="flex items-center gap-4">
-                  <div class="h-24 w-18 shrink-0 overflow-hidden bg-surface-soft">
+                  <div class="h-24 w-18 shrink-0 overflow-hidden rounded-media bg-surface-soft">
                     <img
                       src={member.photo}
                       alt={`Retrato de ${member.name}`}
@@ -113,7 +113,7 @@ function splitProfileDetail(item: string) {
                     <p class="font-display text-2xl leading-[1.1] text-fg">Áreas de práctica</p>
                     <ul class="mt-4 flex flex-wrap gap-2">
                       {member.practiceAreas.map((area) => (
-                        <li class="text-sm px-3 py-1 bg-surface-soft border border-line rounded-full text-fg-soft">
+                        <li class="rounded-full border border-line bg-surface-soft px-3 py-1 text-sm text-fg-soft">
                           {area}
                         </li>
                       ))}
@@ -173,7 +173,7 @@ function splitProfileDetail(item: string) {
               <div class="hidden md:grid md:grid-cols-12 md:gap-10 md:min-h-[32rem]">
                 <!-- Left: photo + name + role -->
                 <div class="md:col-span-3">
-                  <div class="aspect-[4/5] overflow-hidden bg-surface-soft">
+                  <div class="aspect-[4/5] overflow-hidden rounded-media bg-surface-soft">
                     <img
                       src={member.photo}
                       alt={`Retrato de ${member.name}`}
@@ -194,7 +194,7 @@ function splitProfileDetail(item: string) {
                       <p class="font-display text-3xl leading-[1.05] text-fg">Áreas de práctica</p>
                       <ul class="mt-5 flex flex-wrap gap-3">
                         {member.practiceAreas.map((area) => (
-                          <li class="text-base px-4 py-2 bg-surface-soft border border-line rounded-full text-fg-soft">
+                          <li class="rounded-full border border-line bg-surface-soft px-4 py-2 text-base text-fg-soft">
                             {area}
                           </li>
                         ))}

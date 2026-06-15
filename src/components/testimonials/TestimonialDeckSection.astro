@@ -37,7 +37,7 @@ function getInitials(value: string): string {
   {
     testimonials.map((testimonial, index) => (
       <CardDeckItem index={index}>
-        <figure class="mx-auto flex h-full w-full max-w-3xl flex-col bg-surface-inverse text-fg-on-inverse p-8 md:p-12 lg:p-14 shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+        <figure class="mx-auto flex h-full w-full max-w-3xl flex-col rounded-card bg-surface-inverse p-8 text-fg-on-inverse md:p-12 lg:p-14">
           <span
             class="material-symbols-sharp text-fg-on-inverse-accent leading-none"
             style={{
@@ -53,7 +53,7 @@ function getInitials(value: string): string {
           </blockquote>
           <figcaption class="mt-auto flex items-center gap-4 pt-8 md:pt-10">
             <span
-              class="flex size-12 shrink-0 items-center justify-center rounded-full bg-surface-inverse-soft text-sm font-medium text-fg-on-inverse-accent ring-1 ring-line-on-inverse/10"
+              class="flex size-12 shrink-0 items-center justify-center rounded-media bg-surface-inverse-soft text-sm font-medium text-fg-on-inverse-accent ring-1 ring-line-on-inverse/10"
               aria-hidden="true"
             >
               {getInitials(testimonial.author)}

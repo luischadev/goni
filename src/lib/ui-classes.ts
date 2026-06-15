@@ -10,7 +10,7 @@ const focusRingCurrent =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
 
 export const buttonBase =
-  "inline-flex items-center justify-center gap-2 font-bold transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 rounded-button font-bold transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
 
 export const buttonVariants = {
   primary: {
