@@ -61,8 +61,8 @@
   /* ────────────────────────────────────────────────────────────
      TYPOGRAPHY
      ──────────────────────────────────────────────────────────── */
-  --font-display: "Gilda Display", "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  --font-display: "Optima", "Candara", "Segoe UI", "Gill Sans", "Gill Sans MT", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --tracking-display: -0.015em;

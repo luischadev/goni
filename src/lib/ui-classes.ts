@@ -10,7 +10,7 @@ const focusRingCurrent =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
 
 export const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-button font-bold transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 rounded-button font-semibold tracking-tight transition-all disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed";
 
 export const buttonVariants = {
   primary: {
@@ -46,8 +46,8 @@ export const textLinkVariants = {
 } as const;
 
 export const textLinkSizes = {
-  sm: "text-xs tracking-wide",
-  md: "text-sm tracking-wide",
-  lg: "text-base tracking-wide",
-  xl: "text-lg md:text-xl ",
+  sm: "text-xs tracking-tight",
+  md: "text-sm tracking-tight",
+  lg: "text-base tracking-tight",
+  xl: "text-lg md:text-xl tracking-tight ",
 } as const;

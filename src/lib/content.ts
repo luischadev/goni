@@ -30,7 +30,7 @@ export const homeHero: HeroContent = {
   title: "Defensa legal para riesgos complejos",
   subtitle:
     "Rigor técnico, profundidad jurídica y resultados consistentes.",
-  overlayOpacity: 75,
+  overlayOpacity: 60,
   backgroundImage: {
     url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
     alt: "Buques de carga en mar en calma",
