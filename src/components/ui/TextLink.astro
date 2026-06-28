@@ -32,8 +32,8 @@ const displayArrow = arrow !== "none";
 const arrowChar = arrow === "left" ? "←" : "→";
 const arrowClass =
   arrow === "left"
-    ? "inline-block shrink-0 transition-transform duration-300 ease-out group-hover/text-link:-translate-x-1"
-    : "inline-block shrink-0 transition-transform duration-300 ease-out group-hover/text-link:translate-x-1";
+    ? "inline-block shrink-0 transition-transform duration-[240ms] ease-out group-hover/text-link:-translate-x-1"
+    : "inline-block shrink-0 transition-transform duration-[240ms] ease-out group-hover/text-link:translate-x-1";
 
 const classes = [textLinkVariants[variant], textLinkSizes[size], className]
   .filter(Boolean)

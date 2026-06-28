@@ -132,8 +132,8 @@ const currentPath = Astro.url.pathname;
     document.querySelectorAll<HTMLButtonElement>("[data-nav-toggle]")
   );
   let dropdownOpenTimer: number | undefined;
-  const dropdownTransitionMs = 280;
-  const dropdownHeaderGapMs = 120;
+  const dropdownTransitionMs = 224;
+  const dropdownHeaderGapMs = 96;
 
   function getPanelForTrigger(btn: HTMLButtonElement): HTMLElement | null {
     const group = btn.closest("[data-nav-group]");
