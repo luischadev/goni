@@ -189,11 +189,56 @@ const { id, label = "Detalle" } = Astro.props;
    * Handles open/close for every [data-sheet] element on the page.
    */
 
+  function prefersReducedMotion(): boolean {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  /**
+   * Lanza la cascada de fade del contenido visible: los elementos
+   * marcados con [data-sheet-cascade-item] aparecen en orden, de
+   * arriba hacia abajo, con un delay incremental.
+   */
+  function runCascade(sheet: HTMLElement): void {
+    const items = Array.from(
+      sheet.querySelectorAll<HTMLElement>("[data-sheet-cascade-item]")
+    ).filter((el) => el.offsetParent !== null);
+
+    if (prefersReducedMotion()) {
+      items.forEach((el) => {
+        el.style.transitionDelay = "";
+        el.classList.add("is-cascade-in");
+      });
+      return;
+    }
+
+    items.forEach((el, index) => {
+      el.classList.remove("is-cascade-in");
+      el.style.transitionDelay = `${80 + index * 70}ms`;
+    });
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        items.forEach((el) => el.classList.add("is-cascade-in"));
+      });
+    });
+  }
+
+  function resetCascade(sheet: HTMLElement): void {
+    sheet
+      .querySelectorAll<HTMLElement>("[data-sheet-cascade-item]")
+      .forEach((el) => {
+        el.classList.remove("is-cascade-in");
+        el.style.transitionDelay = "";
+      });
+  }
+
   function openSheet(id: string): void {
     const sheet = document.getElementById(id);
     if (!sheet || sheet.getAttribute("aria-hidden") === "false") return;
     sheet.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+
+    runCascade(sheet);
 
     // Focus first focusable element inside the panel
     requestAnimationFrame(() => {
@@ -206,6 +251,7 @@ const { id, label = "Detalle" } = Astro.props;
 
   function closeSheet(sheet: HTMLElement): void {
     sheet.setAttribute("aria-hidden", "true");
+    resetCascade(sheet);
     const anyOpen = document.querySelectorAll('[data-sheet][aria-hidden="false"]').length > 0;
     if (!anyOpen) document.body.style.overflow = "";
   }
@@ -294,6 +340,12 @@ const { id, label = "Detalle" } = Astro.props;
   }
 
   function init(): void {
+    document
+      .querySelectorAll<HTMLElement>("[data-sheet]")
+      .forEach((sheet) => {
+        sheet.dataset.cascadeReady = "true";
+      });
+
     document.removeEventListener("click", handleClick);
     document.removeEventListener("keydown", handleKeydown);
     document.removeEventListener("pointerdown", handleDragStart);

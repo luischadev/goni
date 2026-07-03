@@ -66,7 +66,7 @@
     Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --tracking-display: -0.015em;
-  --tracking-eyebrow: 0.22em;
+  --tracking-eyebrow: 0.12em;
 
   /* ────────────────────────────────────────────────────────────
      RADIUS
@@ -230,6 +230,33 @@
   }
   .reveal.reveal-fade.is-visible {
     transform: none;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+   * Cascada de fade para el contenido del sheet/dialog.
+   * Cada [data-sheet-cascade-item] entra con un fade escalonado
+   * (timing en cascada hacia abajo) cuando el sheet se abre.
+   * El delay incremental lo asigna el controlador del Sheet por JS.
+   * ──────────────────────────────────────────────────────────── */
+  .sheet[data-cascade-ready="true"] [data-sheet-cascade-item] {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .sheet[data-cascade-ready="true"] [data-sheet-cascade-item].is-cascade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.54s ease-out,
+      transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheet[data-cascade-ready="true"] [data-sheet-cascade-item],
+    .sheet[data-cascade-ready="true"] [data-sheet-cascade-item].is-cascade-in {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 
   @keyframes home-hero-load-up {

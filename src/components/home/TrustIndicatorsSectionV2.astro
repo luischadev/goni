@@ -1,0 +1,344 @@
+---
+/**
+ * TrustIndicatorsSectionV2
+ *
+ * Scroll-scene con 4 fases controladas por scroll (GSAP ScrollTrigger + scrub):
+ *   1. Video con fade-in
+ *   2. Texto en dos capas: titular grande, luego subtítulo más pequeño
+ *   3. Contenedor del video se reduce; el texto permanece visible
+ *   4. Texto se desvanece al final, mientras termina la reducción
+ *
+ * El video se reproduce automáticamente e independiente del scroll.
+ */
+
+const VIDEO_SRC =
+  "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/8783391-hd_1920_1080_30fps.mp4";
+const HEADLINE = "+50 años de trayectoria";
+const SUBLINE = "en el mercado de los seguros y reaseguros";
+const PHRASE = `${HEADLINE} ${SUBLINE}`;
+const headlineWords = HEADLINE.split(" ");
+const sublineWords = SUBLINE.split(" ");
+---
+
+<section class="scroll-scene" data-scroll-scene>
+  <div class="scroll-scene__stage" data-scene-stage>
+
+    <!-- Video layer (z-index 1, behind text) -->
+    <div class="scroll-scene__video-wrap" data-scene-video-wrap>
+      <video
+        class="scroll-scene__video"
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+      >
+        <source src={VIDEO_SRC} type="video/mp4" />
+      </video>
+      <div class="scroll-scene__video-overlay" aria-hidden="true"></div>
+    </div>
+
+    <!-- Text layer (z-index 2, siempre al frente) -->
+    <div class="scroll-scene__text" data-scene-text aria-hidden="true">
+      <p class="scroll-scene__headline">
+        {headlineWords.map((word, i) => (
+          <span class="scroll-scene__word" data-scene-headline-word>
+            {i < headlineWords.length - 1 ? `${word}\u00a0` : word}
+          </span>
+        ))}
+      </p>
+      <p class="scroll-scene__subline">
+        {sublineWords.map((word, i) => (
+          <span class="scroll-scene__word" data-scene-subline-word>
+            {i < sublineWords.length - 1 ? `${word}\u00a0` : word}
+          </span>
+        ))}
+      </p>
+    </div>
+
+    <!-- Texto accesible para lectores de pantalla -->
+    <p class="sr-only">{PHRASE}</p>
+  </div>
+</section>
+
+<style>
+  /* ── Sección: altura total que da espacio para las 4 fases ── */
+  .scroll-scene {
+    position: relative;
+    height: 520vh;
+  }
+
+  /* ── Stage: fijo en viewport mientras se scrollea la sección ── */
+  .scroll-scene__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-surface);
+    /* sin overflow:hidden aquí para que el fondo se vea alrededor del video escalado */
+  }
+
+  /* ── Video wrap: ocupa todo el stage, anima opacity y scale ── */
+  .scroll-scene__video-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0; /* JS lo anima; sin JS el video permanece oculto */
+    overflow: hidden; /* recorta el video al border-radius animado */
+    will-change: transform, opacity;
+    transform-origin: center center;
+  }
+
+  .scroll-scene__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .scroll-scene__video-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(15, 24, 34, 0.52);
+    pointer-events: none;
+  }
+
+  /* ── Texto: siempre centrado encima del video ── */
+  .scroll-scene__text {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: min(22rem, 86vw);
+    padding-inline: 1.25rem;
+    box-sizing: border-box;
+    text-align: center;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .scroll-scene__headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5.5vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: #f2f4f6;
+  }
+
+  .scroll-scene__subline {
+    font-family: var(--font-sans);
+    font-size: clamp(0.9375rem, 2.2vw, 1.125rem);
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: 0em;
+    color: rgba(242, 244, 246, 0.85);
+    max-width: 28rem;
+  }
+
+  @media (min-width: 768px) {
+    .scroll-scene__text {
+      gap: 1rem;
+      max-width: 56rem;
+      padding-inline: 1.5rem;
+    }
+
+    .scroll-scene__headline {
+      font-size: clamp(2.5rem, 3.8vw, 3.5rem);
+    }
+
+    .scroll-scene__subline {
+      font-size: clamp(1rem, 1.4vw, 1.25rem);
+      max-width: 32rem;
+    }
+  }
+
+  .scroll-scene__word {
+    display: inline;
+    will-change: opacity;
+  }
+
+  /* ── Reduced motion: desactiva la sección extendida ── */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-scene {
+      height: auto;
+    }
+
+    .scroll-scene__stage {
+      position: relative;
+      min-height: 36vh;
+    }
+
+    .scroll-scene__video-wrap {
+      opacity: 0; /* se oculta el video; el texto es suficiente */
+    }
+
+    .scroll-scene__word {
+      opacity: 1 !important;
+    }
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let scrollSceneMedia: gsap.MatchMedia | null = null;
+
+  function prefersReducedMotion(): boolean {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  interface SceneScaleConfig {
+    initialScale: number;
+    finalScale: number;
+    initialRadius: string;
+    finalRadius: string;
+  }
+
+  function buildScrollTimeline(
+    section: HTMLElement,
+    videoWrap: HTMLElement,
+    textEl: HTMLElement,
+    headlineWords: HTMLElement[],
+    sublineWords: HTMLElement[],
+    scale: SceneScaleConfig
+  ): void {
+    gsap.set([...headlineWords, ...sublineWords], { opacity: 0 });
+    gsap.set(videoWrap, {
+      opacity: 0,
+      scale: scale.initialScale,
+      borderRadius: scale.initialRadius,
+    });
+    gsap.set(textEl, { opacity: 1 });
+
+    const tl = gsap.timeline();
+
+    tl.to(
+      videoWrap,
+      { opacity: 1, duration: 3.2, ease: "power1.inOut" },
+      0
+    );
+
+    tl.to(
+      headlineWords,
+      {
+        opacity: 1,
+        stagger: { amount: 1.75 },
+        duration: 0.5,
+        ease: "none",
+      },
+      3.5
+    );
+
+    tl.to(
+      sublineWords,
+      {
+        opacity: 1,
+        stagger: { amount: 2 },
+        duration: 0.5,
+        ease: "none",
+      },
+      5.2
+    );
+
+    tl.to(
+      videoWrap,
+      {
+        scale: scale.finalScale,
+        borderRadius: scale.finalRadius,
+        duration: 5,
+        ease: "power1.inOut",
+      },
+      7.2
+    );
+
+    tl.to(
+      textEl,
+      { opacity: 0, duration: 1.5, ease: "power1.in" },
+      11
+    );
+
+    ScrollTrigger.create({
+      id: "scroll-scene",
+      trigger: section,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1,
+      animation: tl,
+    });
+  }
+
+  function initScrollScene(): void {
+    const section = document.querySelector<HTMLElement>("[data-scroll-scene]");
+    if (!section) return;
+
+    const headlineWords = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-scene-headline-word]")
+    );
+    const sublineWords = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-scene-subline-word]")
+    );
+    const videoWrap =
+      section.querySelector<HTMLElement>("[data-scene-video-wrap]");
+    const textEl = section.querySelector<HTMLElement>("[data-scene-text]");
+
+    if (!headlineWords.length || !sublineWords.length || !videoWrap || !textEl) return;
+
+    scrollSceneMedia?.revert();
+    scrollSceneMedia = gsap.matchMedia();
+
+    // Limpiar triggers previos (por si quedó alguno huérfano)
+    ScrollTrigger.getAll()
+      .filter((t) => t.vars["id"] === "scroll-scene")
+      .forEach((t) => t.kill());
+
+    if (prefersReducedMotion()) {
+      gsap.set([...headlineWords, ...sublineWords], { opacity: 1 });
+      return;
+    }
+
+    scrollSceneMedia.add("(max-width: 767px)", () => {
+      buildScrollTimeline(
+        section,
+        videoWrap,
+        textEl,
+        headlineWords,
+        sublineWords,
+        {
+          initialScale: 1,
+          finalScale: 0.9,
+          initialRadius: "0px",
+          finalRadius: "12px",
+        }
+      );
+    });
+
+    scrollSceneMedia.add("(min-width: 768px)", () => {
+      buildScrollTimeline(
+        section,
+        videoWrap,
+        textEl,
+        headlineWords,
+        sublineWords,
+        {
+          initialScale: 0.84,
+          finalScale: 0.6,
+          initialRadius: "12px",
+          finalRadius: "20px",
+        }
+      );
+    });
+  }
+
+  initScrollScene();
+  document.addEventListener("astro:page-load", () => {
+    initScrollScene();
+    ScrollTrigger.refresh();
+  });
+</script>

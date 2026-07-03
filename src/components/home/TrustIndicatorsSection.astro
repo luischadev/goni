@@ -1,0 +1,41 @@
+---
+import type { Indicator } from "../../lib/types";
+
+interface Props {
+  indicators: Indicator[];
+}
+
+const { indicators } = Astro.props;
+---
+
+<section aria-labelledby="trust-indicators" class="border-y border-line bg-surface-soft">
+  <h2 id="trust-indicators" class="sr-only">Indicadores de confianza</h2>
+  <div class="container-x py-10 md:py-20">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-8 md:divide-x divide-line">
+      {indicators.map((indicator, i) => (
+        <div class={`reveal ${i > 0 ? "md:pl-10" : ""}`}>
+          <div class="flex h-14 items-end md:h-16">
+            {indicator.value === "LATAM" ? (
+              <img
+                src="/flags2.svg"
+                alt="Banderas de Chile, Reino Unido y España"
+                width="152"
+                height="60"
+                loading="lazy"
+                decoding="async"
+                class="h-11 w-auto md:h-12"
+              />
+            ) : (
+              <p class="font-display text-5xl md:text-6xl text-fg leading-none">
+                {indicator.value}
+              </p>
+            )}
+          </div>
+          <p class="mt-4 text-sm text-fg-muted max-w-[200px] leading-snug">
+            {indicator.label}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
