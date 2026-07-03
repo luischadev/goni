@@ -86,7 +86,8 @@ const sublineWords = SUBLINE.split(" ");
     inset: 0;
     z-index: 1;
     opacity: 0; /* JS lo anima; sin JS el video permanece oculto */
-    overflow: hidden; /* recorta el video al border-radius animado */
+    overflow: hidden; /* recorta el video al border-radius */
+    border-radius: var(--radius-media);
     will-change: transform, opacity;
     transform-origin: center center;
   }
@@ -197,8 +198,6 @@ const sublineWords = SUBLINE.split(" ");
   interface SceneScaleConfig {
     initialScale: number;
     finalScale: number;
-    initialRadius: string;
-    finalRadius: string;
   }
 
   function buildScrollTimeline(
@@ -213,7 +212,6 @@ const sublineWords = SUBLINE.split(" ");
     gsap.set(videoWrap, {
       opacity: 0,
       scale: scale.initialScale,
-      borderRadius: scale.initialRadius,
     });
     gsap.set(textEl, { opacity: 1 });
 
@@ -251,7 +249,6 @@ const sublineWords = SUBLINE.split(" ");
       videoWrap,
       {
         scale: scale.finalScale,
-        borderRadius: scale.finalRadius,
         duration: 3.5,
         ease: "power1.inOut",
       },
@@ -311,10 +308,8 @@ const sublineWords = SUBLINE.split(" ");
         headlineWords,
         sublineWords,
         {
-          initialScale: 1,
-          finalScale: 0.9,
-          initialRadius: "0px",
-          finalRadius: "12px",
+          initialScale: 0.9,
+          finalScale: 0.8,
         }
       );
     });
@@ -329,8 +324,6 @@ const sublineWords = SUBLINE.split(" ");
         {
           initialScale: 0.84,
           finalScale: 0.6,
-          initialRadius: "12px",
-          finalRadius: "20px",
         }
       );
     });
