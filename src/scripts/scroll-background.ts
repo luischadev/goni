@@ -30,6 +30,7 @@ function initScrollBackgroundSection(section: HTMLElement): void {
   });
 
   backgroundTriggers.set(section, trigger);
+  trigger.refresh();
 }
 
 export function initScrollBackgroundSections(): void {

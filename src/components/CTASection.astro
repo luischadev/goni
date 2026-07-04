@@ -36,3 +36,13 @@ const {
     </div>
   </div>
 </section>
+
+<script>
+  import { initScrollBackgroundSections } from "../scripts/scroll-background";
+  import { initScrollTextReveals } from "../scripts/scroll-text-reveal";
+
+  initScrollBackgroundSections();
+  initScrollTextReveals();
+  document.addEventListener("astro:page-load", initScrollBackgroundSections);
+  document.addEventListener("astro:page-load", initScrollTextReveals);
+</script>
