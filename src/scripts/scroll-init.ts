@@ -7,18 +7,9 @@ import { initScrollScene } from "./scroll-scene";
 
 gsap.registerPlugin(ScrollTrigger);
 
-let touchScrollNormalized = false;
 let initGeneration = 0;
 
-function normalizeTouchScroll(): void {
-  if (touchScrollNormalized || !ScrollTrigger.isTouch) return;
-  ScrollTrigger.normalizeScroll(true);
-  touchScrollNormalized = true;
-}
-
 function finalizeScrollFeatures(): void {
-  normalizeTouchScroll();
-  initScrollTextReveals();
   initScrollBackgroundSections();
   initScrollScene();
   ScrollTrigger.refresh();
@@ -32,11 +23,13 @@ export function scheduleScrollInit(): void {
   });
 }
 
-// Estado inicial de la scroll-scene de inmediato (evita flash del grid completo)
+// Inicialización inmediata: estado visual correcto antes del scroll del usuario
 initScrollScene();
+initScrollTextReveals();
 
 scheduleScrollInit();
 document.addEventListener("astro:page-load", () => {
   initScrollScene();
+  initScrollTextReveals();
   scheduleScrollInit();
 });
