@@ -79,6 +79,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
     <ToastHost />
 
     <script>
+      import "../scripts/scroll-init";
+    </script>
+
+    <script>
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {

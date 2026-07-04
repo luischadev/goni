@@ -72,7 +72,6 @@ function initScrollTextReveal(element: HTMLElement): void {
   });
 
   revealTriggers.set(element, trigger);
-  trigger.refresh();
 }
 
 export function initScrollTextReveals(): void {
