@@ -65,7 +65,7 @@ const sublineWords = SUBLINE.split(" ");
   /* ── Sección: altura total que da espacio para las 4 fases ── */
   .scroll-scene {
     position: relative;
-    height: 400vh;
+    height: 300vh;
   }
 
   /* ── Stage: fijo en viewport mientras se scrollea la sección ── */
@@ -219,7 +219,7 @@ const sublineWords = SUBLINE.split(" ");
 
     tl.to(
       videoWrap,
-      { opacity: 1, duration: 2.6, ease: "power1.inOut" },
+      { opacity: 1, duration: 2.4, ease: "power1.inOut" },
       0
     );
 
@@ -227,45 +227,45 @@ const sublineWords = SUBLINE.split(" ");
       headlineWords,
       {
         opacity: 1,
-        stagger: { amount: 1.4 },
+        stagger: { amount: 1.2 },
         duration: 0.5,
         ease: "none",
       },
-      2.8
+      0.35
     );
 
     tl.to(
       sublineWords,
       {
         opacity: 1,
-        stagger: { amount: 1.6 },
+        stagger: { amount: 1.4 },
         duration: 0.5,
         ease: "none",
       },
-      4.2
+      1.4
     );
 
     tl.to(
       videoWrap,
       {
         scale: scale.finalScale,
-        duration: 3.5,
+        duration: 2.4,
         ease: "power1.inOut",
       },
-      5.8
+      3.8
     );
 
     tl.to(
       textEl,
-      { opacity: 0, duration: 1.2, ease: "power1.in" },
-      8.8
+      { opacity: 0, duration: 0.8, ease: "power1.in" },
+      5.6
     );
 
     ScrollTrigger.create({
       id: "scroll-scene",
       trigger: section,
-      start: "top top",
-      end: "bottom bottom",
+      start: "top bottom",
+      end: "bottom 72%",
       scrub: 1,
       animation: tl,
     });
