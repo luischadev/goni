@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import ToastHost from "../components/ui/ToastHost.astro";
 import { cms } from "../lib/cms";
 
 interface Props {
@@ -74,6 +75,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
     </main>
 
     <Footer />
+
+    <ToastHost />
 
     <script>
       const observer = new IntersectionObserver(

@@ -67,12 +67,13 @@ const Tag = isLink ? "a" : "button";
       aria-label={ariaLabel}
     >
       <slot />
-      {showArrow && <span aria-hidden="true">→</span>}
+      {showArrow && <span class="button__arrow" aria-hidden="true">→</span>}
     </a>
   ) : (
     <button
       type={type}
       class={classes}
+      data-button
       disabled={disabled}
       id={id}
       aria-label={ariaLabel}
@@ -80,8 +81,55 @@ const Tag = isLink ? "a" : "button";
       aria-controls={ariaControls}
       onclick={onclick}
     >
-      <slot />
-      {showArrow && <span aria-hidden="true">→</span>}
+      <span class="button__label">
+        <slot />
+      </span>
+      <span class="button__spinner" aria-hidden="true"></span>
+      {showArrow && <span class="button__arrow" aria-hidden="true">→</span>}
     </button>
   )
 }
+
+<style is:global>
+  [data-button] {
+    position: relative;
+  }
+
+  [data-button] .button__spinner {
+    display: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: button-spin 0.7s linear infinite;
+  }
+
+  [data-button].is-loading {
+    pointer-events: none;
+  }
+
+  [data-button].is-loading .button__label,
+  [data-button].is-loading .button__arrow {
+    opacity: 0;
+  }
+
+  [data-button].is-loading .button__spinner {
+    display: block;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+
+  @keyframes button-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-button] .button__spinner {
+      animation-duration: 1.2s;
+    }
+  }
+</style>

@@ -255,13 +255,9 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
               </p>
             </div>
 
-            <Button type="submit" size="lg" data-contact-submit>Enviar consulta</Button>
-            <p
-              class="contact-form-status hidden text-sm leading-relaxed"
-              data-contact-status
-              role="status"
-              aria-live="polite"
-            ></p>
+            <Button type="submit" size="lg" showArrow={false}>
+              Enviar consulta
+            </Button>
           </form>
         </div>
       </div>
@@ -298,16 +294,19 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
     display: block;
   }
 
-  .contact-form-status.is-success {
-    color: var(--color-fg-muted);
+  .contact-form.is-submitting,
+  .contact-form.is-submitted {
+    pointer-events: none;
   }
 
-  .contact-form-status.is-error {
-    color: var(--contact-error-color);
+  .contact-form.is-submitted button[type="submit"] {
+    opacity: 1;
   }
 </style>
 
-<script define:vars={{ contactFormUrl }}>
+<script>
+  import { showToast } from "../lib/toast";
+
   function initContactForm() {
     const form = document.querySelector("[data-contact-form]");
     if (!(form instanceof HTMLFormElement)) return;
@@ -315,25 +314,16 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
     form.dataset.initialized = "true";
 
     const fields = form.querySelectorAll("[data-contact-input][required]");
-    const statusEl = form.querySelector("[data-contact-status]");
-    const submitButton = form.querySelector("[data-contact-submit]");
-    const endpoint = form.dataset.contactEndpoint || contactFormUrl;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const submitLabel = submitButton?.querySelector(".button__label");
+    let hasSubmittedSuccessfully = false;
 
-    const setStatus = (type, message) => {
-      if (!(statusEl instanceof HTMLElement)) return;
+    const endpoint = form.dataset.contactEndpoint || "";
 
-      statusEl.textContent = message;
-      statusEl.classList.remove("hidden", "is-success", "is-error");
-      statusEl.classList.add(type === "success" ? "is-success" : "is-error");
-    };
-
-    const clearStatus = () => {
-      if (!(statusEl instanceof HTMLElement)) return;
-
-      statusEl.textContent = "";
-      statusEl.classList.add("hidden");
-      statusEl.classList.remove("is-success", "is-error");
-    };
+    const waitForNextFrame = () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+      });
 
     const resetFormState = () => {
       form.querySelectorAll("[data-contact-field]").forEach((group) => {
@@ -351,6 +341,35 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
       if (messageField instanceof HTMLTextAreaElement) {
         messageField.style.height = "auto";
       }
+    };
+
+    const setSubmitLoading = (isLoading) => {
+      if (!(submitButton instanceof HTMLButtonElement)) return;
+
+      submitButton.disabled = isLoading;
+      submitButton.classList.toggle("is-loading", isLoading);
+      submitButton.setAttribute("aria-busy", isLoading ? "true" : "false");
+    };
+
+    const setSubmitSuccess = () => {
+      if (!(submitButton instanceof HTMLButtonElement)) return;
+
+      submitButton.disabled = true;
+      submitButton.classList.remove("is-loading");
+      submitButton.setAttribute("aria-busy", "false");
+
+      if (submitLabel instanceof HTMLElement) {
+        submitLabel.textContent = "Consulta enviada";
+      }
+
+      form.classList.remove("is-submitting");
+      form.classList.add("is-submitted");
+      form.dataset.submitting = "true";
+    };
+
+    const setFormSubmitting = (isSubmitting) => {
+      form.dataset.submitting = isSubmitting ? "true" : "false";
+      form.classList.toggle("is-submitting", isSubmitting);
     };
 
     const getFieldValue = (name) => {
@@ -410,7 +429,10 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      clearStatus();
+
+      if (hasSubmittedSuccessfully || form.dataset.submitting === "true") {
+        return;
+      }
 
       let hasError = false;
 
@@ -432,10 +454,10 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
       }
 
       if (!endpoint) {
-        setStatus(
-          "error",
-          "El formulario no está configurado. Escríbanos directamente a abogados@goniabogados.cl."
-        );
+        showToast({
+          variant: "error",
+          text: "El formulario no está configurado. Escríbanos directamente a abogados@goniabogados.cl.",
+        });
         return;
       }
 
@@ -449,38 +471,36 @@ const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
         website: getFieldValue("website").trim(),
       };
 
-      const defaultSubmitLabel =
-        submitButton instanceof HTMLButtonElement ? submitButton.textContent : "Enviar consulta";
-
-      if (submitButton instanceof HTMLButtonElement) {
-        submitButton.disabled = true;
-        submitButton.textContent = "Enviando...";
-      }
+      setFormSubmitting(true);
+      setSubmitLoading(true);
+      await waitForNextFrame();
 
       try {
-        await fetch(endpoint, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        await Promise.all([
+          fetch(endpoint, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }),
+          new Promise((resolve) => window.setTimeout(resolve, 700)),
+        ]);
 
         form.reset();
         resetFormState();
-        setStatus(
-          "success",
-          "Gracias. Recibimos su consulta y le responderemos a la brevedad."
-        );
+        hasSubmittedSuccessfully = true;
+        setSubmitSuccess();
+        showToast({
+          variant: "success",
+          text: "Gracias. Recibimos su consulta y le responderemos a la brevedad.",
+        });
       } catch {
-        setStatus(
-          "error",
-          "No pudimos enviar su consulta. Inténtelo nuevamente o escríbanos directamente."
-        );
-      } finally {
-        if (submitButton instanceof HTMLButtonElement) {
-          submitButton.disabled = false;
-          submitButton.textContent = defaultSubmitLabel;
-        }
+        setFormSubmitting(false);
+        setSubmitLoading(false);
+        showToast({
+          variant: "error",
+          text: "No pudimos enviar su consulta. Inténtelo nuevamente o escríbanos directamente.",
+        });
       }
     });
   }
