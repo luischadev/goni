@@ -2,17 +2,49 @@
 /**
  * TrustIndicatorsSectionV2
  *
- * Scroll-scene con 4 fases controladas por scroll (GSAP ScrollTrigger + scrub):
- *   1. Video con fade-in
- *   2. Texto en dos capas: titular grande, luego subtítulo más pequeño
- *   3. Contenedor del video se reduce; el texto permanece visible
- *   4. Texto se desvanece al final, mientras termina la reducción
+ * Grid de 4 columnas × 3 filas que escala con scroll:
  *
- * El video se reproduce automáticamente e independiente del scroll.
+ *  [  top-left  ][  top-right  ]   ← row 1, gap centrado con el video
+ *  [ L ][ VIDEO ][ VIDEO ][ R ]   ← row 2, video en cols 2-3
+ *  [ bot-left  ][ bot-right   ]   ← row 3, gap centrado con el video
+ *
+ * Al comienzo, el grid empieza ampliado (~1.68×) para que el video aparezca al
+ * ~84 % del viewport (igual que antes). Las tarjetas circundantes ya existen pero
+ * están fuera del viewport. Con el scroll, el GRID COMPLETO escala hacia 1×
+ * y las tarjetas "entran al cuadro" desde los bordes.
+ *
+ * En mobile: animación clásica, solo el video escala.
  */
 
 const VIDEO_SRC =
   "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/8783391-hd_1920_1080_30fps.mp4";
+
+const SURROUND_VIDEOS = [
+  {
+    class: "surround--tl",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/4157778-hd_1920_1080_24fps.mp4",
+  },
+  {
+    class: "surround--tr",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/12028868_1920_1080_24fps.mp4",
+  },
+  {
+    class: "surround--l",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/8344449-uhd_3840_2160_30fps.mp4",
+  },
+  {
+    class: "surround--r",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/12984266_1920_1080_25fps.mp4",
+  },
+  {
+    class: "surround--bl",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/4292300-uhd_3840_2160_25fps.mp4",
+  },
+  {
+    class: "surround--br",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/15978611-uhd_3840_2160_30fps.mp4",
+  },
+] as const;
 const HEADLINE = "+50 años de trayectoria";
 const SUBLINE = "en el mercado de los seguros y reaseguros";
 const PHRASE = `${HEADLINE} ${SUBLINE}`;
@@ -23,22 +55,40 @@ const sublineWords = SUBLINE.split(" ");
 <section class="scroll-scene" data-scroll-scene>
   <div class="scroll-scene__stage" data-scene-stage>
 
-    <!-- Video layer (z-index 1, behind text) -->
-    <div class="scroll-scene__video-wrap" data-scene-video-wrap>
-      <video
-        class="scroll-scene__video"
-        autoplay
-        muted
-        loop
-        playsinline
-        aria-hidden="true"
-      >
-        <source src={VIDEO_SRC} type="video/mp4" />
-      </video>
-      <div class="scroll-scene__video-overlay" aria-hidden="true"></div>
+    <div class="scroll-scene__grid" data-scene-grid>
+
+      {SURROUND_VIDEOS.map(({ class: cardClass, src }) => (
+        <div class={`scroll-scene__surround-card ${cardClass}`} data-scene-surround>
+          <video
+            class="scroll-scene__video"
+            autoplay
+            muted
+            loop
+            playsinline
+            aria-hidden="true"
+          >
+            <source src={src} type="video/mp4" />
+          </video>
+        </div>
+      ))}
+
+      <div class="scroll-scene__video-wrap" data-scene-video-wrap>
+        <video
+          class="scroll-scene__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          aria-hidden="true"
+        >
+          <source src={VIDEO_SRC} type="video/mp4" />
+        </video>
+        <div class="scroll-scene__video-overlay" aria-hidden="true"></div>
+      </div>
+
     </div>
 
-    <!-- Text layer (z-index 2, siempre al frente) -->
+    <!-- Texto fijo en el stage, independiente del grid que escala debajo -->
     <div class="scroll-scene__text" data-scene-text aria-hidden="true">
       <p class="scroll-scene__headline">
         {headlineWords.map((word, i) => (
@@ -56,13 +106,12 @@ const sublineWords = SUBLINE.split(" ");
       </p>
     </div>
 
-    <!-- Texto accesible para lectores de pantalla -->
     <p class="sr-only">{PHRASE}</p>
   </div>
 </section>
 
 <style>
-  /* ── Sección: altura total que da espacio para las 4 fases ── */
+  /* ── Sección: altura total para las 4 fases ── */
   .scroll-scene {
     position: relative;
     height: 250vh;
@@ -70,39 +119,133 @@ const sublineWords = SUBLINE.split(" ");
 
   @media (min-width: 768px) {
     .scroll-scene {
-      height: 260vh;
+      height: 270vh;
     }
   }
 
-  /* ── Stage: fijo en viewport mientras se scrollea la sección ── */
+  /* ── Stage: fijo en viewport; recorta el grid cuando está ampliado ── */
   .scroll-scene__stage {
     position: sticky;
     top: 0;
     height: 100vh;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--color-surface);
-    /* sin overflow:hidden aquí para que el fondo se vea alrededor del video escalado */
   }
 
-  /* ── Video wrap: ocupa todo el stage, anima opacity y scale ── */
+  /* ── Grid: mobile = contenedor simple, desktop = cuadrícula que escala ── */
+  .scroll-scene__grid {
+    position: absolute;
+    inset: 0;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  @media (min-width: 768px) {
+    .scroll-scene__grid {
+      inset: 8px;
+      display: grid;
+      /*
+        4 columnas iguales:
+        - video ocupa cols 2-3 → 50 % del grid
+        - gap entre tarjetas superiores/inferiores cae en el centro del video ✓
+      */
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      /*
+        3 filas: las superior e inferior son más cortas que la del video
+      */
+      grid-template-rows: 1fr 2.5fr 1fr;
+      gap: 8px;
+    }
+  }
+
+  /* ── Tarjetas circundantes ── */
+  .scroll-scene__surround-card {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background-color: var(--palette-ink);
+  }
+
+  @media (min-width: 768px) {
+    .scroll-scene__surround-card {
+      display: block;
+    }
+
+    /* Row 1: tarjetas superiores, cada una ocupa 2 columnas */
+    .surround--tl {
+      grid-column: 1 / 3;
+      grid-row: 1;
+    }
+
+    .surround--tr {
+      grid-column: 3 / 5;
+      grid-row: 1;
+    }
+
+    /* Row 2: tarjetas laterales, 1 columna cada una */
+    .surround--l {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .surround--r {
+      grid-column: 4;
+      grid-row: 2;
+    }
+
+    /* Row 3: tarjetas inferiores, cada una ocupa 2 columnas */
+    .surround--bl {
+      grid-column: 1 / 3;
+      grid-row: 3;
+    }
+
+    .surround--br {
+      grid-column: 3 / 5;
+      grid-row: 3;
+    }
+  }
+
+  .scroll-scene__surround-card .scroll-scene__video {
+    opacity: 0.2;
+  }
+
+  /* ── Video wrap ── */
+  /* Mobile: absoluto, llena el stage */
   .scroll-scene__video-wrap {
     position: absolute;
     inset: 0;
-    z-index: 1;
-    opacity: 0; /* JS lo anima; sin JS el video permanece oculto */
-    overflow: hidden; /* recorta el video al border-radius */
+    opacity: 0;
+    overflow: hidden;
     border-radius: var(--radius-media);
-    will-change: transform, opacity;
+    will-change: transform, opacity, border-radius;
     transform-origin: center center;
+    isolation: isolate;
+  }
+
+  /* Desktop: ítem del grid (cols 2-3, row 2) */
+  @media (min-width: 768px) {
+    .scroll-scene__video-wrap {
+      position: relative;
+      inset: auto;
+      grid-column: 2 / 4;
+      grid-row: 2;
+      will-change: opacity, border-radius;
+      border-radius: var(--radius-card);
+    }
   }
 
   .scroll-scene__video {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: inherit;
   }
 
   .scroll-scene__video-overlay {
@@ -110,9 +253,10 @@ const sublineWords = SUBLINE.split(" ");
     inset: 0;
     background-color: rgba(15, 24, 34, 0.52);
     pointer-events: none;
+    border-radius: inherit;
   }
 
-  /* ── Texto: siempre centrado encima del video ── */
+  /* ── Texto: centrado sobre el stage, independiente del grid ── */
   .scroll-scene__text {
     position: relative;
     z-index: 2;
@@ -168,7 +312,7 @@ const sublineWords = SUBLINE.split(" ");
     will-change: opacity;
   }
 
-  /* ── Reduced motion: desactiva la sección extendida ── */
+  /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
     .scroll-scene {
       height: auto;
@@ -180,7 +324,7 @@ const sublineWords = SUBLINE.split(" ");
     }
 
     .scroll-scene__video-wrap {
-      opacity: 0; /* se oculta el video; el texto es suficiente */
+      opacity: 0;
     }
 
     .scroll-scene__word {
@@ -201,6 +345,13 @@ const sublineWords = SUBLINE.split(" ");
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
+  /** Radio base en px del contenedor del video. */
+  function getBorderRadiusBase(el: HTMLElement): number {
+    const radius = getComputedStyle(el).borderTopLeftRadius;
+    const parsed = parseFloat(radius);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 4;
+  }
+
   interface SceneTimelineConfig {
     initialScale: number;
     finalScale: number;
@@ -211,68 +362,103 @@ const sublineWords = SUBLINE.split(" ");
     scrollEnd: string;
   }
 
+  /**
+   * @param scaleTarget     mobile → videoWrap | desktop → grid completo
+   * @param videoWrap       siempre el video-wrap, para animar su opacidad
+   * @param surroundCards   contenedores circundantes (desktop); fade-in al revelarse
+   */
   function buildScrollTimeline(
     section: HTMLElement,
+    scaleTarget: HTMLElement,
     videoWrap: HTMLElement,
     textEl: HTMLElement,
     headlineWords: HTMLElement[],
     sublineWords: HTMLElement[],
+    surroundCards: HTMLElement[],
     config: SceneTimelineConfig
   ): void {
+    const borderRadiusBase = getBorderRadiusBase(videoWrap);
+    const borderRadiusPx = `${borderRadiusBase}px`;
+    const scaleAffectsVideoRadius = scaleTarget !== videoWrap;
+
     gsap.set([...headlineWords, ...sublineWords], { opacity: 0 });
     gsap.set(videoWrap, {
       opacity: 0,
-      scale: config.initialScale,
+      borderRadius: borderRadiusPx,
     });
     gsap.set(textEl, { opacity: 1 });
 
+    if (scaleAffectsVideoRadius) {
+      gsap.set(scaleTarget, { scale: config.initialScale, transformOrigin: "center center" });
+    }
+
+    if (surroundCards.length) {
+      gsap.set(surroundCards, { opacity: 0 });
+    }
+
     const tl = gsap.timeline();
 
-    tl.to(
-      videoWrap,
-      { opacity: 1, duration: 2.4, ease: "power1.inOut" },
-      0
-    );
+    // Fase 1: video fade-in (grid al tamaño inicial, tarjetas circundantes fuera del viewport)
+    tl.to(videoWrap, { opacity: 1, duration: 2.4, ease: "power1.inOut" }, 0);
 
+    // Fase 2: texto por palabras
     tl.to(
       headlineWords,
-      {
-        opacity: 1,
-        stagger: { amount: 1.2 },
-        duration: 0.5,
-        ease: "none",
-      },
+      { opacity: 1, stagger: { amount: 1.2 }, duration: 0.5, ease: "none" },
       0.35
     );
-
     tl.to(
       sublineWords,
-      {
-        opacity: 1,
-        stagger: { amount: 1.4 },
-        duration: 0.5,
-        ease: "none",
-      },
+      { opacity: 1, stagger: { amount: 1.4 }, duration: 0.5, ease: "none" },
       1.4
     );
 
-    tl.to(
-      videoWrap,
-      {
-        scale: config.finalScale,
-        duration: config.scaleDuration,
-        ease: "power1.inOut",
-      },
-      config.scaleStart
-    );
+    // Fase 3: zoom-out
+    if (scaleAffectsVideoRadius) {
+      // Desktop: el grid escala hacia atrás
+      tl.to(
+        scaleTarget,
+        {
+          scale: config.finalScale,
+          duration: config.scaleDuration,
+          ease: "power2.inOut",
+        },
+        config.scaleStart
+      );
+    } else {
+      // Mobile: el video escala
+      gsap.set(videoWrap, {
+        scale: config.initialScale,
+        transformOrigin: "center center",
+      });
+      tl.to(
+        videoWrap,
+        {
+          scale: config.finalScale,
+          duration: config.scaleDuration,
+          ease: "power2.inOut",
+        },
+        config.scaleStart
+      );
+    }
 
+    // Contenedores circundantes: fade-in simultáneo (videos mantienen 20% vía CSS)
+    if (surroundCards.length) {
+      tl.to(
+        surroundCards,
+        {
+          opacity: 1,
+          duration: config.scaleDuration * 0.7,
+          ease: "power1.inOut",
+        },
+        config.scaleStart + 0.55
+      );
+    }
+
+    // Fase 4: texto se desvanece
     tl.to(
       textEl,
-      {
-        opacity: 0,
-        duration: config.textFadeDuration,
-        ease: "power1.in",
-      },
+      { opacity: 0, duration: config.textFadeDuration, ease: "power1.in" },
       config.textFadeStart
     );
 
@@ -296,59 +482,96 @@ const sublineWords = SUBLINE.split(" ");
     const sublineWords = Array.from(
       section.querySelectorAll<HTMLElement>("[data-scene-subline-word]")
     );
-    const videoWrap =
-      section.querySelector<HTMLElement>("[data-scene-video-wrap]");
-    const textEl = section.querySelector<HTMLElement>("[data-scene-text]");
+    const videoWrap  = section.querySelector<HTMLElement>("[data-scene-video-wrap]");
+    const textEl     = section.querySelector<HTMLElement>("[data-scene-text]");
+    const gridEl     = section.querySelector<HTMLElement>("[data-scene-grid]");
+    const stage      = section.querySelector<HTMLElement>("[data-scene-stage]");
 
-    if (!headlineWords.length || !sublineWords.length || !videoWrap || !textEl) return;
+    if (!headlineWords.length || !sublineWords.length || !videoWrap || !textEl || !gridEl || !stage) return;
 
     scrollSceneMedia?.revert();
     scrollSceneMedia = gsap.matchMedia();
 
-    // Limpiar triggers previos (por si quedó alguno huérfano)
     ScrollTrigger.getAll()
       .filter((t) => t.vars["id"] === "scroll-scene")
       .forEach((t) => t.kill());
 
     if (prefersReducedMotion()) {
       gsap.set([...headlineWords, ...sublineWords], { opacity: 1 });
+      gsap.set(
+        section.querySelectorAll<HTMLElement>("[data-scene-surround]"),
+        { opacity: 1 }
+      );
       return;
     }
 
+    const surroundCards = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-scene-surround]")
+    );
+
+    // Mobile: animación clásica, solo el video escala
     scrollSceneMedia.add("(max-width: 767px)", () => {
       buildScrollTimeline(
         section,
         videoWrap,
-        textEl,
-        headlineWords,
-        sublineWords,
-        {
-          initialScale: 0.9,
-          finalScale: 0.8,
-          scaleStart: 2.95,
-          scaleDuration: 1.65,
-          textFadeStart: 4.15,
-          textFadeDuration: 0.55,
-          scrollEnd: "bottom 54%",
-        }
-      );
-    });
-
-    scrollSceneMedia.add("(min-width: 768px)", () => {
-      buildScrollTimeline(
-        section,
         videoWrap,
         textEl,
         headlineWords,
         sublineWords,
+        [],
         {
-          initialScale: 0.84,
-          finalScale: 0.6,
+          initialScale: 0.9,
+          finalScale: 0.8,
+          scaleStart: 2.7,
+          scaleDuration: 1.65,
+          textFadeStart: 3.8,
+          textFadeDuration: 0.55,
+          scrollEnd: "bottom 50%",
+        }
+      );
+    });
+
+    // Desktop: el grid completo escala → zoom-out revela tarjetas con fade-in demorado
+    scrollSceneMedia.add("(min-width: 768px)", () => {
+      const stageW = stage.offsetWidth;
+      const stageH = stage.offsetHeight;
+
+      // Grid interno (inset 8px cada lado, gap 8px)
+      const gridW = stageW - 16;
+      const gridH = stageH - 16;
+
+      // Columnas: 4 iguales con 3 gaps de 8px
+      const colW = (gridW - 24) / 4;
+      // Video ocupa cols 2-3: 2 columnas + 1 gap entre ellas
+      const videoW = colW * 2 + 8;
+
+      // Filas: 1fr + 2.5fr + 1fr = 4.5fr total, con 2 gaps de 8px
+      const rowUnit = (gridH - 16) / 4.5;
+      // Video ocupa row 2 (2.5fr)
+      const videoH = rowUnit * 2.5;
+
+      // initialScale: el video ocupa ~84 % del viewport (como la animación original)
+      // Usamos min() para que quepa en ambas dimensiones y deje margen para el border-radius
+      const VIDEO_VIEWPORT_COVERAGE = 0.88;
+      const fitScale = Math.min(stageW / videoW, stageH / videoH);
+      const initialScale = fitScale * VIDEO_VIEWPORT_COVERAGE;
+
+      buildScrollTimeline(
+        section,
+        gridEl,
+        videoWrap,
+        textEl,
+        headlineWords,
+        sublineWords,
+        surroundCards,
+        {
+          initialScale,
+          finalScale: 1.0,
           scaleStart: 3.1,
-          scaleDuration: 1.85,
-          textFadeStart: 4.45,
-          textFadeDuration: 0.6,
-          scrollEnd: "bottom 58%",
+          scaleDuration: 2.2,
+          textFadeStart: 4.8,
+          textFadeDuration: 0.65,
+          scrollEnd: "bottom 62%",
         }
       );
     });
