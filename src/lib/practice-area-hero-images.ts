@@ -1,8 +1,4 @@
 export const areaHeroImages: Record<string, { src: string; alt: string }> = {
-  "seguros-y-reaseguros": {
-    src: "https://images.pexels.com/photos/7654609/pexels-photo-7654609.jpeg?auto=compress&cs=tinysrgb&w=1800",
-    alt: "Equipo profesional revisando documentos en una oficina moderna",
-  },
   "recuperos-legales": {
     src: "https://images.pexels.com/photos/5324856/pexels-photo-5324856.jpeg?auto=compress&cs=tinysrgb&w=1800",
     alt: "Profesionales trabajando en computadores dentro de una oficina sobria",
@@ -26,5 +22,5 @@ export const areaHeroImages: Record<string, { src: string; alt: string }> = {
 };
 
 export function getPracticeAreaHeroImage(slug: string): { src: string; alt: string } {
-  return areaHeroImages[slug] ?? areaHeroImages["seguros-y-reaseguros"];
+  return areaHeroImages[slug] ?? areaHeroImages["recuperos-legales"];
 }

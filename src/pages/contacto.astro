@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/ui/Button.astro";
+import TextLink from "../components/ui/TextLink.astro";
 import { cms } from "../lib/cms";
 
 const settings = await cms.getSiteSettings();
@@ -14,6 +15,9 @@ const fieldClass =
 const textareaClass = `${fieldClass} min-h-36 resize-none overflow-hidden`;
 const contactFieldClass = `${fieldGroupClass} contact-field`;
 const selectClass = `${fieldClass} appearance-none pr-12`;
+const contactDetailLinkClass =
+  "mt-4 inline-block font-display text-2xl md:text-3xl text-fg hover:text-fg-accent transition-colors link-underline [text-decoration-line:underline] md:[text-decoration-line:none] md:hover:[text-decoration-line:underline]";
+const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
 ---
 
 <BaseLayout
@@ -36,7 +40,7 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
     </div>
   </section>
 
-  <section class="border-y border-line">
+  <section id="consulta" class="border-y border-line scroll-mt-24 md:scroll-mt-28">
     <div class="container-x py-20 md:py-28">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
         <div class="md:col-span-5">
@@ -52,6 +56,16 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
                 {settings.address.city}<br />
                 {settings.address.region}, {settings.address.country}
               </address>
+              <div class="mt-5">
+                <TextLink
+                  href={settings.address.mapsUrl}
+                  size="md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ver en Google Maps
+                </TextLink>
+              </div>
             </div>
 
             <div>
@@ -60,7 +74,7 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
               </p>
               <a
                 href={`mailto:${settings.email}`}
-                class="mt-4 inline-block font-display text-2xl md:text-3xl text-fg hover:text-fg-accent transition-colors"
+                class={contactDetailLinkClass}
               >
                 {settings.email}
               </a>
@@ -72,7 +86,7 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
               </p>
               <a
                 href={`tel:${settings.phone.replace(/\s+/g, "")}`}
-                class="mt-4 inline-block font-display text-2xl md:text-3xl text-fg hover:text-fg-accent transition-colors"
+                class={contactDetailLinkClass}
               >
                 {settings.phone}
               </a>
@@ -99,8 +113,20 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
             action="#"
             name="contact"
             data-contact-form
+            data-contact-endpoint={contactFormUrl}
             novalidate
           >
+            <div class="sr-only" aria-hidden="true">
+              <label for="website">Sitio web</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class={contactFieldClass} data-contact-field>
                 <label for="name" class={labelClass}>
@@ -221,18 +247,21 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
                 required
                 class={textareaClass}
                 data-contact-input
-                placeholder="Describa el contexto, los actores involucrados y el resultado esperado."
-                aria-describedby="message-helper message-error-helper"
+                placeholder="¿En qué podemos ayudarle?"
+                aria-describedby="message-error-helper"
               ></textarea>
-              <p id="message-helper" class={`${helperClass} contact-helper-default`}>
-                Resuma el contexto, los actores involucrados y el resultado esperado.
-              </p>
               <p id="message-error-helper" class={`${helperClass} contact-helper-invalid`}>
                 Cuéntenos brevemente su caso para poder responderle.
               </p>
             </div>
 
-            <Button type="submit" size="lg">Enviar consulta</Button>
+            <Button type="submit" size="lg" data-contact-submit>Enviar consulta</Button>
+            <p
+              class="contact-form-status hidden text-sm leading-relaxed"
+              data-contact-status
+              role="status"
+              aria-live="polite"
+            ></p>
           </form>
         </div>
       </div>
@@ -268,9 +297,17 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
   .contact-field.field-error .contact-helper-invalid {
     display: block;
   }
+
+  .contact-form-status.is-success {
+    color: var(--color-fg-muted);
+  }
+
+  .contact-form-status.is-error {
+    color: var(--contact-error-color);
+  }
 </style>
 
-<script>
+<script define:vars={{ contactFormUrl }}>
   function initContactForm() {
     const form = document.querySelector("[data-contact-form]");
     if (!(form instanceof HTMLFormElement)) return;
@@ -278,6 +315,54 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
     form.dataset.initialized = "true";
 
     const fields = form.querySelectorAll("[data-contact-input][required]");
+    const statusEl = form.querySelector("[data-contact-status]");
+    const submitButton = form.querySelector("[data-contact-submit]");
+    const endpoint = form.dataset.contactEndpoint || contactFormUrl;
+
+    const setStatus = (type, message) => {
+      if (!(statusEl instanceof HTMLElement)) return;
+
+      statusEl.textContent = message;
+      statusEl.classList.remove("hidden", "is-success", "is-error");
+      statusEl.classList.add(type === "success" ? "is-success" : "is-error");
+    };
+
+    const clearStatus = () => {
+      if (!(statusEl instanceof HTMLElement)) return;
+
+      statusEl.textContent = "";
+      statusEl.classList.add("hidden");
+      statusEl.classList.remove("is-success", "is-error");
+    };
+
+    const resetFormState = () => {
+      form.querySelectorAll("[data-contact-field]").forEach((group) => {
+        group.classList.remove("field-error");
+      });
+
+      form.querySelectorAll("[data-contact-input]").forEach((field) => {
+        if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+          field.dataset.touched = "false";
+          field.setAttribute("aria-invalid", "false");
+        }
+      });
+
+      const messageField = form.querySelector("#message");
+      if (messageField instanceof HTMLTextAreaElement) {
+        messageField.style.height = "auto";
+      }
+    };
+
+    const getFieldValue = (name) => {
+      const field = form.elements.namedItem(name);
+      if (field instanceof RadioNodeList) {
+        return field.value;
+      }
+      if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) {
+        return field.value;
+      }
+      return "";
+    };
 
     const resizeTextarea = (field) => {
       if (!(field instanceof HTMLTextAreaElement)) return;
@@ -323,7 +408,10 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
       });
     });
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearStatus();
+
       let hasError = false;
 
       fields.forEach((field) => {
@@ -334,12 +422,64 @@ const selectClass = `${fieldClass} appearance-none pr-12`;
       });
 
       if (hasError) {
-        event.preventDefault();
         const firstInvalid = form.querySelector(
           "[data-contact-field].field-error [data-contact-input]"
         );
         if (firstInvalid instanceof HTMLElement) {
           firstInvalid.focus();
+        }
+        return;
+      }
+
+      if (!endpoint) {
+        setStatus(
+          "error",
+          "El formulario no está configurado. Escríbanos directamente a abogados@goniabogados.cl."
+        );
+        return;
+      }
+
+      const payload = {
+        name: getFieldValue("name").trim(),
+        company: getFieldValue("company").trim(),
+        email: getFieldValue("email").trim(),
+        phone: getFieldValue("phone").trim(),
+        area: getFieldValue("area").trim(),
+        message: getFieldValue("message").trim(),
+        website: getFieldValue("website").trim(),
+      };
+
+      const defaultSubmitLabel =
+        submitButton instanceof HTMLButtonElement ? submitButton.textContent : "Enviar consulta";
+
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Enviando...";
+      }
+
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        form.reset();
+        resetFormState();
+        setStatus(
+          "success",
+          "Gracias. Recibimos su consulta y le responderemos a la brevedad."
+        );
+      } catch {
+        setStatus(
+          "error",
+          "No pudimos enviar su consulta. Inténtelo nuevamente o escríbanos directamente."
+        );
+      } finally {
+        if (submitButton instanceof HTMLButtonElement) {
+          submitButton.disabled = false;
+          submitButton.textContent = defaultSubmitLabel;
         }
       }
     });

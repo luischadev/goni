@@ -24,42 +24,13 @@ const { area } = Astro.props;
 const allAreas = await cms.getPracticeAreas();
 const otherAreas = allAreas.filter((a) => a.slug !== area.slug);
 const heroImage = getPracticeAreaHeroImage(area.slug);
-const heroHighlights = [
-  {
-    icon: "architecture",
-    title: "Profundidad técnica",
-    description:
-      "Nuestra práctica nace del conocimiento profundo de las industrias que asesoramos. Hablamos el lenguaje del negocio, no solo el del derecho.",
-  },
-  {
-    icon: "handshake",
-    title: "Trato cercano",
-    description:
-      "Como estudio boutique, cada cliente tiene acceso directo a los socios y a un equipo que conoce su operación de extremo a extremo.",
-  },
-  {
-    icon: "verified",
-    title: "Resultados consistentes",
-    description:
-      "Más de tres décadas asesorando al mercado asegurador y logístico nos han enseñado que la consistencia es el mejor capital de un estudio.",
-  },
-  {
-    icon: "query_stats",
-    title: "Criterio estratégico",
-    description:
-      "Ordenamos escenarios complejos para que cada decisión legal tenga una lectura clara de riesgos, tiempos y efectos comerciales.",
-  },
-];
-const featureSections = [
-  {
-    eyebrow: "Cómo trabajamos",
-    title: "Una forma de trabajo pensada para casos complejos.",
-  },
-  {
-    eyebrow: "Ámbitos clave",
-    title: "Acompañamiento focalizado en las decisiones que definen cada caso.",
-  },
-];
+const heroHighlights = area.highlights;
+const heroHighlightColumns =
+  heroHighlights.length === 2 ? "md:grid-cols-2" : "md:grid-cols-4";
+const featureSection = {
+  eyebrow: "Cómo trabajamos",
+  title: area.featuresTitle,
+};
 ---
 
 <BaseLayout
@@ -126,7 +97,7 @@ const featureSections = [
             class="relative -mt-80 px-5 pb-16 pt-28 text-fg-on-inverse md:-mt-64 md:px-8 md:pb-12 md:pt-28 lg:px-10 lg:pb-14"
             style="background: linear-gradient(to bottom, transparent 0, transparent 4rem, color-mix(in srgb, var(--color-surface-inverse) 72%, transparent) 9rem, var(--color-surface-inverse) 13rem, var(--color-surface-inverse) 100%);"
           >
-            <div class="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-4 md:gap-8">
+            <div class:list={["grid grid-cols-2 gap-x-5 gap-y-8 md:gap-8", heroHighlightColumns]}>
               {heroHighlights.map((highlight) => (
                 <div>
                   <span class="material-symbols-sharp text-3xl md:text-5xl text-fg-on-inverse/85 leading-none reveal reveal-from-top" aria-hidden="true">
@@ -147,7 +118,7 @@ const featureSections = [
     </div>
   </section>
 
-  {area.features && area.features.length > 0 && featureSections.map((featureSection) => (
+  {area.features && area.features.length > 0 && (
     <section class="border-b border-line bg-surface-soft">
       <div class="container-x py-20 md:py-28">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
@@ -170,7 +141,7 @@ const featureSections = [
         </div>
       </div>
     </section>
-  ))}
+  )}
 
   <CTASection
     title={`Conversemos sobre cómo ${area.title.toLowerCase()} aplica a su operación.`}

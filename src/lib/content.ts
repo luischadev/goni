@@ -13,13 +13,15 @@ export const siteSettings: SiteSettings = {
   legalName: "Goñi & Cía. Abogados S.A.",
   tagline:
     "Estudio jurídico especializado en seguros, responsabilidad civil y derecho de transporte marítimo, aéreo y terrestre.",
-  email: "contacto@goniabogados.cl",
-  phone: "+56 2 2345 6789",
+  email: "abogados@goniabogados.cl",
+  phone: "+56 2 2429 6900",
   address: {
-    street: "Avenida Nueva Providencia 1901, Piso 7",
-    city: "Providencia",
+    street: "Avenida Nueva Providencia N° 1901, Oficina 52",
+    city: "comuna de Providencia",
     region: "Región Metropolitana",
     country: "Chile",
+    mapsUrl:
+      "https://www.google.com/maps/search/?api=1&query=Avenida+Nueva+Providencia+1901+Oficina+52+Providencia+Chile",
   },
   social: {
     linkedin: "https://www.linkedin.com/company/goniabogados",
@@ -49,222 +51,333 @@ export const indicators: Indicator[] = [
   { value: "LATAM", label: "Cobertura internacional con aseguradores y brokers" },
 ];
 
-const sharedPracticeAreaFeatures = [
+const recuperosLegalesHighlights = [
   {
-    title: "Diagnóstico técnico desde el inicio",
+    title: "Conocimiento del rubro",
     description:
-      "Ordenamos hechos, pólizas, contratos y evidencia para definir una estrategia clara antes de avanzar.",
-    bullets: [
-      "Revisión de pólizas, contratos y antecedentes clave",
-      "Identificación temprana de riesgos y escenarios",
-      "Definición de una estrategia de acción inicial",
-    ],
-    icon: "track_changes",
+      "Experiencia sostenida en el mercado de seguros y reaseguros, con foco en recuperos judiciales.",
+    icon: "domain",
   },
   {
-    title: "Criterio jurídico aplicable al negocio",
+    title: "Gestión de cartera",
     description:
-      "Traducimos la complejidad legal en decisiones comprensibles para equipos legales, técnicos y operacionales.",
-    bullets: [
-      "Análisis alineado con la operación del cliente",
-      "Comunicación clara entre áreas legales y de negocio",
-      "Recomendaciones accionables, no solo teóricas",
-    ],
-    icon: "account_tree",
+      "Capacidad para administrar volúmenes de recuperos con orden, trazabilidad y previsibilidad.",
+    icon: "folder_managed",
   },
   {
-    title: "Seguimiento con foco en resultado",
+    title: "Criterio para actuar",
     description:
-      "Gestionamos cada asunto con trazabilidad, prioridades definidas y comunicación permanente con el cliente.",
-    bullets: [
-      "Hitos y prioridades definidos desde el inicio",
-      "Trazabilidad documental y de decisiones",
-      "Actualización permanente al cliente",
-    ],
-    icon: "timeline",
+      "Evaluación rigurosa que distingue cuándo conviene litigar y cuándo buscar otra vía.",
+    icon: "balance",
   },
   {
-    title: "Coordinación con equipos técnicos",
+    title: "Equipos integrados",
     description:
-      "Integramos antecedentes de liquidadores, peritos, ajustadores y equipos internos para construir una visión completa del caso.",
-    bullets: [
-      "Levantamiento ordenado de información técnica",
-      "Coordinación con especialistas y contrapartes",
-      "Síntesis jurídica de hallazgos críticos",
-    ],
-    icon: "hub",
+      "Profesionales que cruzan seguros, transporte, litigios y derecho comercial sin silos.",
+    icon: "groups",
+  },
+];
+
+const derechoMaritimoHighlights = [
+  {
+    title: "Cadena logística",
+    description:
+      "Conocimiento de operadores, agentes de carga, transportistas y aseguradoras en cada eslabón.",
+    icon: "local_shipping",
   },
   {
-    title: "Estrategia procesal y negociación",
+    title: "Transporte multimodal",
     description:
-      "Definimos rutas de acción que combinan análisis jurídico, oportunidad procesal y espacios de negociación cuando agregan valor.",
+      "Marítimo, aéreo y terrestre en controversias del transporte de mercancías.",
+    icon: "directions_boat",
+  },
+  {
+    title: "Alcance internacional",
+    description:
+      "Asesoría en transporte nacional e internacional de carga y sus controversias.",
+    icon: "public",
+  },
+  {
+    title: "Ecosistema del transporte",
+    description:
+      "Trabajo con aseguradoras, reaseguradoras, transportistas y clientes corporativos.",
+    icon: "handshake",
+  },
+];
+
+const litigiosHighlights = [
+  {
+    title: "Amplitud de materias",
+    description:
+      "Experiencia en civiles, comerciales, laborales, penales, marítimos y de seguros.",
     icon: "gavel",
   },
   {
-    title: "Comunicación ejecutiva",
+    title: "Foros múltiples",
     description:
-      "Presentamos avances, riesgos y próximos pasos en formatos claros para que los equipos puedan tomar decisiones con rapidez.",
-    bullets: [
-      "Reportes breves orientados a decisión",
-      "Priorización de riesgos materiales",
-      "Lenguaje claro para comités y áreas de negocio",
-    ],
+      "Representación ante tribunales ordinarios, arbitrales y otras instancias de resolución.",
+    icon: "account_balance",
+  },
+];
+
+const responsabilidadCivilHighlights = [
+  {
+    title: "Experiencia diversa",
+    description:
+      "Accidentes, daños a la propiedad, responsabilidad profesional y controversias de transporte.",
+    icon: "emergency",
+  },
+  {
+    title: "Múltiples actores",
+    description:
+      "Defensa de personas, empresas y compañías de seguros en la misma práctica.",
+    icon: "groups",
+  },
+  {
+    title: "Ambas modalidades",
+    description:
+      "Dominio de la responsabilidad contractual y extracontractual en indemnización de perjuicios.",
+    icon: "compare_arrows",
+  },
+  {
+    title: "Alto nivel técnico",
+    description:
+      "Soluciones jurídicas rigurosas, con foco en resultados concretos para cada cliente.",
+    icon: "workspace_premium",
+  },
+];
+
+const derechoCorporativoHighlights = [
+  {
+    title: "Alcance global",
+    description:
+      "Asesoría a empresas nacionales e internacionales en decisiones corporativas y comerciales.",
+    icon: "language",
+  },
+  {
+    title: "Seguridad jurídica",
+    description:
+      "Estructuras y decisiones que protegen el crecimiento del negocio y gestionan riesgos.",
+    icon: "verified_user",
+  },
+];
+
+const recuperosLegalesFeatures = [
+  {
+    title: "Análisis",
+    description:
+      "Estudio exhaustivo de los antecedentes jurídicos, técnicos y comerciales, identificando los riesgos, oportunidades y la estrategia más eficiente para la defensa de los intereses de nuestros clientes.",
+    icon: "track_changes",
+  },
+  {
+    title: "Definición de la estrategia",
+    description:
+      "Diseñamos soluciones personalizadas privilegiando un enfoque preventivo cuando es posible y una litigación rigurosa cuando el conflicto requiere ser resuelto ante tribunales o en sede arbitral.",
+    icon: "route",
+  },
+  {
+    title: "Gestión especializada",
+    description:
+      "Nuestros abogados trabajan de manera coordinada, combinando experiencia en seguros, responsabilidad civil, transporte, litigios y derecho comercial para entregar una asesoría integral en cada etapa del caso.",
+    icon: "hub",
+  },
+  {
+    title: "Información permanente",
+    description:
+      "Mantenemos una comunicación clara y oportuna con nuestros clientes, proporcionando reportes periódicos sobre el estado de los asuntos encomendados y recomendaciones para la toma de decisiones.",
     icon: "summarize",
+  },
+  {
+    title: "Orientación a resultados",
+    description:
+      "Nuestro compromiso es ofrecer soluciones jurídicas eficientes, técnicamente sólidas y alineadas con los objetivos comerciales de cada cliente, procurando siempre la mejor alternativa para la resolución de sus conflictos.",
+    icon: "verified",
+  },
+];
+
+const derechoMaritimoFeatures = [
+  {
+    title: "Análisis de la operación",
+    description:
+      "Evaluamos los antecedentes de cada caso, la documentación contractual y de transporte, la normativa aplicable y las responsabilidades de los distintos intervinientes en la cadena logística.",
+    icon: "inventory_2",
+  },
+  {
+    title: "Estrategia jurídica",
+    description:
+      "Diseñamos una estrategia ajustada a cada asunto, considerando la naturaleza del transporte, los riesgos involucrados y los objetivos comerciales del cliente.",
+    icon: "account_tree",
+  },
+  {
+    title: "Gestión integral",
+    description:
+      "Representamos a nuestros clientes en negociaciones, reclamaciones, arbitrajes y litigios, coordinando cuando corresponde el trabajo con aseguradoras, peritos, liquidadores, transportistas y demás actores relevantes.",
+    icon: "hub",
+  },
+  {
+    title: "Soluciones eficientes",
+    description:
+      "Priorizamos una gestión ágil y técnicamente sólida, manteniendo una comunicación permanente con nuestros clientes y orientando nuestra actuación a la prevención de riesgos y a la resolución eficaz de los conflictos.",
+    icon: "bolt",
+  },
+];
+
+const litigiosFeatures = [
+  {
+    title: "Evaluación estratégica",
+    description:
+      "Analizamos los antecedentes de cada controversia para identificar los riesgos, fortalezas y oportunidades, definiendo la estrategia procesal más adecuada desde el inicio.",
+    icon: "track_changes",
+  },
+  {
+    title: "Defensa especializada",
+    description:
+      "Representamos a nuestros clientes ante tribunales ordinarios, arbitrales y demás instancias de resolución de conflictos, actuando con rigor jurídico y una visión estratégica en cada etapa del proceso.",
+    icon: "gavel",
+  },
+  {
+    title: "Gestión eficiente",
+    description:
+      "Planificamos cada litigio con un enfoque preventivo y orientado a resultados, optimizando recursos, controlando plazos y evaluando permanentemente las mejores alternativas para la resolución del conflicto.",
+    icon: "timeline",
+  },
+  {
+    title: "Comunicación permanente",
+    description:
+      "Mantenemos una relación cercana con nuestros clientes, entregando información clara y oportuna que les permita tomar decisiones fundadas durante el desarrollo del proceso.",
+    icon: "forum",
+  },
+];
+
+const responsabilidadCivilFeatures = [
+  {
+    title: "Evaluación del caso",
+    description:
+      "Analizamos los antecedentes, los hechos y la normativa aplicable para determinar los riesgos, responsabilidades y la mejor estrategia de defensa.",
+    icon: "fact_check",
+  },
+  {
+    title: "Estrategia personalizada",
+    description:
+      "Diseñamos una defensa jurídica adaptada a las particularidades de cada caso, considerando tanto los aspectos legales como los intereses comerciales de nuestros clientes.",
+    icon: "tune",
+  },
+  {
+    title: "Representación integral",
+    description:
+      "Asumimos la defensa en negociaciones, mediaciones y litigios, coordinando cuando corresponde el trabajo con aseguradoras, liquidadores, peritos y demás intervinientes.",
+    icon: "gavel",
+  },
+  {
+    title: "Protección de intereses del cliente",
+    description:
+      "Actuamos con un enfoque preventivo, técnico y orientado a resultados, manteniendo una comunicación permanente durante todo el desarrollo del asunto.",
+    icon: "shield",
+  },
+];
+
+const derechoCorporativoFeatures = [
+  {
+    title: "Comprensión del negocio",
+    description:
+      "Conocemos la actividad, objetivos y desafíos de cada cliente para ofrecer soluciones jurídicas alineadas con su estrategia empresarial.",
+    icon: "business_center",
+  },
+  {
+    title: "Asesoría estratégica",
+    description:
+      "Diseñamos estructuras y soluciones legales que permitan desarrollar los negocios con seguridad jurídica, eficiencia y una adecuada gestión de riesgos.",
+    icon: "account_tree",
+  },
+  {
+    title: "Acompañamiento permanente",
+    description:
+      "Brindamos asesoría continua en las decisiones societarias, contractuales y comerciales, anticipándonos a las contingencias y apoyando el crecimiento de nuestros clientes.",
+    icon: "handshake",
+  },
+  {
+    title: "Soluciones orientadas a resultados",
+    description:
+      "Trabajamos con un enfoque práctico, cercano y eficiente, proporcionando respuestas oportunas que agregan valor y contribuyen al éxito de cada negocio.",
+    icon: "trending_up",
   },
 ];
 
 export const practiceAreas: PracticeArea[] = [
   {
-    slug: "seguros-y-reaseguros",
-    number: "01",
-    title: "Seguros y reaseguros",
-    shortDescription:
-      "Asesoría técnica y litigios en pólizas complejas, coberturas, reclamos de indemnización y disputas con reaseguradores.",
-    intro:
-      "Acompañamos a compañías de seguros y reaseguros en la totalidad del ciclo de la póliza: desde la estructuración de programas hasta la defensa frente a reclamos y disputas técnicas.",
-    body: [
-      "Nuestra práctica nace de un conocimiento profundo del negocio asegurador y de su lógica contractual. Trabajamos con aseguradores nacionales e internacionales, brokers y reaseguradores, asesorando en pólizas de transporte, casco y maquinaria, construcción y montaje, responsabilidad civil y líneas técnicas.",
-    ],
-    features: sharedPracticeAreaFeatures,
-    highlights: [
-      "Defensa de reclamos de cobertura",
-      "Análisis y opinión legal sobre pólizas",
-      "Disputas con reaseguradores",
-      "Estructuración de programas de seguros",
-    ],
-    industries: [
-      "Aseguradoras",
-      "Reaseguradoras",
-      "Brokers",
-      "Empresas industriales",
-    ],
-  },
-  {
     slug: "recuperos-legales",
-    number: "02",
+    number: "01",
     title: "Recuperos legales",
     shortDescription:
-      "Acciones de subrogación y recupero contra terceros responsables, con know-how en procesos masivos y litigios técnicamente complejos.",
+      "Gestión y tramitación de acciones de recupero para reembolsar indemnizaciones pagadas por aseguradoras ante terceros responsables.",
     intro:
-      "Una de las prácticas más consolidadas del estudio. Operamos recuperos masivos y casos puntuales de alto monto con criterios técnicos uniformes y trazabilidad para el cliente.",
-    body: [
-      "Asesoramos a aseguradoras y concesionarias en acciones de subrogación contra terceros responsables, integrando gestión judicial y extrajudicial. Aplicamos métricas de seguimiento, tiempos de resolución y montos recuperados que el cliente puede consultar de forma transparente.",
-      "Nuestra experiencia abarca recuperos en siniestros de transporte marítimo, terrestre, aéreo, robo, daños a infraestructura vial y responsabilidad civil de terceros.",
-    ],
-    features: sharedPracticeAreaFeatures,
-    highlights: [
-      "Recupero judicial y extrajudicial",
-      "Gestión de carteras masivas",
-      "Métricas y reportería para el cliente",
-      "Negociación con responsables y sus aseguradores",
-    ],
-    industries: [
-      "Aseguradoras",
-      "Concesionarias de autopistas",
-      "Operadores logísticos",
-    ],
-  },
-  {
-    slug: "responsabilidad-civil",
-    number: "03",
-    title: "Responsabilidad civil",
-    shortDescription:
-      "Defensa y reclamación de indemnizaciones por daños patrimoniales y morales, en sede contractual y extracontractual.",
-    intro:
-      "Defendemos y representamos a empresas e instituciones en litigios de responsabilidad civil contractual y extracontractual, con énfasis en industrias reguladas y de alta exposición técnica.",
-    body: [
-      "Combinamos análisis técnico-pericial con argumentación jurídica para articular defensas robustas frente a reclamos individuales y colectivos. Trabajamos coordinadamente con peritos, ajustadores y equipos de operaciones del cliente.",
-      "Hemos representado intereses en casos de daños a la propiedad, accidentes de transporte, responsabilidad de producto, riesgos operacionales y responsabilidad civil de directores y administradores.",
-    ],
-    features: sharedPracticeAreaFeatures,
-    highlights: [
-      "Defensa frente a demandas indemnizatorias",
-      "Estrategias de transacción",
-      "Coordinación con peritos y ajustadores",
-      "Litigios de alta complejidad técnica",
-    ],
-    industries: [
-      "Industrias logísticas",
-      "Concesionarias",
-      "Empresas industriales",
-      "Aseguradoras",
-    ],
+      "Asesoría integral en la gestión y tramitación de acciones de recupero, orientadas a obtener el reembolso de las indemnizaciones pagadas por las compañías de seguros cuando existe un tercero legalmente responsable del siniestro.",
+    featuresTitle:
+      "Gestión integral para recuperar indemnizaciones ante terceros responsables",
+    body: [],
+    features: recuperosLegalesFeatures,
+    highlights: recuperosLegalesHighlights,
+    industries: [],
   },
   {
     slug: "derecho-maritimo-y-transporte",
-    number: "04",
+    number: "02",
     title: "Derecho marítimo y transporte",
     shortDescription:
-      "Asesoría integral en transporte marítimo, aéreo y terrestre: contratos, siniestros, averías, litigios y arbitrajes internacionales.",
+      "Asesoría y representación en controversias del transporte nacional e internacional de mercancías.",
     intro:
-      "Una de las prácticas distintivas del estudio. Nuestro socio fundador, Magíster en Derecho Marítimo por Tulane Law School, lidera un equipo con experiencia en toda la cadena de transporte.",
-    body: [
-      "Asesoramos en contratos de fletamento, conocimientos de embarque, contratos de transporte multimodal y operaciones portuarias. Representamos a navieras, operadores logísticos, cargadores, terminales y aseguradores ante tribunales chilenos y en arbitrajes internacionales.",
-      "Nuestra inserción en el ecosistema marítimo-portuario nos permite anticipar riesgos, coordinar con surveyors y P&I Clubs, y articular estrategias eficientes en siniestros complejos.",
-    ],
-    features: sharedPracticeAreaFeatures,
-    highlights: [
-      "Contratos de fletamento y transporte",
-      "Defensa en averías gruesas y particulares",
-      "Coordinación con P&I Clubs y surveyors",
-      "Arbitrajes internacionales",
-    ],
-    industries: [
-      "Navieras y armadores",
-      "Operadores logísticos",
-      "Terminales portuarias",
-      "Aseguradores y reaseguradores",
-    ],
+      "Asesoría y representación a aseguradoras y reaseguradoras, empresas de transporte, operadores logísticos, agentes de carga y clientes corporativos en la prevención y resolución de controversias derivadas del transporte nacional e internacional de mercancías.",
+    featuresTitle:
+      "Enfoque jurídico alineado con la cadena logística y el transporte de mercancías",
+    body: [],
+    features: derechoMaritimoFeatures,
+    highlights: derechoMaritimoHighlights,
+    industries: [],
+  },
+  {
+    slug: "litigios-y-arbitrajes",
+    number: "03",
+    title: "Litigios",
+    shortDescription:
+      "Representación en litigios civiles, comerciales, laborales, penales, marítimos y de seguros ante tribunales y arbitrajes.",
+    intro:
+      "Trayectoria y amplia experiencia en litigios civiles, comerciales, laborales, penales, marítimos y de seguros, representando a sus clientes ante tribunales ordinarios, tribunales arbitrales y otras instancias de resolución de controversias.",
+    featuresTitle:
+      "Litigación rigurosa con estrategia procesal en cada etapa del conflicto",
+    body: [],
+    features: litigiosFeatures,
+    highlights: litigiosHighlights,
+    industries: [],
+  },
+  {
+    slug: "responsabilidad-civil",
+    number: "04",
+    title: "Responsabilidad civil",
+    shortDescription:
+      "Defensa en responsabilidad civil contractual y extracontractual para personas, empresas y compañías de seguros.",
+    intro:
+      "Asesoría y representación especializada en materias de responsabilidad civil, asumiendo la defensa de personas, empresas y compañías de seguros en acciones de indemnización de perjuicios derivadas de responsabilidad contractual y extracontractual. Contamos con amplia experiencia en controversias relacionadas con accidentes, daños a la propiedad, responsabilidad profesional, responsabilidad derivada del transporte y otros conflictos complejos, proporcionando soluciones jurídicas de alto nivel técnico y orientadas a resultados.",
+    featuresTitle:
+      "Defensa técnica adaptada a los riesgos y objetivos de cada caso",
+    body: [],
+    features: responsabilidadCivilFeatures,
+    highlights: responsabilidadCivilHighlights,
+    industries: [],
   },
   {
     slug: "derecho-corporativo",
     number: "05",
-    title: "Derecho corporativo y negocios internacionales",
+    title: "Derecho corporativo y negocios",
     shortDescription:
-      "Asesoría societaria, contratos comerciales y operaciones transfronterizas para empresas que operan en mercados regulados.",
+      "Asesoría corporativa y comercial para empresas nacionales e internacionales en sus decisiones estratégicas.",
     intro:
-      "Acompañamos a nuestros clientes en su operación cotidiana y en transacciones complejas, con un enfoque pragmático orientado al cierre de negocios y a la gestión de riesgo contractual.",
-    body: [
-      "Asesoramos en constitución y reorganización de sociedades, negociación y redacción de contratos comerciales, joint ventures, compraventa de activos y operaciones transfronterizas. Trabajamos coordinadamente con asesores en otras jurisdicciones cuando la operación lo requiere.",
-      "Nuestra mirada está puesta en industrias de alta exigencia regulatoria: seguros, transporte, logística e infraestructura.",
-    ],
-    features: sharedPracticeAreaFeatures,
-    highlights: [
-      "Contratos comerciales complejos",
-      "Operaciones transfronterizas",
-      "Gobierno corporativo",
-      "Cumplimiento regulatorio sectorial",
-    ],
-    industries: [
-      "Empresas medianas y grandes",
-      "Holdings",
-      "Inversionistas extranjeros",
-    ],
-  },
-  {
-    slug: "litigios-y-arbitrajes",
-    number: "06",
-    title: "Litigios y arbitrajes",
-    shortDescription:
-      "Representación estratégica en sede judicial y arbitral, con foco en disputas comerciales, civiles y de seguros.",
-    intro:
-      "Nuestra práctica litigiosa es transversal a las áreas del estudio: representamos a nuestros clientes en disputas comerciales, civiles, de seguros y de transporte, con un enfoque estratégico y orientado a resultados.",
-    body: [
-      "Asumimos casos donde la complejidad técnica y la exposición patrimonial requieren un equipo con experiencia probada. Definimos estrategias procesales claras desde el inicio, evaluando alternativas de transacción cuando agregan valor al cliente.",
-      "Tenemos experiencia en juicios ordinarios, sumarios, ejecutivos, arbitrales y procedimientos especiales aplicables a seguros y transporte.",
-    ],
-    features: sharedPracticeAreaFeatures,
-    highlights: [
-      "Litigios civiles y comerciales",
-      "Arbitrajes nacionales e internacionales",
-      "Medidas precautorias",
-      "Recursos ante cortes superiores",
-    ],
-    industries: [
-      "Aseguradoras",
-      "Empresas industriales y logísticas",
-      "Concesionarias",
-    ],
+      "Asesoría a empresas nacionales e internacionales en materias de derecho corporativo y comercial, acompañándolas en el desarrollo de sus actividades y en la toma de decisiones estratégicas. Entregamos soluciones jurídicas prácticas y eficientes, orientadas a prevenir contingencias, facilitar el desarrollo de los negocios y resguardar los intereses de nuestros clientes en un entorno empresarial dinámico.",
+    featuresTitle:
+      "Acompañamiento estratégico alineado con el desarrollo de su negocio",
+    body: [],
+    features: derechoCorporativoFeatures,
+    highlights: derechoCorporativoHighlights,
+    industries: [],
   },
 ];
 

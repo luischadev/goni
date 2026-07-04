@@ -27,12 +27,16 @@ import type {
 } from "./types";
 
 const practiceAreaNavDescriptions: Record<string, string> = {
-  "seguros-y-reaseguros": "Cobertura, pólizas y disputas técnicas.",
-  "recuperos-legales": "Subrogación, recuperos y carteras masivas.",
-  "responsabilidad-civil": "Defensa y reclamación de daños.",
-  "derecho-maritimo-y-transporte": "Contratos, siniestros y arbitrajes.",
-  "derecho-corporativo": "Sociedades, contratos y operaciones.",
-  "litigios-y-arbitrajes": "Estrategia judicial y arbitral.",
+  "recuperos-legales":
+    "Acciones de recupero orientadas al reembolso de indemnizaciones pagadas por compañías de seguros.",
+  "derecho-maritimo-y-transporte":
+    "Prevención y resolución de controversias del transporte nacional e internacional de mercancías.",
+  "litigios-y-arbitrajes":
+    "Litigios civiles, comerciales, laborales, penales, marítimos y de seguros.",
+  "responsabilidad-civil":
+    "Defensa en acciones de indemnización de perjuicios contractuales y extracontractuales.",
+  "derecho-corporativo":
+    "Asesoría en derecho corporativo y comercial para decisiones estratégicas.",
 };
 
 function resolveHero(hero: HeroContent): HeroContent {
@@ -139,7 +143,7 @@ export const cms = {
       {
         label: "Áreas de práctica",
         href: "/areas-de-practica",
-        description: "Frentes legales donde combinamos criterio técnico y estrategia.",
+        description: "Servicios legales integrales para riesgos y controversias",
         children: areas.map((area) => ({
           label: area.title,
           href: `/areas-de-practica/${area.slug}`,

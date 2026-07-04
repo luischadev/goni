@@ -1,5 +1,6 @@
 ---
 import { cms } from "../lib/cms";
+import TextLink from "./ui/TextLink.astro";
 
 const settings = await cms.getSiteSettings();
 const areas = await cms.getPracticeAreas();
@@ -52,7 +53,6 @@ const footerLinkClass =
         <p class="eyebrow text-fg-on-inverse/55">Estudio</p>
         <ul class="mt-6 space-y-3.5">
           <li><a href="/nosotros" class={footerLinkClass}>Nosotros</a></li>
-          <li><a href="/publicaciones" class={footerLinkClass}>Publicaciones</a></li>
           <li><a href="/contacto" class={footerLinkClass}>Contacto</a></li>
         </ul>
       </div>
@@ -64,6 +64,17 @@ const footerLinkClass =
             {settings.address.street}<br />
             {settings.address.city}, {settings.address.region}<br />
             {settings.address.country}
+          </p>
+          <p>
+            <TextLink
+              href={settings.address.mapsUrl}
+              variant="inverse"
+              size="md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver en Google Maps
+            </TextLink>
           </p>
           <p>
             <a href={`tel:${settings.phone.replace(/\s+/g, "")}`} class="transition-colors hover:text-fg-on-inverse">

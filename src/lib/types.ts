@@ -27,9 +27,10 @@ export interface PracticeArea {
   shortDescription: string;
   number: string;
   intro: string;
+  featuresTitle: string;
   body: string[];
   features?: PracticeAreaFeature[];
-  highlights: string[];
+  highlights: PracticeAreaFeature[];
   industries: string[];
 }
 
@@ -96,6 +97,7 @@ export interface SiteSettings {
     city: string;
     region: string;
     country: string;
+    mapsUrl: string;
   };
   social: {
     linkedin: string;
