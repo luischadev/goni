@@ -65,7 +65,13 @@ const sublineWords = SUBLINE.split(" ");
   /* ── Sección: altura total que da espacio para las 4 fases ── */
   .scroll-scene {
     position: relative;
-    height: 300vh;
+    height: 260vh;
+  }
+
+  @media (min-width: 768px) {
+    .scroll-scene {
+      height: 300vh;
+    }
   }
 
   /* ── Stage: fijo en viewport mientras se scrollea la sección ── */
@@ -195,9 +201,14 @@ const sublineWords = SUBLINE.split(" ");
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
-  interface SceneScaleConfig {
+  interface SceneTimelineConfig {
     initialScale: number;
     finalScale: number;
+    scaleStart: number;
+    scaleDuration: number;
+    textFadeStart: number;
+    textFadeDuration: number;
+    scrollEnd: string;
   }
 
   function buildScrollTimeline(
@@ -206,12 +217,12 @@ const sublineWords = SUBLINE.split(" ");
     textEl: HTMLElement,
     headlineWords: HTMLElement[],
     sublineWords: HTMLElement[],
-    scale: SceneScaleConfig
+    config: SceneTimelineConfig
   ): void {
     gsap.set([...headlineWords, ...sublineWords], { opacity: 0 });
     gsap.set(videoWrap, {
       opacity: 0,
-      scale: scale.initialScale,
+      scale: config.initialScale,
     });
     gsap.set(textEl, { opacity: 1 });
 
@@ -248,24 +259,28 @@ const sublineWords = SUBLINE.split(" ");
     tl.to(
       videoWrap,
       {
-        scale: scale.finalScale,
-        duration: 2.4,
+        scale: config.finalScale,
+        duration: config.scaleDuration,
         ease: "power1.inOut",
       },
-      3.8
+      config.scaleStart
     );
 
     tl.to(
       textEl,
-      { opacity: 0, duration: 0.8, ease: "power1.in" },
-      5.6
+      {
+        opacity: 0,
+        duration: config.textFadeDuration,
+        ease: "power1.in",
+      },
+      config.textFadeStart
     );
 
     ScrollTrigger.create({
       id: "scroll-scene",
       trigger: section,
       start: "top bottom",
-      end: "bottom 72%",
+      end: config.scrollEnd,
       scrub: 1,
       animation: tl,
     });
@@ -310,6 +325,11 @@ const sublineWords = SUBLINE.split(" ");
         {
           initialScale: 0.9,
           finalScale: 0.8,
+          scaleStart: 3.1,
+          scaleDuration: 1.8,
+          textFadeStart: 4.5,
+          textFadeDuration: 0.6,
+          scrollEnd: "bottom 58%",
         }
       );
     });
@@ -324,6 +344,11 @@ const sublineWords = SUBLINE.split(" ");
         {
           initialScale: 0.84,
           finalScale: 0.6,
+          scaleStart: 3.8,
+          scaleDuration: 2.4,
+          textFadeStart: 5.6,
+          textFadeDuration: 0.8,
+          scrollEnd: "bottom 72%",
         }
       );
     });
