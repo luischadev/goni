@@ -1,23 +1,26 @@
+const pexels = (id: number) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1800`;
+
 export const areaHeroImages: Record<string, { src: string; alt: string }> = {
   "recuperos-legales": {
-    src: "https://images.pexels.com/photos/5324856/pexels-photo-5324856.jpeg?auto=compress&cs=tinysrgb&w=1800",
-    alt: "Profesionales trabajando en computadores dentro de una oficina sobria",
-  },
-  "responsabilidad-civil": {
-    src: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1800",
-    alt: "Reunión de trabajo en una oficina luminosa y minimalista",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/img-recuperos-2.jpg",
+    alt: "Vista ascendente de edificios corporativos de acero y cristal, evocando el entorno institucional de los recuperos legales",
   },
   "derecho-maritimo-y-transporte": {
-    src: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1800",
-    alt: "Equipo conversando alrededor de una mesa de trabajo en oficina",
-  },
-  "derecho-corporativo": {
-    src: "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1800",
-    alt: "Profesionales colaborando en un espacio de oficina contemporáneo",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/img-maritimo-1.jpg",
+    alt: "Operario sobre contenedores de carga en un buque, evocando el transporte marítimo internacional de mercancías",
   },
   "litigios-y-arbitrajes": {
-    src: "https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=1800",
-    alt: "Mesa de reunión en oficina con profesionales revisando una estrategia",
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/img-litigios-1.png",
+    alt: "Interior neoclasico de un edificio institucional con columnas y atrio, evocando el entorno de los litigios",
+  },
+  "responsabilidad-civil": {
+    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/img-recupero-1.jpg",
+    alt: "Profesional revisando documentos en una carpeta, evocando el análisis y la defensa en responsabilidad civil",
+  },
+  "derecho-corporativo": {
+    src: pexels(33463115),
+    alt: "Edificio de oficinas moderno con fachada de vidrio, representando derecho corporativo y negocios",
   },
 };
 

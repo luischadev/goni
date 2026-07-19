@@ -54,7 +54,6 @@ const HEADLINE = "+50 años de trayectoria";
 const SUBLINE = "en el mercado de los seguros y reaseguros";
 const PHRASE = `${HEADLINE} ${SUBLINE}`;
 const headlineWords = HEADLINE.split(" ");
-const sublineWords = SUBLINE.split(" ");
 ---
 
 <section class="scroll-scene" data-scroll-scene>
@@ -102,12 +101,8 @@ const sublineWords = SUBLINE.split(" ");
           </span>
         ))}
       </p>
-      <p class="scroll-scene__subline">
-        {sublineWords.map((word, i) => (
-          <span class="scroll-scene__word" data-scene-subline-word>
-            {i < sublineWords.length - 1 ? `${word}\u00a0` : word}
-          </span>
-        ))}
+      <p class="scroll-scene__subline" data-scene-subline>
+        {SUBLINE}
       </p>
     </div>
 
@@ -243,6 +238,7 @@ const sublineWords = SUBLINE.split(" ");
     letter-spacing: 0em;
     color: rgba(242, 244, 246, 0.85);
     max-width: 28rem;
+    will-change: opacity;
   }
 
   @media (min-width: 768px) {
@@ -282,7 +278,8 @@ const sublineWords = SUBLINE.split(" ");
       opacity: 0;
     }
 
-    .scroll-scene__word {
+    .scroll-scene__word,
+    .scroll-scene__subline {
       opacity: 1 !important;
     }
   }
@@ -320,11 +317,11 @@ const sublineWords = SUBLINE.split(" ");
     videoWrap: HTMLElement,
     textEl: HTMLElement,
     headlineWords: HTMLElement[],
-    sublineWords: HTMLElement[],
+    sublineEl: HTMLElement,
     surroundCards: HTMLElement[],
     config: SceneTimelineConfig
   ): void {
-    gsap.set([...headlineWords, ...sublineWords], { opacity: 0 });
+    gsap.set([...headlineWords, sublineEl], { opacity: 0 });
     gsap.set(videoWrap, { opacity: 0 });
     gsap.set(textEl, { opacity: 1 });
     gsap.set(scaleTarget, { scale: config.initialScale, transformOrigin: "center center" });
@@ -335,15 +332,15 @@ const sublineWords = SUBLINE.split(" ");
     // Fase 1: video fade-in (grid ampliado, tarjetas fuera del viewport)
     tl.to(videoWrap, { opacity: 1, duration: 2.4, ease: "power1.inOut" }, 0);
 
-    // Fase 2: texto palabra a palabra
+    // Fase 2: headline palabra a palabra; bajada como un solo fade
     tl.to(
       headlineWords,
       { opacity: 1, stagger: { amount: 1.2 }, duration: 0.5, ease: "none" },
       0.35
     );
     tl.to(
-      sublineWords,
-      { opacity: 1, stagger: { amount: 1.4 }, duration: 0.5, ease: "none" },
+      sublineEl,
+      { opacity: 1, duration: 0.7, ease: "power1.out" },
       1.4
     );
 
@@ -387,15 +384,13 @@ const sublineWords = SUBLINE.split(" ");
     const headlineWords = Array.from(
       section.querySelectorAll<HTMLElement>("[data-scene-headline-word]")
     );
-    const sublineWords = Array.from(
-      section.querySelectorAll<HTMLElement>("[data-scene-subline-word]")
-    );
+    const sublineEl = section.querySelector<HTMLElement>("[data-scene-subline]");
     const videoWrap = section.querySelector<HTMLElement>("[data-scene-video-wrap]");
     const textEl    = section.querySelector<HTMLElement>("[data-scene-text]");
     const gridEl    = section.querySelector<HTMLElement>("[data-scene-grid]");
     const stage     = section.querySelector<HTMLElement>("[data-scene-stage]");
 
-    if (!headlineWords.length || !sublineWords.length || !videoWrap || !textEl || !gridEl || !stage) return;
+    if (!headlineWords.length || !sublineEl || !videoWrap || !textEl || !gridEl || !stage) return;
 
     scrollSceneMedia?.revert();
     scrollSceneMedia = gsap.matchMedia();
@@ -405,7 +400,7 @@ const sublineWords = SUBLINE.split(" ");
       .forEach((t) => t.kill());
 
     if (prefersReducedMotion()) {
-      gsap.set([...headlineWords, ...sublineWords], { opacity: 1 });
+      gsap.set([...headlineWords, sublineEl], { opacity: 1 });
       gsap.set(section.querySelectorAll<HTMLElement>("[data-scene-surround]"), { opacity: 1 });
       return;
     }
@@ -436,7 +431,7 @@ const sublineWords = SUBLINE.split(" ");
       const finalScale = (stageW * END_COVERAGE) / videoW2;
 
       buildScrollTimeline(
-        section, gridEl, videoWrap, textEl, headlineWords, sublineWords, surroundCards,
+        section, gridEl, videoWrap, textEl, headlineWords, sublineEl, surroundCards,
         {
           initialScale,
           finalScale,
@@ -470,7 +465,7 @@ const sublineWords = SUBLINE.split(" ");
       const initialScale = fitScale * VIDEO_VIEWPORT_COVERAGE;
 
       buildScrollTimeline(
-        section, gridEl, videoWrap, textEl, headlineWords, sublineWords, surroundCards,
+        section, gridEl, videoWrap, textEl, headlineWords, sublineEl, surroundCards,
         {
           initialScale,
           finalScale: 1.0,

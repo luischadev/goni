@@ -59,6 +59,8 @@ export interface TeamMember {
   education?: string[];
   languages?: string[];
   memberships?: string[];
+  email?: string;
+  linkedin?: string;
 }
 
 export interface Testimonial {
