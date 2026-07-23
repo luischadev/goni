@@ -422,7 +422,7 @@ export const teamMembers: TeamMember[] = [
     name: "Carlos Goñi Garrido",
     role: "Socio",
     bio: "Licenciado en Ciencias Jurídicas y Sociales por la Universidad de Valparaíso y liquidador de seguros.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/carlos.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/carlos.jpg",
     credentials: [
       "Universidad de Valparaíso",
       "Liquidador de seguros",
@@ -439,7 +439,7 @@ export const teamMembers: TeamMember[] = [
     name: "Sebastián Matías Mardones Zúñiga",
     role: "Gerente",
     bio: "Licenciado en Ciencias Jurídicas y Sociales por la Universidad Adolfo Ibáñez, con formación de postítulo en seguros, derecho laboral y compliance.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/sebastian.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/sebastian.jpg",
     credentials: [
       "Universidad Adolfo Ibáñez",
       "Diplomado en Seguros",
@@ -460,7 +460,7 @@ export const teamMembers: TeamMember[] = [
     name: "Rubén Darío Nieto Santelices",
     role: "Consultor",
     bio: "Consultor del estudio con experiencia en el mercado de seguros y reaseguros.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/ruben.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/ruben.jpg",
     credentials: ["Consultor", "Español e inglés"],
     languages: ["Español", "Inglés"],
     email: "rnieto@goni-abogados.cl",
@@ -470,7 +470,7 @@ export const teamMembers: TeamMember[] = [
     name: "Josefa María Guerrero Vives",
     role: "Asociada",
     bio: "Licenciada en Ciencias Jurídicas y Sociales por la Universidad Diego Portales, con diplomado en Derecho de Seguros y magíster en Derecho Laboral en curso.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/josefa.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/josefa.jpg",
     credentials: [
       "Universidad Diego Portales",
       "Diplomado en Derecho de Seguros",
@@ -493,7 +493,7 @@ export const teamMembers: TeamMember[] = [
     name: "Daniel Alberto Lagunas Pizarro",
     role: "Asociado",
     bio: "Asociado de Goñi & Cía. Abogados con trayectoria en procura y derecho de seguros, vinculado al estudio desde el año 2000.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/daniel.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/daniel.jpg",
     credentials: [
       "Goñi & Cía. Abogados desde 2000",
       "Derecho de Seguros y Seguros Marítimos",
@@ -515,7 +515,7 @@ export const teamMembers: TeamMember[] = [
     name: "Danilo Iván Álvarez Medina",
     role: "Asociado",
     bio: "Licenciado en Ciencias Jurídicas y Sociales por la Universidad Miguel de Cervantes, con experiencia en procura judicial.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/danilo.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/danilo.jpg",
     credentials: [
       "Universidad Miguel de Cervantes",
       "Experiencia en procura",
@@ -535,7 +535,7 @@ export const teamMembers: TeamMember[] = [
     name: "Nicolás Antonio Obregón Soto",
     role: "Asociado",
     bio: "Licenciado en Ciencias Jurídicas y Sociales por la Pontificia Universidad Católica de Chile, con especialización en derecho privado y formación en litigación civil.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/nicolas.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/nicolas.jpg",
     credentials: [
       "Pontificia Universidad Católica de Chile",
       "Especialidad en Derecho Privado",
@@ -560,7 +560,7 @@ export const teamMembers: TeamMember[] = [
     name: "Antonia De Los Ángeles Soto Pizarro",
     role: "Asociada",
     bio: "Licenciada en Ciencias Jurídicas y Sociales por la Universidad Diego Portales, con diploma de honor en Políticas Públicas.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/antonia.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/antonia.jpg",
     credentials: [
       "Universidad Diego Portales",
       "Diploma de Honor en Políticas Públicas",
@@ -582,7 +582,7 @@ export const teamMembers: TeamMember[] = [
     name: "Edith Del Carmen Muñoz Cabrales",
     role: "Administración y Finanzas",
     bio: "Técnico jurídico del Instituto Jurídico Canon, a cargo de administración y finanzas del estudio.",
-    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/edith.JPG",
+    photo: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/equipo/edith.jpg",
     credentials: ["Técnico jurídico", "Administración y Finanzas"],
     education: ["Técnico jurídico, Instituto Jurídico Canon"],
     languages: ["Español"],
