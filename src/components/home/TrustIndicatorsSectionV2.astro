@@ -114,7 +114,7 @@ const headlineWords = HEADLINE.split(" ");
   /* ── Sección: altura total para las 4 fases ── */
   .scroll-scene {
     position: relative;
-    height: 250vh;
+    height: 230vh;
   }
 
   @media (min-width: 768px) {
@@ -302,6 +302,7 @@ const headlineWords = HEADLINE.split(" ");
     finalScale: number;
     scaleStart: number;
     scaleDuration: number;
+    sublineStart: number;
     textFadeStart: number;
     textFadeDuration: number;
     scrollEnd: string;
@@ -341,7 +342,7 @@ const headlineWords = HEADLINE.split(" ");
     tl.to(
       sublineEl,
       { opacity: 1, duration: 0.7, ease: "power1.out" },
-      1.4
+      config.sublineStart
     );
 
     // Fase 3: zoom-out → grid escala, tarjetas circundantes entran al frame
@@ -422,7 +423,7 @@ const headlineWords = HEADLINE.split(" ");
       const videoH2 = videoW2 * (16 / 9); // 9:16 → height = width × 16/9
 
       const START_COVERAGE = 0.92; // inicio: video ~92% del ancho del viewport
-      const END_COVERAGE   = 0.82; // final: video ~82% — menos zoom-out
+      const END_COVERAGE   = 0.68; // final más pequeño → más visibles los videos alrededor
 
       const initialScale = Math.min(
         (stageW * START_COVERAGE) / videoW2,
@@ -435,11 +436,12 @@ const headlineWords = HEADLINE.split(" ");
         {
           initialScale,
           finalScale,
-          scaleStart: 2.7,
-          scaleDuration: 1.8,
-          textFadeStart: 3.9,
-          textFadeDuration: 0.55,
-          scrollEnd: "bottom 50%",
+          scaleStart: 2.55,
+          scaleDuration: 1.75, // se extiende un tramo después de que el texto desaparece
+          sublineStart: 1.75,
+          textFadeStart: 3.15,
+          textFadeDuration: 0.4,
+          scrollEnd: "bottom 55%",
         }
       );
     });
@@ -471,6 +473,7 @@ const headlineWords = HEADLINE.split(" ");
           finalScale: 1.0,
           scaleStart: 3.1,
           scaleDuration: 2.2,
+          sublineStart: 1.4,
           textFadeStart: 4.8,
           textFadeDuration: 0.65,
           scrollEnd: "bottom 62%",

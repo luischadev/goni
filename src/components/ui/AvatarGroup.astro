@@ -1,0 +1,175 @@
+---
+interface AvatarMember {
+  name: string;
+  photo: string;
+}
+
+interface Props {
+  members: AvatarMember[];
+  limit?: number;
+  size?: number;
+  href?: string;
+  class?: string;
+}
+
+const {
+  members,
+  limit = 4,
+  size = 40,
+  href = "/nosotros",
+  class: className = "",
+} = Astro.props;
+
+const visible = members.slice(0, limit);
+const remaining = Math.max(members.length - limit, 0);
+const itemCount = visible.length + (remaining > 0 ? 1 : 0);
+const sizeMd = Math.round(size * 1.25);
+const overlap = Math.round(size * 0.3);
+const overlapMd = Math.round(sizeMd * 0.3);
+---
+
+<div
+  class:list={["avatar-group-wrap", "reveal", className]}
+  style={`--avatar-size: ${size}px; --avatar-overlap: ${overlap}px; --avatar-size-md: ${sizeMd}px; --avatar-overlap-md: ${overlapMd}px;`}
+>
+  <a
+    href={href}
+    class="avatar-group"
+    aria-label={`Ver equipo: ${members.length} personas`}
+  >
+    <ul class="avatar-group__list">
+      {visible.map((member, index) => (
+        <li
+          class="avatar-group__item"
+          style={`z-index: ${itemCount - index}; --avatar-delay: ${index * 100}ms;`}
+        >
+          <img
+            src={member.photo}
+            alt=""
+            width={size}
+            height={size}
+            class="avatar-group__image"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="sr-only">{member.name}</span>
+        </li>
+      ))}
+      {remaining > 0 && (
+        <li
+          class="avatar-group__item avatar-group__item--more"
+          style={`z-index: 1; --avatar-delay: ${visible.length * 100}ms;`}
+          aria-hidden="true"
+        >
+          <span class="avatar-group__more">+{remaining}</span>
+        </li>
+      )}
+    </ul>
+  </a>
+</div>
+
+<style>
+  /* Wrapper solo para IntersectionObserver; sin fade propio */
+  .avatar-group-wrap.reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .avatar-group {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .avatar-group__list {
+    display: flex;
+    flex-direction: row;
+    direction: ltr;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .avatar-group__item {
+    position: relative;
+    margin-left: calc(var(--avatar-overlap) * -1);
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: 9999px;
+    border: 2px solid var(--color-surface);
+    background-color: var(--color-surface-soft);
+    overflow: hidden;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+
+  .avatar-group__item:first-child {
+    margin-left: 0;
+  }
+
+  :global(.avatar-group-wrap.is-visible) .avatar-group__item {
+    animation: avatar-group-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--avatar-delay, 0ms);
+  }
+
+  @keyframes avatar-group-in {
+    from {
+      opacity: 0;
+      transform: translateX(-14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .avatar-group__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .avatar-group__item--more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-surface-soft);
+    border-color: var(--color-surface);
+  }
+
+  .avatar-group__more {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-fg-muted);
+    line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+    .avatar-group-wrap {
+      --avatar-size: var(--avatar-size-md);
+      --avatar-overlap: var(--avatar-overlap-md);
+    }
+
+    .avatar-group__more {
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .avatar-group__item {
+      opacity: 1;
+      transform: none;
+    }
+
+    :global(.avatar-group-wrap.is-visible) .avatar-group__item {
+      animation: none;
+    }
+  }
+</style>

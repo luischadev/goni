@@ -9,9 +9,10 @@ import TestimonialHorizontalSection from "../components/testimonials/Testimonial
 import PublicationItem from "../components/publications/PublicationItem.astro";
 import Button from "../components/ui/Button.astro";
 import TextLink from "../components/ui/TextLink.astro";
+import AvatarGroup from "../components/ui/AvatarGroup.astro";
 import { cms } from "../lib/cms";
 
-const [settings, hero, indicators, areas, testimonials, publications] =
+const [settings, hero, indicators, areas, testimonials, publications, team] =
   await Promise.all([
     cms.getSiteSettings(),
     cms.getHomeHero(),
@@ -19,6 +20,7 @@ const [settings, hero, indicators, areas, testimonials, publications] =
     cms.getPracticeAreas(),
     cms.getTestimonials(),
     cms.getPublications(),
+    cms.getTeamMembers(),
   ]);
 
 const featuredPublications = publications.slice(0, 3);
@@ -84,8 +86,20 @@ const featuredPublications = publications.slice(0, 3);
           integrales y especializados en materias civiles y comerciales,
           fundamentalmente en asuntos relacionados con seguros y reaseguros.
         </h2>
-        <div class="mt-8 md:mt-10 reveal">
-          <TextLink href="/nosotros" size="xl">Más sobre nosotros</TextLink>
+        <div class="mt-8 md:mt-10 flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
+          <TextLink href="/nosotros" size="xl" class="order-2 md:order-1 self-start reveal">
+            Más sobre nosotros
+          </TextLink>
+          <AvatarGroup
+            class="order-1 md:order-2 reveal"
+            members={team.map((member) => ({
+              name: member.name,
+              photo: member.photo,
+            }))}
+            limit={4}
+            size={40}
+            href="/nosotros"
+          />
         </div>
       </div>
     </div>
