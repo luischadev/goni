@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CTASection from "../../components/CTASection.astro";
 import { cms } from "../../lib/cms";
-import { getPracticeAreaHeroImage } from "../../lib/practice-area-hero-images";
+import { getPracticeAreaHeroImage } from "../../lib/content";
 
 const areas = await cms.getPracticeAreas();
 ---
@@ -37,7 +37,7 @@ const areas = await cms.getPracticeAreas();
               href={`/areas-de-practica/${area.slug}`}
               class="group reveal relative block min-h-[28rem] overflow-hidden rounded-card bg-surface-inverse shadow-[0_24px_80px_rgba(15,24,34,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong md:min-h-[32rem]"
             >
-              <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+              <div class="pointer-events-none absolute inset-0 media-skeleton media-skeleton--inverse" aria-hidden="true">
                 <Image
                   src={heroImage.src}
                   alt=""
@@ -45,9 +45,10 @@ const areas = await cms.getPracticeAreas();
                   height={1125}
                   format="webp"
                   loading="lazy"
+                  data-skeleton
                   class="h-full w-full object-cover"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-surface-inverse/95 via-surface-inverse/62 to-surface-inverse/10"></div>
+                <div class="absolute inset-0 z-[2] bg-gradient-to-t from-surface-inverse/95 via-surface-inverse/62 to-surface-inverse/10"></div>
               </div>
 
               <div class="relative z-10 flex min-h-[28rem] flex-col justify-end p-6 text-fg-on-inverse sm:p-8 md:min-h-[32rem] md:p-10 lg:p-12">

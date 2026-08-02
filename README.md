@@ -4,117 +4,118 @@ Sitio web institucional para Goñi & Cía. Abogados S.A., estudio jurídico bout
 especializado en seguros, responsabilidad civil y derecho de transporte
 marítimo, aéreo y terrestre.
 
-Construido con **Astro 6** y **Tailwind CSS 4**, pensado como un MVP rápido de
-levantar y preparado para conectarse más adelante con **Strapi CMS** sin
+Construido con **Astro 6** y **Tailwind CSS 4**. El contenido vive en módulos
+locales detrás de un adaptador `cms` preparado para migrar a Strapi sin
 reescribir las páginas.
+
+Para un mapa mental del repo, ver [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 
 ## Stack
 
-- **Astro 6** · sitio estático con Islands Architecture.
-- **Tailwind CSS 4** · sistema de utilidades + tokens propios en `src/styles/global.css`.
-- **TypeScript estricto**.
+- **Astro 6** · sitio estático (SSG).
+- **Tailwind CSS 4** · utilidades + tokens semánticos en `src/styles/`.
+- **TypeScript estricto** (`astro/tsconfigs/strict`).
+- **GSAP** · animaciones scroll (hero indicators, text reveal, backgrounds).
 - **Tipografías**:
-  - `Gilda Display` (Google Fonts) para títulos y voces editoriales.
-  - `Geist` para textos largos e interfaz.
+  - Display: `Optima` (stack de sistema) para títulos.
+  - Body/UI: `IBM Plex Sans` (Google Fonts).
+  - Iconos: Material Symbols Sharp.
 
 ## Estructura del proyecto
 
 ```
 src/
-├── components/        # Header, Footer, SectionHeader compartidos
+├── components/
+│   ├── ui/              # Primitivos (Button, TextLink, Sheet, AvatarGroup…)
+│   ├── header/          # Nav desktop/mobile
+│   ├── home/            # Secciones exclusivas del home
+│   ├── practice/        # Áreas de práctica
+│   ├── publications/    # Cards / listados de publicaciones
+│   ├── testimonials/    # Carrusel horizontal (listo, no montado en home hoy)
+│   ├── PageHero.astro
+│   ├── Header.astro / Footer.astro / CTASection.astro
 ├── layouts/
 │   └── BaseLayout.astro
 ├── lib/
-│   ├── cms.ts         # Adaptador único (preparado para Strapi)
-│   ├── content.ts     # Datos curados (mock) e implementación local
-│   └── types.ts       # Contratos TypeScript del contenido
-├── pages/
-│   ├── index.astro                       # Home
-│   ├── areas-de-practica/
-│   │   ├── index.astro                   # Listado
-│   │   └── [slug].astro                  # Detalle por área
-│   ├── publicaciones/
-│   │   ├── index.astro                   # Listado
-│   │   └── [slug].astro                  # Detalle por publicación
-│   ├── nosotros.astro
-│   └── contacto.astro
+│   ├── cms.ts           # Único punto de entrada de datos para las páginas
+│   ├── content/         # Contenido curado por dominio (site, team, areas…)
+│   ├── media.ts         # Resolución de URLs (R2 / CDN)
+│   ├── types.ts         # Contratos TypeScript
+│   ├── toast.ts
+│   └── ui-classes.ts    # Variantes de Button / TextLink
+├── pages/               # Rutas Astro
+├── scripts/             # JS cliente (GSAP, formulario de contacto)
 └── styles/
-    └── global.css     # Tokens (colores, tipografías) + base + componentes
+    ├── global.css       # Entry: importa tokens → base → components
+    ├── tokens.css
+    ├── base.css
+    └── components.css
 ```
 
 ## Sistema de diseño
 
-Definido como variables CSS en `src/styles/global.css` y expuestas como tokens
-de Tailwind v4 vía `@theme`:
+Definido en `src/styles/tokens.css`:
 
-| Token | Valor | Uso |
-| --- | --- | --- |
-| `--color-ink` | `#0f1822` | Texto principal, fondos oscuros |
-| `--color-ink-soft` | `#2a3340` | Hover de fondos oscuros |
-| `--color-stone-deep` | `#4a525d` | Texto secundario, leads |
-| `--color-stone` | `#8a8f99` | Texto terciario, separadores activos |
-| `--color-line` | `#e3e1dc` | Líneas y bordes sutiles |
-| `--color-cream` | `#f6f3ee` | Bloques de respiro / fondos cálidos |
-| `--color-paper` | `#fbfaf7` | Fondo de página |
-| `--color-bronze` | `#8a6a3f` | Acentos editoriales |
-| `--color-bronze-soft` | `#b89a6c` | Acentos sobre fondos oscuros |
+| Token semántico | Uso |
+| --- | --- |
+| `surface` / `surface-soft` | Fondos de página y secciones |
+| `surface-inverse` | Bloques oscuros, footer, heroes |
+| `fg` / `fg-muted` / `fg-subtle` | Jerarquía de texto |
+| `fg-accent` | Acentos interactivos (azul) |
+| `fg-on-inverse*` | Texto sobre fondos oscuros |
+| `line` / `line-strong` | Bordes y separadores |
 
-Espaciado vertical generoso por defecto (`py-20`, `py-28`, `py-32`, `py-40`)
-para imprimir el ritmo visual de tranquilidad pedido por el cliente.
+Los componentes deben usar tokens semánticos (`bg-surface`, `text-fg`), nunca
+los primitivos `--palette-*` directamente.
 
-## Capa de datos · preparada para Strapi
+## Capa de datos
 
-Todo el contenido se consume vía `cms` (`src/lib/cms.ts`). Hoy la implementación
-delega en `src/lib/content.ts`, pero cada página ya `await`-ea las llamadas, por
-lo que migrar a Strapi solo requiere reemplazar el cuerpo de los métodos en
-`cms.ts` por llamadas `fetch` a la API REST de Strapi (manteniendo los tipos en
-`src/lib/types.ts`).
+Todo el contenido se consume vía `cms` (`src/lib/cms.ts`). Hoy delega en
+`src/lib/content/*`. Las páginas ya hacen `await`, así que migrar a Strapi
+solo requiere reemplazar la implementación dentro de `cms.ts`.
 
-Ejemplo de migración futura:
+Los medios pesados (videos, fotos de equipo, heroes de áreas) viven en
+**Cloudflare R2**. La base URL se configura con:
 
-```ts
-async getPracticeAreas(): Promise<PracticeArea[]> {
-  const res = await fetch(
-    `${import.meta.env.STRAPI_URL}/api/practice-areas?populate=*`,
-    { headers: { Authorization: `Bearer ${import.meta.env.STRAPI_TOKEN}` } }
-  );
-  const data = await res.json();
-  return data.data.map(mapPracticeArea);
-}
+```bash
+PUBLIC_MEDIA_BASE_URL=https://pub-….r2.dev
 ```
 
-## Páginas implementadas
+Ver `.env.example`.
 
-- `/` · Home (hero, indicadores de confianza, áreas, testimonios, reconocimientos, publicaciones, CTA).
-- `/areas-de-practica` · Listado completo.
-- `/areas-de-practica/[slug]` · Detalle por área con servicios e industrias.
-- `/publicaciones` · Listado con publicación destacada.
-- `/publicaciones/[slug]` · Detalle largo y sidebar de contacto.
-- `/nosotros` · Identidad, valores, socio fundador y equipo con foto y bio.
-- `/contacto` · Datos de contacto, formulario y ubicación.
+## Páginas
+
+- `/` · Home (hero, intro, trayectoria scroll, áreas, CTA)
+- `/areas-de-practica` · Listado
+- `/areas-de-practica/[slug]` · Detalle
+- `/publicaciones` · Listado
+- `/publicaciones/[slug]` · Detalle
+- `/nosotros` · Equipo
+- `/contacto` · Datos + formulario
 
 ## Cómo correr el proyecto
 
 ```bash
-# Node 22 o superior recomendado
+# Node 22+ (engines en package.json)
 nvm use 22
 
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # genera ./dist
+npm run build    # genera ./dist (+ poster del hero si hace falta)
 npm run preview  # previsualiza el build
 ```
 
-## Créditos de medios
+## Scripts útiles
 
-- **Hero (video):** [Scenic view of cargo ships on calm sea](https://www.pexels.com/video/scenic-view-of-cargo-ships-on-calm-sea-34533819/) — Video by Evgenij Mikhailov from Pexels.
-- **Hero (poster):** imagen de respaldo vía Unsplash mientras carga el video.
+| Script | Qué hace |
+| --- | --- |
+| `npm run generate:hero-poster` | Extrae un frame JPG del video hero (requiere `ffmpeg`) |
+| `predev` / `build` | Corren el poster automáticamente |
 
 ## Próximos pasos sugeridos
 
-1. Conectar el adaptador `cms` con la API de Strapi (REST o GraphQL).
-2. Optimizar `public/videos/cargo-ships-hero.mp4` (hoy ~22 MB; ideal &lt; 8 MB con ffmpeg).
-3. Reemplazar las fotos del equipo (hoy desde Unsplash) por imágenes propias.
-4. Implementar el endpoint del formulario de contacto (`/api/contact`).
-5. Definir un sitemap y robots, y registrar dominio en Search Console.
-6. Añadir analítica (idealmente respetuosa de privacidad como Plausible).
+1. Conectar el adaptador `cms` con Strapi (REST o GraphQL).
+2. Sitemap + robots + Search Console.
+3. Analítica privacy-friendly (p. ej. Plausible).
+4. Remontar testimonios / publicaciones en el home cuando el contenido esté listo
+   (`TestimonialHorizontalSection` y `PublicationItem` ya existen).

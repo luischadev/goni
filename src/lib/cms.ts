@@ -2,6 +2,7 @@ import {
   getHomeHero,
   getIndicators,
   getPracticeAreaBySlug,
+  getPracticeAreaHeroImage,
   getPracticeAreas,
   getPublicationBySlug,
   getPublications,
@@ -25,6 +26,8 @@ import type {
   TeamMember,
   Testimonial,
 } from "./types";
+
+export type PracticeAreaHeroImage = { src: string; alt: string };
 
 const practiceAreaNavDescriptions: Record<string, string> = {
   "recuperos-legales":
@@ -134,6 +137,10 @@ export const cms = {
 
   async getTestimonials(): Promise<Testimonial[]> {
     return getTestimonials();
+  },
+
+  async getPracticeAreaHeroImage(slug: string): Promise<PracticeAreaHeroImage> {
+    return getPracticeAreaHeroImage(slug);
   },
 
   async getMainNav(): Promise<NavItem[]> {

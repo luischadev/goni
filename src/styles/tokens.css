@@ -1,0 +1,92 @@
+/* Design tokens: palette primitives + semantic @theme */
+/* ──────────────────────────────────────────────────────────────
+   PALETTE (PRIMITIVES)
+
+   Source of truth for raw color values. These live in :root and
+   are NOT exposed as Tailwind utilities. Components must consume
+   semantic tokens, never primitives.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --palette-ink:          #0f1822;
+  --palette-ink-soft:     #1d2630;
+  --palette-stone-deep:   #4a525d;
+  --palette-stone:        #8a8f99;
+  --palette-hairline:     #dfe3e6;
+  --palette-cream:        #f2f4f6;
+  --palette-paper:        #fdfeff;
+  --palette-bronze:       #8a6a3f;
+  --palette-bronze-soft:  #b89a6c;
+  --palette-bronze-light: #d6bd8d;
+  --palette-blue:         #145584;
+  --palette-blue-soft:    #78a8c7;
+  --palette-blue-light:   #a9cce0;
+}
+
+@theme {
+  /* ────────────────────────────────────────────────────────────
+     SURFACES — backgrounds.
+     Tailwind utilities: bg-surface, bg-surface-soft,
+     bg-surface-inverse, bg-surface-inverse-soft
+     ──────────────────────────────────────────────────────────── */
+  --color-surface:              var(--palette-paper);     /* page */
+  --color-surface-soft:         var(--palette-cream);     /* alt. sections / cards */
+  --color-surface-inverse:      var(--palette-ink);       /* dark sections, footer */
+  --color-surface-inverse-soft: var(--palette-ink-soft);  /* hover on dark / primary CTAs */
+
+  /* ────────────────────────────────────────────────────────────
+     FOREGROUND (text).
+     Tailwind utilities: text-fg, text-fg-soft, text-fg-muted,
+     text-fg-subtle, text-fg-accent, text-fg-on-inverse,
+     text-fg-on-inverse-accent, text-fg-on-inverse-interaction
+     ──────────────────────────────────────────────────────────── */
+  --color-fg:                    var(--palette-ink);         /* headings, default text */
+  --color-fg-soft:               var(--palette-ink-soft);    /* article body */
+  --color-fg-muted:              var(--palette-stone-deep);  /* leads, descriptions */
+  --color-fg-subtle:             var(--palette-stone);       /* metadata, breadcrumbs */
+  --color-fg-accent:             var(--palette-blue);        /* numbers, hover accents */
+  --color-fg-on-inverse:         var(--palette-cream);       /* text on dark */
+  --color-fg-on-inverse-accent:  var(--palette-blue-soft);   /* accent on dark */
+  --color-fg-on-inverse-interaction: var(--palette-blue-light); /* hover on dark */
+
+  /* ────────────────────────────────────────────────────────────
+     LINES — borders & separators.
+     Tailwind utilities: border-line, border-line-strong,
+     border-line-on-inverse, divide-line, outline-line-strong
+     ──────────────────────────────────────────────────────────── */
+  --color-line:             var(--palette-hairline);  /* default hairline separator */
+  --color-line-strong:      var(--palette-ink);       /* CTA underlines, active state */
+  --color-line-on-inverse:  var(--palette-cream);     /* separator on dark */
+
+  /* ────────────────────────────────────────────────────────────
+     TYPOGRAPHY
+     ──────────────────────────────────────────────────────────── */
+  --font-display: "Optima", "Candara", "Segoe UI", "Gill Sans", "Gill Sans MT", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --tracking-display: -0.015em;
+  --tracking-eyebrow: 0.12em;
+
+  /* ────────────────────────────────────────────────────────────
+     RADIUS
+     ──────────────────────────────────────────────────────────── */
+  --radius-button: 3px;
+  --radius-card: 4px;
+  --radius-media: 4px;
+  --radius-modal: 4px;
+  --radius-full: 9999px;
+
+  /* ────────────────────────────────────────────────────────────
+     ELEVATION — shadows.
+     Tailwind utilities: shadow-xs, shadow-sm, shadow-md,
+     shadow-lg, shadow-xl, shadow-inverse-md, shadow-inverse-lg
+     ──────────────────────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px color-mix(in srgb, var(--palette-ink) 8%, transparent);
+  --shadow-sm: 0 4px 12px color-mix(in srgb, var(--palette-ink) 8%, transparent);
+  --shadow-md: 0 12px 32px color-mix(in srgb, var(--palette-ink) 10%, transparent);
+  --shadow-lg: 0 24px 64px color-mix(in srgb, var(--palette-ink) 12%, transparent);
+  --shadow-xl: 0 32px 96px color-mix(in srgb, var(--palette-ink) 16%, transparent);
+  --shadow-inverse-md: 0 18px 48px rgba(0, 0, 0, 0.22);
+  --shadow-inverse-lg: 0 30px 90px rgba(0, 0, 0, 0.28);
+}
+

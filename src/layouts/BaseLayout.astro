@@ -84,6 +84,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
     <ToastHost />
 
     <script>
+      import { initMediaSkeletons } from "../scripts/media-skeleton";
+
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -96,7 +98,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
         { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
       );
 
-      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+      function initReveals() {
+        document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+      }
+
+      initReveals();
+      initMediaSkeletons();
+
+      document.addEventListener("astro:page-load", () => {
+        initReveals();
+        initMediaSkeletons();
+      });
     </script>
   </body>
 </html>

@@ -42,7 +42,7 @@ const overlapMd = Math.round(sizeMd * 0.3);
     <ul class="avatar-group__list">
       {visible.map((member, index) => (
         <li
-          class="avatar-group__item"
+          class="avatar-group__item media-skeleton"
           style={`z-index: ${itemCount - index}; --avatar-delay: ${index * 100}ms;`}
         >
           <Image
@@ -54,6 +54,7 @@ const overlapMd = Math.round(sizeMd * 0.3);
             class="avatar-group__image"
             loading="lazy"
             decoding="async"
+            data-skeleton
           />
           <span class="sr-only">{member.name}</span>
         </li>
