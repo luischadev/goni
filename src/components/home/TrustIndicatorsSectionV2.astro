@@ -69,9 +69,11 @@ const headlineWords = HEADLINE.split(" ");
             muted
             loop
             playsinline
+            preload="none"
             aria-hidden="true"
+            data-lazy-video
           >
-            <source src={src} type="video/mp4" />
+            <source data-src={src} type="video/mp4" />
           </video>
         </div>
       ))}
@@ -83,9 +85,11 @@ const headlineWords = HEADLINE.split(" ");
           muted
           loop
           playsinline
+          preload="none"
           aria-hidden="true"
+          data-lazy-video
         >
-          <source src={VIDEO_SRC} type="video/mp4" />
+          <source data-src={VIDEO_SRC} type="video/mp4" />
         </video>
         <div class="scroll-scene__video-overlay" aria-hidden="true"></div>
       </div>
@@ -297,6 +301,50 @@ const headlineWords = HEADLINE.split(" ");
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
+  /**
+   * Los videos de esta sección son pesados (fondo decorativo en grid + video
+   * central). En vez de dejar que el navegador los descargue apenas carga la
+   * página (con `autoplay` en el HTML inicial), se dejan sin `src` real
+   * (`data-src`) y recién se asignan cuando el video está por entrar en
+   * pantalla. Esto evita ~cientos de MB de descarga innecesaria en visitas
+   * donde el usuario nunca hace scroll hasta esta sección.
+   */
+  function initLazyVideos(): void {
+    const section = document.querySelector<HTMLElement>("[data-scroll-scene]");
+    if (!section) return;
+
+    const videos = Array.from(
+      section.querySelectorAll<HTMLVideoElement>("video[data-lazy-video]")
+    );
+    if (!videos.length) return;
+
+    const loadVideo = (video: HTMLVideoElement) => {
+      const source = video.querySelector<HTMLSourceElement>("source[data-src]");
+      if (!source?.dataset.src) return;
+      source.src = source.dataset.src;
+      delete source.dataset.src;
+      video.load();
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      videos.forEach(loadVideo);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          loadVideo(entry.target as HTMLVideoElement);
+          obs.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "800px 0px 800px 0px" }
+    );
+
+    videos.forEach((video) => observer.observe(video));
+  }
+
   interface SceneTimelineConfig {
     initialScale: number;
     finalScale: number;
@@ -482,8 +530,10 @@ const headlineWords = HEADLINE.split(" ");
     });
   }
 
+  initLazyVideos();
   initScrollScene();
   document.addEventListener("astro:page-load", () => {
+    initLazyVideos();
     initScrollScene();
     ScrollTrigger.refresh();
   });

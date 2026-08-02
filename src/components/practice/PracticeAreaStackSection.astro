@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { getPracticeAreaHeroImage } from "../../lib/practice-area-hero-images";
 import type { PracticeArea } from "../../lib/types";
 
@@ -42,22 +43,15 @@ const { areas } = Astro.props;
               href={`/areas-de-practica/${area.slug}`}
               class="group reveal relative block min-h-[28rem] overflow-hidden rounded-card bg-surface-inverse shadow-[0_24px_80px_rgba(15,24,34,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong md:min-h-[32rem]"
             >
-              <div class="pointer-events-none absolute inset-0 md:hidden" aria-hidden="true">
-                <img
+              <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                <Image
                   src={heroImage.src}
                   alt=""
-                  class="h-full w-full object-cover"
+                  inferSize
+                  width={900}
+                  format="webp"
                   loading="lazy"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-surface-inverse/95 via-surface-inverse/65 to-surface-inverse/10"></div>
-              </div>
-
-              <div class="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true">
-                <img
-                  src={heroImage.src}
-                  alt=""
                   class="h-full w-full object-cover"
-                  loading="lazy"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-surface-inverse/95 via-surface-inverse/62 to-surface-inverse/10"></div>
               </div>

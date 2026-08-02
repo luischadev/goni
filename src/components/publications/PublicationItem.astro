@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import TextLink from "../ui/TextLink.astro";
 import { formatPublicationDate } from "../../lib/content";
 import type { Publication } from "../../lib/types";
@@ -53,9 +54,12 @@ const wrapperReveal = reveal ? "reveal" : "";
   >
     {hasCover && (
       <div class="aspect-[4/3] overflow-hidden rounded-media bg-surface-soft mb-6">
-        <img
-          src={publication.coverImage}
+        <Image
+          src={publication.coverImage as string}
           alt={publication.coverImageAlt ?? ""}
+          inferSize
+          width={700}
+          format="webp"
           loading="lazy"
           decoding="async"
           class="w-full h-full object-cover transition-transform duration-[560ms] ease-out group-hover:scale-[1.03]"
@@ -104,9 +108,12 @@ const wrapperReveal = reveal ? "reveal" : "";
       {hasCover ? (
         <div class="col-span-12 md:col-span-3">
           <div class="aspect-[4/3] overflow-hidden rounded-media bg-surface-soft">
-            <img
-              src={publication.coverImage}
+            <Image
+              src={publication.coverImage as string}
               alt={publication.coverImageAlt ?? ""}
+              inferSize
+              width={500}
+              format="webp"
               loading="lazy"
               decoding="async"
               class="w-full h-full object-cover transition-transform duration-[560ms] ease-out group-hover:scale-[1.03]"
@@ -170,9 +177,12 @@ const wrapperReveal = reveal ? "reveal" : "";
       {hasCover && (
         <div class="md:col-span-4 md:order-3">
           <div class="aspect-[4/3] overflow-hidden rounded-media bg-surface">
-            <img
-              src={publication.coverImage}
+            <Image
+              src={publication.coverImage as string}
               alt={publication.coverImageAlt ?? ""}
+              inferSize
+              width={900}
+              format="webp"
               loading="eager"
               decoding="async"
               class="w-full h-full object-cover transition-transform duration-[560ms] ease-out group-hover:scale-[1.03]"

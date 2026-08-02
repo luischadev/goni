@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CTASection from "../../components/CTASection.astro";
 import Button from "../../components/ui/Button.astro";
@@ -43,11 +44,14 @@ const featureSection = {
   >
     <figure class="relative w-full bg-surface-inverse">
       <div class="relative min-h-[72vh] overflow-hidden md:min-h-[78vh]">
-        <img
+        <Image
           src={heroImage.src}
           alt={heroImage.alt}
-          width="1800"
-          height="1013"
+          inferSize
+          width={2000}
+          format="webp"
+          fetchpriority="high"
+          loading="eager"
           class="absolute inset-0 h-full w-full object-cover"
         />
         <div

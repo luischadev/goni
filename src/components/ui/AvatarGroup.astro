@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 interface AvatarMember {
   name: string;
   photo: string;
@@ -43,11 +45,12 @@ const overlapMd = Math.round(sizeMd * 0.3);
           class="avatar-group__item"
           style={`z-index: ${itemCount - index}; --avatar-delay: ${index * 100}ms;`}
         >
-          <img
+          <Image
             src={member.photo}
             alt=""
-            width={size}
-            height={size}
+            inferSize
+            width={size * 3}
+            format="webp"
             class="avatar-group__image"
             loading="lazy"
             decoding="async"

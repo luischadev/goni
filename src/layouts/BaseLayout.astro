@@ -59,6 +59,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,200,0,0&display=swap"
     />
+
+    <!-- Medios pesados (imágenes/videos) viven en estos dominios externos -->
+    <link rel="preconnect" href="https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev" crossorigin />
+    <link rel="preconnect" href="https://images.pexels.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
   </head>
   <body class="min-h-screen flex flex-col antialiased">
     <a
