@@ -6,14 +6,19 @@ de aplicación en runtime.
 ## Flujo de datos
 
 ```
-page (src/pages/*)
-  └─ await cms.*()          ← único entrypoint público
-       └─ content/*         ← datos locales curados (hoy)
+page (src/pages/[...lang]/*)
+  └─ getLang(Astro.url)     ← idioma desde la URL (/ = es, /en = en)
+  └─ await cms.*(lang)      ← único entrypoint público
+       └─ content/<lang>/*  ← datos locales curados (hoy)
        └─ media.ts          ← resuelve URLs relativas → R2/CDN
+  └─ ui[lang]               ← copy de UI (labels, aria, formulario)
 ```
 
 - **Páginas** no importan `content/*` salvo helpers puros (p. ej.
   `formatPublicationDate`). Preferir siempre `cms`.
+- **Idioma**: se deriva de la URL, no se pasa por props. Cualquier componente
+  puede llamar `getLang(Astro.url)`; los `href` internos pasan por
+  `localizePath`.
 - **Componentes de presentación** pueden recibir datos ya resueltos por props,
   o llamar helpers sync de `content` cuando hace falta un lookup local
   (p. ej. hero image por slug dentro de un `.map()`).
@@ -24,10 +29,11 @@ page (src/pages/*)
 
 | Quieres… | Ve a… |
 | --- | --- |
-| Nueva página / ruta | `src/pages/` |
+| Nueva página bilingüe | `src/pages/[...lang]/` |
 | Sección reutilizable de marketing | `src/components/<dominio>/` |
 | Botón, link, sheet, avatar | `src/components/ui/` |
-| Copy, equipo, áreas, publicaciones | `src/lib/content/<dominio>.ts` |
+| Equipo, áreas, testimonios, hero | `src/lib/content/<lang>/<dominio>.ts` |
+| Label, botón, aria-label, formulario | `src/lib/i18n/<lang>.ts` |
 | Fetch / resolución CMS | `src/lib/cms.ts` |
 | URL de video/imagen (R2) | `src/lib/media.ts` + `PUBLIC_MEDIA_BASE_URL` |
 | Animación scroll / form JS | `src/scripts/` |
@@ -78,3 +84,7 @@ Scripts activos hoy:
   `content`.
 - No dejar componentes “V2” o versiones comentadas en el árbol activo.
 - No importar primitivos `--palette-*` desde componentes de página.
+- No hardcodear texto visible en `.astro`: va al diccionario de `i18n`.
+- No hardcodear `href` internos: usar `localizePath`.
+- No poner copy en `src/scripts/*`: pasarlo desde el markup con `data-*`
+  (ver `data-contact-success` en el formulario de contacto).

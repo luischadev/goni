@@ -1,0 +1,50 @@
+---
+import { LANGS, getLang, switchLocalePath, ui } from "../../lib/i18n";
+
+/**
+ * Language toggle. Plain anchors to the same page in the other language, so
+ * it works without JS and stays crawlable. Pages that exist only in Spanish
+ * (publications) fall back to that language's home — see `switchLocalePath`.
+ */
+interface Props {
+  variant: "desktop" | "mobile";
+}
+
+const { variant } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const lang = getLang(Astro.url);
+const t = ui[lang].a11y;
+
+const isDesktop = variant === "desktop";
+const wrapperClass = isDesktop
+  ? "flex items-center gap-1.5 text-sm tracking-wide"
+  : "flex items-center gap-2 text-base tracking-wide";
+const activeClass = "font-medium text-current";
+const inactiveClass =
+  "text-current opacity-55 transition-opacity hover:opacity-100";
+---
+
+<div class={wrapperClass} role="group" aria-label={t.languageSwitcher}>
+  {LANGS.map((code, index) => (
+    <>
+      {index > 0 && (
+        <span class="text-current opacity-35" aria-hidden="true">/</span>
+      )}
+      {code === lang ? (
+        <span class={activeClass} aria-current="true">
+          {ui[code].label}
+        </span>
+      ) : (
+        <a
+          href={switchLocalePath(currentPath, code)}
+          hreflang={code}
+          lang={code}
+          class={inactiveClass}
+        >
+          {ui[code].label}
+        </a>
+      )}
+    </>
+  ))}
+</div>

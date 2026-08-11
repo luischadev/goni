@@ -1,0 +1,120 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CTASection from "../../components/CTASection.astro";
+import PageHero from "../../components/PageHero.astro";
+import TrustIndicatorsSection from "../../components/home/TrustIndicatorsSection.astro";
+import PracticeAreaStackSection from "../../components/practice/PracticeAreaStackSection.astro";
+import Button from "../../components/ui/Button.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import AvatarGroup from "../../components/ui/AvatarGroup.astro";
+import { cms } from "../../lib/cms";
+import { getLang, localizePath, ui } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return [{ params: { lang: undefined } }, { params: { lang: "en" } }];
+}
+
+const lang = getLang(Astro.url);
+const t = ui[lang].home;
+
+const [settings, hero, areas, team] = await Promise.all([
+  cms.getSiteSettings(lang),
+  cms.getHomeHero(lang),
+  cms.getPracticeAreas(lang),
+  cms.getTeamMembers(lang),
+]);
+
+const aboutHref = localizePath("/nosotros", lang);
+---
+
+<BaseLayout
+  description={settings.tagline}
+  headerVariant="transparent"
+>
+  <PageHero
+    videoSrc={hero.backgroundVideo?.url}
+    imgSrc={hero.backgroundImage.url}
+    imgAlt={hero.backgroundImage.alt}
+    overlayOpacity={hero.overlayOpacity}
+    minHeight={hero.minHeight}
+  >
+    <div class="grid grid-cols-1 md:grid-cols-12">
+      <div class="md:col-span-10">
+        <h1
+          class="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.01em] text-fg-on-inverse"
+          data-home-hero-item="title"
+        >
+          {hero.title}
+        </h1>
+        <p
+          class="mt-6 md:mt-8 max-w-xl text-lg md:text-xl text-fg-on-inverse/75 leading-relaxed"
+          data-home-hero-item="subtitle"
+        >
+          {hero.subtitle}
+        </p>
+        <div
+          class="mt-8 md:mt-10 flex flex-col sm:flex-row gap-6 sm:items-center"
+          data-home-hero-item="actions"
+        >
+          <Button
+            href={localizePath("/contacto#consulta", lang)}
+            tone="inverse"
+            class="md:min-w-[240px]"
+          >
+            {t.heroPrimaryAction}
+          </Button>
+          <TextLink
+            href={localizePath("/areas-de-practica", lang)}
+            variant="inverse"
+            size="lg"
+            class="self-start sm:self-auto"
+          >
+            {t.heroSecondaryAction}
+          </TextLink>
+        </div>
+      </div>
+    </div>
+  </PageHero>
+
+  <section aria-labelledby="home-intro" class="container-x py-16 md:py-32 border-b border-line">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-16">
+      <div class="md:col-span-3">
+        <p class="eyebrow reveal">{t.introEyebrow}</p>
+      </div>
+
+      <div class="md:col-span-8 md:col-start-5">
+        <h2
+          id="home-intro"
+          class="font-display text-3xl md:text-5xl leading-[1.22] md:leading-[1.14] text-fg-muted reveal"
+          data-scroll-text-reveal
+        >
+          {t.introHeadline}
+        </h2>
+        <div class="mt-8 md:mt-10 flex flex-col gap-5 md:flex-row md:items-center md:gap-16">
+          <TextLink href={aboutHref} size="xl" class="order-2 md:order-1 self-start reveal">
+            {t.aboutLink}
+          </TextLink>
+          <AvatarGroup
+            class="order-1 md:order-2 reveal"
+            members={team.map((member) => ({
+              name: member.name,
+              photo: member.photo,
+            }))}
+            limit={4}
+            size={40}
+            href={aboutHref}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <TrustIndicatorsSection />
+
+  <PracticeAreaStackSection areas={areas} />
+
+  <CTASection
+    title={t.ctaTitle}
+    description={t.ctaDescription}
+  />
+</BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import TextLink from "../ui/TextLink.astro";
+import { getLang, ui } from "../../lib/i18n";
 import type { NavItem as NavItemType } from "../../lib/types";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const { id, variant, items, parent } = Astro.props;
+const t = ui[getLang(Astro.url)].nav;
 ---
 
 {variant === "desktop" ? (
@@ -31,7 +33,7 @@ const { id, variant, items, parent } = Astro.props;
         )}
         {parent.href && (
           <TextLink href={parent.href} class="mt-8">
-            Ver todas
+            {t.viewAll}
           </TextLink>
         )}
       </div>
@@ -77,7 +79,7 @@ const { id, variant, items, parent } = Astro.props;
         href={parent.href}
         class="block text-sm text-fg-accent hover:text-fg transition-colors pt-2"
       >
-        Ver todas →
+        {t.viewAllMobile}
       </a>
     )}
   </div>

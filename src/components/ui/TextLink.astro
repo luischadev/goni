@@ -26,7 +26,7 @@ const {
   class: className = "",
   target,
   rel,
-} = Astro.props;
+}: Props = Astro.props;
 
 const displayArrow = arrow !== "none";
 const arrowChar = arrow === "left" ? "←" : "→";

@@ -38,12 +38,15 @@ src/
 │   └── BaseLayout.astro
 ├── lib/
 │   ├── cms.ts           # Único punto de entrada de datos para las páginas
-│   ├── content/         # Contenido curado por dominio (site, team, areas…)
+│   ├── content/         # Contenido curado: es/ y en/ por dominio + publications
+│   ├── i18n/            # Idioma activo, rutas localizadas y copy de UI
 │   ├── media.ts         # Resolución de URLs (R2 / CDN)
 │   ├── types.ts         # Contratos TypeScript
 │   ├── toast.ts
 │   └── ui-classes.ts    # Variantes de Button / TextLink
-├── pages/               # Rutas Astro
+├── pages/
+│   ├── [...lang]/       # Rutas bilingües: / y /en
+│   └── publicaciones/   # Solo español
 ├── scripts/             # JS cliente (GSAP, formulario de contacto)
 └── styles/
     ├── global.css       # Entry: importa tokens → base → components
@@ -74,6 +77,9 @@ Todo el contenido se consume vía `cms` (`src/lib/cms.ts`). Hoy delega en
 `src/lib/content/*`. Las páginas ya hacen `await`, así que migrar a Strapi
 solo requiere reemplazar la implementación dentro de `cms.ts`.
 
+Cada método recibe el idioma activo (`cms.getPracticeAreas(lang)`), que mapea
+directo al parámetro `locale` de Strapi. Ver la sección de idiomas más abajo.
+
 Los medios pesados (videos, fotos de equipo, heroes de áreas) viven en
 **Cloudflare R2**. La base URL se configura con:
 
@@ -93,6 +99,29 @@ Ver `.env.example`.
 - `/nosotros` · Equipo
 - `/contacto` · Datos + formulario
 
+Todas salvo publicaciones existen además bajo `/en` con las mismas slugs.
+
+## Idiomas
+
+Español en la raíz, inglés bajo `/en`. Un solo archivo por página genera ambas
+versiones: viven en `src/pages/[...lang]/` y devuelven
+`[{ params: { lang: undefined } }, { params: { lang: "en" } }]` desde
+`getStaticPaths`, así que no hay riesgo de que las dos versiones se
+desincronicen.
+
+| Quieres… | Ve a… |
+| --- | --- |
+| Traducir un label, botón o mensaje de UI | `src/lib/i18n/es.ts` y `en.ts` |
+| Traducir contenido editorial | `src/lib/content/es/` y `en/` |
+| Prefijar un `href` | `localizePath(path, lang)` |
+| Saber el idioma activo en un componente | `getLang(Astro.url)` |
+
+`en.ts` está tipado contra `es.ts`: si falta una clave, falla el build.
+Lo mismo con `src/lib/content/en/`, que debe exportar lo mismo que `es/`.
+
+Las publicaciones son solo en español: viven fuera de `[...lang]/`, no declaran
+`hreflang` y el selector de idioma lleva al home del otro idioma.
+
 ## Cómo correr el proyecto
 
 ```bash
@@ -101,7 +130,8 @@ nvm use 22
 
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # genera ./dist (+ poster del hero si hace falta)
+npm run check    # type-check de .astro/.ts
+npm run build    # type-check + genera ./dist (+ poster del hero si hace falta)
 npm run preview  # previsualiza el build
 ```
 
@@ -109,8 +139,9 @@ npm run preview  # previsualiza el build
 
 | Script | Qué hace |
 | --- | --- |
+| `npm run check` | `astro check`: tipos de componentes, props y contenido |
 | `npm run generate:hero-poster` | Extrae un frame JPG del video hero (requiere `ffmpeg`) |
-| `predev` / `build` | Corren el poster automáticamente |
+| `predev` / `build` | Corren el poster automáticamente; `build` además corre `check` |
 
 ## Próximos pasos sugeridos
 

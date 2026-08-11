@@ -1,6 +1,13 @@
+---
+import { getLang, ui } from "../../lib/i18n";
+
+const closeLabel = ui[getLang(Astro.url)].a11y.closeNotification;
+---
+
 <div
   class="toast-region"
   data-toast-region
+  data-toast-close-label={closeLabel}
   aria-live="polite"
   aria-relevant="additions"
 ></div>

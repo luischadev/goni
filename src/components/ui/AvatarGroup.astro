@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { getLang, localizePath, ui } from "../../lib/i18n";
 
 interface AvatarMember {
   name: string;
@@ -14,11 +15,14 @@ interface Props {
   class?: string;
 }
 
+const lang = getLang(Astro.url);
+const t = ui[lang].a11y;
+
 const {
   members,
   limit = 4,
   size = 40,
-  href = "/nosotros",
+  href = localizePath("/nosotros", lang),
   class: className = "",
 } = Astro.props;
 
@@ -37,7 +41,7 @@ const overlapMd = Math.round(sizeMd * 0.3);
   <a
     href={href}
     class="avatar-group"
-    aria-label={`Ver equipo: ${members.length} personas`}
+    aria-label={t.avatarGroup(members.length)}
   >
     <ul class="avatar-group__list">
       {visible.map((member, index) => (

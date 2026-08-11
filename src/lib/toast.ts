@@ -56,7 +56,10 @@ export function showToast({
   const closeButton = document.createElement("button");
   closeButton.type = "button";
   closeButton.className = "toast__close";
-  closeButton.setAttribute("aria-label", "Cerrar notificación");
+  closeButton.setAttribute(
+    "aria-label",
+    region.dataset.toastCloseLabel ?? "Close"
+  );
   closeButton.innerHTML =
     '<span class="material-symbols-sharp" aria-hidden="true">close</span>';
 

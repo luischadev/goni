@@ -1,9 +1,13 @@
 ---
 import { cms } from "../lib/cms";
+import { getLang, localizePath, ui } from "../lib/i18n";
 import TextLink from "./ui/TextLink.astro";
 
-const settings = await cms.getSiteSettings();
-const areas = await cms.getPracticeAreas();
+const lang = getLang(Astro.url);
+const t = ui[lang].footer;
+
+const settings = await cms.getSiteSettings(lang);
+const areas = await cms.getPracticeAreas(lang);
 
 const currentYear = new Date().getFullYear();
 const footerLinkClass =
@@ -14,7 +18,11 @@ const footerLinkClass =
   <div class="container-x py-20 md:py-28">
     <div class="grid grid-cols-1 gap-14 md:grid-cols-12 md:gap-12">
       <div class="md:col-span-3">
-        <a href="/" class="inline-block" aria-label={`${settings.name} — Inicio`}>
+        <a
+          href={localizePath("/", lang)}
+          class="inline-block"
+          aria-label={ui[lang].a11y.homeLink(settings.name)}
+        >
           <img
             src="/goni-abogados-logo.png"
             alt={settings.legalName}
@@ -26,12 +34,12 @@ const footerLinkClass =
       </div>
 
       <div class="md:col-span-3">
-        <p class="eyebrow text-fg-on-inverse/55">Práctica</p>
+        <p class="eyebrow text-fg-on-inverse/55">{t.practice}</p>
         <ul class="mt-6 space-y-3.5">
           {areas.slice(0, 5).map((area) => (
             <li>
               <a
-                href={`/areas-de-practica/${area.slug}`}
+                href={localizePath(`/areas-de-practica/${area.slug}`, lang)}
                 class={footerLinkClass}
               >
                 {area.title}
@@ -40,25 +48,33 @@ const footerLinkClass =
           ))}
           <li>
             <a
-              href="/areas-de-practica"
+              href={localizePath("/areas-de-practica", lang)}
               class={footerLinkClass}
             >
-              Ver todas las áreas
+              {t.viewAllAreas}
             </a>
           </li>
         </ul>
       </div>
 
       <div class="md:col-span-2">
-        <p class="eyebrow text-fg-on-inverse/55">Estudio</p>
+        <p class="eyebrow text-fg-on-inverse/55">{t.firm}</p>
         <ul class="mt-6 space-y-3.5">
-          <li><a href="/nosotros" class={footerLinkClass}>Nosotros</a></li>
-          <li><a href="/contacto" class={footerLinkClass}>Contacto</a></li>
+          <li>
+            <a href={localizePath("/nosotros", lang)} class={footerLinkClass}>
+              {ui[lang].nav.about}
+            </a>
+          </li>
+          <li>
+            <a href={localizePath("/contacto", lang)} class={footerLinkClass}>
+              {ui[lang].nav.contact}
+            </a>
+          </li>
         </ul>
       </div>
 
       <div class="md:col-span-4">
-        <p class="eyebrow text-fg-on-inverse/55">Contacto</p>
+        <p class="eyebrow text-fg-on-inverse/55">{t.contact}</p>
         <address class="mt-6 space-y-3.5 text-base not-italic leading-relaxed text-fg-on-inverse/85">
           <p>
             {settings.address.street}<br />
@@ -73,7 +89,7 @@ const footerLinkClass =
               target="_blank"
               rel="noopener noreferrer"
             >
-              Ver en Google Maps
+              {t.viewOnMaps}
             </TextLink>
           </p>
           <p>
@@ -89,7 +105,7 @@ const footerLinkClass =
     </div>
 
     <div class="mt-20 flex flex-col items-start justify-between gap-4 border-t border-line-on-inverse/15 pt-8 text-xs text-fg-on-inverse/55 md:flex-row md:items-center">
-      <p>© {currentYear} {settings.legalName}. Todos los derechos reservados.</p>
+      <p>© {currentYear} {settings.legalName}. {t.rights}</p>
     </div>
   </div>
 </footer>

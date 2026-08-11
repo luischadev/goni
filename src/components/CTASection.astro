@@ -1,5 +1,6 @@
 ---
 import Button from "./ui/Button.astro";
+import { getLang, localizePath, ui } from "../lib/i18n";
 
 interface Props {
   title: string;
@@ -8,11 +9,13 @@ interface Props {
   href?: string;
 }
 
+const lang = getLang(Astro.url);
+
 const {
   title,
   description,
-  buttonLabel = "Contáctanos",
-  href = "/contacto",
+  buttonLabel = ui[lang].cta.defaultLabel,
+  href = localizePath("/contacto", lang),
 } = Astro.props;
 ---
 

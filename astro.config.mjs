@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://goniabogados.cl',
   image: {
     // Permite que <Image>/getImage() de astro:assets optimice (resize +
     // AVIF/WebP + srcset) imágenes remotas en build time, sin depender de

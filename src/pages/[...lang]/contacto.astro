@@ -1,0 +1,319 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Button from "../../components/ui/Button.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import { cms } from "../../lib/cms";
+import { getLang, ui } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return [{ params: { lang: undefined } }, { params: { lang: "en" } }];
+}
+
+const lang = getLang(Astro.url);
+const t = ui[lang].contact;
+
+const settings = await cms.getSiteSettings(lang);
+const areas = await cms.getPracticeAreas(lang);
+
+const fieldGroupClass = "space-y-2";
+const labelClass = "block text-sm font-medium leading-none text-fg-muted";
+const helperClass = "text-xs leading-relaxed text-fg-muted";
+const fieldClass =
+  "contact-field-input w-full min-h-12 rounded-card bg-surface-soft border border-transparent border-b-line px-4 py-3 text-base leading-normal text-fg outline-none transition-colors duration-[160ms] placeholder:text-fg-subtle hover:border-b-line-strong focus:[border-color:var(--color-fg-accent)] focus:hover:[border-color:var(--color-fg-accent)] disabled:cursor-not-allowed disabled:bg-surface-soft/60 disabled:text-fg-subtle";
+const textareaClass = `${fieldClass} min-h-36 resize-none overflow-hidden`;
+const contactFieldClass = `${fieldGroupClass} contact-field`;
+const selectClass = `${fieldClass} appearance-none pr-12`;
+const contactDetailLinkClass =
+  "mt-4 inline-block font-display text-2xl md:text-3xl text-fg hover:text-fg-accent transition-colors link-underline [text-decoration-line:underline] md:[text-decoration-line:none] md:hover:[text-decoration-line:underline]";
+const contactFormUrl = import.meta.env.PUBLIC_CONTACT_FORM_URL ?? "";
+---
+
+<BaseLayout title={t.metaTitle} description={t.metaDescription}>
+  <section class="container-x pt-20 md:pt-32 pb-12 md:pb-20">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+      <div class="md:col-span-8">
+        <p class="eyebrow reveal">{t.eyebrow}</p>
+        <h1 class="font-display text-4xl md:text-6xl leading-[1.05] mt-8 reveal">
+          {t.title}
+        </h1>
+        <p class="mt-10 max-w-2xl text-base md:text-lg text-fg-muted leading-relaxed reveal">
+          {t.intro}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="consulta" class="border-y border-line scroll-mt-24 md:scroll-mt-28">
+    <div class="container-x py-20 md:py-28">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        <div class="md:col-span-5">
+          <p class="eyebrow reveal">{t.detailsEyebrow}</p>
+
+          <div class="mt-10 space-y-10 reveal">
+            <div>
+              <p class="text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-subtle">
+                {t.office}
+              </p>
+              <address class="not-italic mt-4 text-base md:text-lg text-fg-soft leading-relaxed">
+                {settings.address.street}<br />
+                {settings.address.city}<br />
+                {settings.address.region}, {settings.address.country}
+              </address>
+              <div class="mt-5">
+                <TextLink
+                  href={settings.address.mapsUrl}
+                  size="md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t.viewOnMaps}
+                </TextLink>
+              </div>
+            </div>
+
+            <div>
+              <p class="text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-subtle">
+                {t.email}
+              </p>
+              <a
+                href={`mailto:${settings.email}`}
+                class={contactDetailLinkClass}
+              >
+                {settings.email}
+              </a>
+            </div>
+
+            <div>
+              <p class="text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-subtle">
+                {t.phone}
+              </p>
+              <a
+                href={`tel:${settings.phone.replace(/\s+/g, "")}`}
+                class={contactDetailLinkClass}
+              >
+                {settings.phone}
+              </a>
+            </div>
+
+            <div>
+              <p class="text-xs uppercase tracking-[var(--tracking-eyebrow)] text-fg-subtle">
+                {t.hours}
+              </p>
+              <p class="mt-4 text-base text-fg-soft leading-relaxed">
+                {t.hoursDays}<br />
+                {t.hoursTime}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-6 md:col-start-7">
+          <p class="eyebrow reveal">{t.formEyebrow}</p>
+
+          <form
+            class="contact-form mt-10 space-y-7 reveal"
+            method="POST"
+            action="#"
+            name="contact"
+            data-contact-form
+            data-contact-endpoint={contactFormUrl}
+            data-contact-submitted-label={t.submitted}
+            data-contact-success={t.successMessage}
+            data-contact-error={t.errorMessage}
+            data-contact-unconfigured={t.notConfiguredMessage(settings.email)}
+            novalidate
+          >
+            <div class="sr-only" aria-hidden="true">
+              <label for="website">{t.honeypotLabel}</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class={contactFieldClass} data-contact-field>
+                <label for="name" class={labelClass}>
+                  {t.nameLabel}
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  class={fieldClass}
+                  data-contact-input
+                  placeholder={t.namePlaceholder}
+                  aria-describedby="name-helper name-error-helper"
+                />
+                <p id="name-helper" class={`${helperClass} contact-helper-default`}>
+                  {t.nameHelper}
+                </p>
+                <p id="name-error-helper" class={`${helperClass} contact-helper-invalid`}>
+                  {t.nameError}
+                </p>
+              </div>
+              <div class={fieldGroupClass}>
+                <label for="company" class={labelClass}>
+                  {t.companyLabel} <span class="text-fg-subtle">{t.optional}</span>
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  class={fieldClass}
+                  placeholder={t.companyPlaceholder}
+                  aria-describedby="company-helper"
+                />
+                <p id="company-helper" class={helperClass}>
+                  {t.companyHelper}
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class={contactFieldClass} data-contact-field>
+                <label for="email" class={labelClass}>
+                  {t.emailLabel}
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class={fieldClass}
+                  data-contact-input
+                  placeholder={t.emailPlaceholder}
+                  aria-describedby="email-helper email-format-helper"
+                />
+                <p id="email-helper" class={`${helperClass} contact-helper-default`}>
+                  {t.emailHelper}
+                </p>
+                <p id="email-format-helper" class={`${helperClass} contact-helper-invalid`}>
+                  {t.emailError}
+                </p>
+              </div>
+              <div class={fieldGroupClass}>
+                <label for="phone" class={labelClass}>
+                  {t.phoneLabel} <span class="text-fg-subtle">{t.optional}</span>
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class={fieldClass}
+                  placeholder={t.phonePlaceholder}
+                  aria-describedby="phone-helper"
+                />
+                <p id="phone-helper" class={helperClass}>
+                  {t.phoneHelper}
+                </p>
+              </div>
+            </div>
+
+            <div class={fieldGroupClass}>
+              <label for="area" class={labelClass}>
+                {t.areaLabel} <span class="text-fg-subtle">{t.optional}</span>
+              </label>
+              <div class="relative">
+                <select
+                  id="area"
+                  name="area"
+                  class={selectClass}
+                  aria-describedby="area-helper"
+                >
+                  <option value="">{t.areaPlaceholder}</option>
+                  {areas.map((area) => (
+                    <option value={area.slug}>{area.title}</option>
+                  ))}
+                  <option value="otro">{t.areaOther}</option>
+                </select>
+                <span
+                  class="material-symbols-sharp pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xl leading-none text-fg-muted"
+                  aria-hidden="true"
+                >
+                  expand_more
+                </span>
+              </div>
+              <p id="area-helper" class={helperClass}>
+                {t.areaHelper}
+              </p>
+            </div>
+
+            <div class={contactFieldClass} data-contact-field>
+              <label for="message" class={labelClass}>
+                {t.messageLabel}
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class={textareaClass}
+                data-contact-input
+                placeholder={t.messagePlaceholder}
+                aria-describedby="message-error-helper"
+              ></textarea>
+              <p id="message-error-helper" class={`${helperClass} contact-helper-invalid`}>
+                {t.messageError}
+              </p>
+            </div>
+
+            <Button type="submit" size="lg" showArrow={false}>
+              {t.submit}
+            </Button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style is:global>
+  .contact-form {
+    --contact-error-color: #7a1f2b;
+  }
+
+  .contact-field .contact-helper-invalid {
+    color: var(--contact-error-color);
+    display: none;
+  }
+
+  .contact-field.field-error .contact-field-input {
+    border-color: var(--contact-error-color);
+  }
+
+  .contact-field.field-error .contact-field-input:hover,
+  .contact-field.field-error .contact-field-input:focus,
+  .contact-field.field-error .contact-field-input:focus:hover {
+    border-color: var(--contact-error-color);
+  }
+
+  .contact-field.field-error .contact-helper-default {
+    display: none;
+  }
+
+  .contact-field.field-error .contact-helper-invalid {
+    display: block;
+  }
+
+  .contact-form.is-submitting,
+  .contact-form.is-submitted {
+    pointer-events: none;
+  }
+
+  .contact-form.is-submitted button[type="submit"] {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { initContactForm } from "../../scripts/contact-form";
+
+  initContactForm();
+  document.addEventListener("astro:page-load", initContactForm);
+</script>

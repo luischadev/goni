@@ -1,4 +1,4 @@
-import type { PracticeArea } from "../types";
+import type { PracticeArea } from "../../types";
 
 const recuperosLegalesHighlights = [
   {
@@ -329,11 +329,3 @@ export const practiceAreas: PracticeArea[] = [
     industries: [],
   },
 ];
-
-export function getPracticeAreas(): PracticeArea[] {
-  return practiceAreas;
-}
-
-export function getPracticeAreaBySlug(slug: string): PracticeArea | undefined {
-  return practiceAreas.find((area) => area.slug === slug);
-}

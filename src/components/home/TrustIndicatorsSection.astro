@@ -1,4 +1,6 @@
 ---
+import { getLang, ui } from "../../lib/i18n";
+
 /**
  * TrustIndicatorsSection
  *
@@ -50,8 +52,7 @@ const SURROUND_VIDEOS = [
   },
 ] as const;
 
-const HEADLINE = "+50 años de trayectoria";
-const SUBLINE = "en el mercado de los seguros y reaseguros";
+const { headline: HEADLINE, subline: SUBLINE } = ui[getLang(Astro.url)].trust;
 const PHRASE = `${HEADLINE} ${SUBLINE}`;
 const headlineWords = HEADLINE.split(" ");
 ---
@@ -463,7 +464,6 @@ const headlineWords = HEADLINE.split(" ");
       const stageW = stage.offsetWidth;
       const stageH = stage.offsetHeight;
       const gridW2 = stageW - 16;
-      const gridH2 = stageH - 16;
 
       // Video central: 2 columnas de ancho, aspect-ratio 9:16 (mismo que CSS)
       const colW2   = (gridW2 - 24) / 4;

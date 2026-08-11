@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run generate:hero-poster && astro build",
+    "check": "astro check",
+    "build": "npm run generate:hero-poster && astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "generate:hero-poster": "node scripts/generate-hero-poster.mjs",
@@ -18,5 +19,9 @@
     "astro": "^6.3.7",
     "gsap": "^3.15.0",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
   }
 }

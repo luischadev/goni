@@ -1,4 +1,5 @@
 ---
+import { getLang, ui } from "../../lib/i18n";
 import type { Testimonial } from "../../lib/types";
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 }
 
 const { testimonials } = Astro.props;
+const t = ui[getLang(Astro.url)].testimonials;
 ---
 
 <section
@@ -17,18 +19,17 @@ const { testimonials } = Astro.props;
     <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-16 items-end">
       <div class="md:col-span-7">
         <p class="eyebrow text-fg-on-inverse-accent reveal">
-          Voces del mercado
+          {t.eyebrow}
         </p>
         <h2
           id="testimonials"
           class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] text-fg-on-inverse reveal"
         >
-          La confianza de quienes operan en los frentes más exigentes.
+          {t.title}
         </h2>
       </div>
       <p class="md:col-span-4 md:col-start-9 text-base md:text-lg text-fg-on-inverse/70 leading-relaxed reveal">
-        Testimonios de equipos que enfrentan riesgos técnicos, disputas
-        complejas y decisiones legales de alto impacto.
+        {t.description}
       </p>
     </div>
   </div>
@@ -37,7 +38,7 @@ const { testimonials } = Astro.props;
     <div
       class="horizontal-scroll-viewport"
       data-horizontal-scroll-viewport
-      aria-label="Testimonios"
+      aria-label={t.regionLabel}
     >
       <div class="container-x">
         <div class="horizontal-scroll-track" data-horizontal-scroll-track>
@@ -85,12 +86,12 @@ const { testimonials } = Astro.props;
       </div>
     </div>
 
-    <div class="container-x mt-6 flex gap-3 md:hidden" aria-label="Controles del carrusel de testimonios">
+    <div class="container-x mt-6 flex gap-3 md:hidden" aria-label={t.controlsLabel}>
       <button
         type="button"
         class="testimonial-carousel-control"
         data-testimonial-carousel-prev
-        aria-label="Testimonio anterior"
+        aria-label={t.previous}
       >
         <span class="material-symbols-sharp text-xl" aria-hidden="true">arrow_back</span>
       </button>
@@ -98,7 +99,7 @@ const { testimonials } = Astro.props;
         type="button"
         class="testimonial-carousel-control"
         data-testimonial-carousel-next
-        aria-label="Testimonio siguiente"
+        aria-label={t.next}
       >
         <span class="material-symbols-sharp text-xl" aria-hidden="true">arrow_forward</span>
       </button>

@@ -4,13 +4,13 @@ export const siteSettings: SiteSettings = {
   name: "Goñi & Cía.",
   legalName: "Goñi & Cía. Abogados S.A.",
   tagline:
-    "Estudio jurídico especializado en seguros, responsabilidad civil y derecho de transporte marítimo, aéreo y terrestre.",
+    "Law firm specialized in insurance, civil liability and maritime, air and land transport law.",
   email: "abogados@goniabogados.cl",
   phone: "+56 2 2429 6900",
   address: {
-    street: "Avenida Nueva Providencia N° 1901, Oficina 52",
-    city: "comuna de Providencia",
-    region: "Región Metropolitana",
+    street: "Avenida Nueva Providencia 1901, Office 52",
+    city: "Providencia",
+    region: "Santiago Metropolitan Region",
     country: "Chile",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=Avenida+Nueva+Providencia+1901+Oficina+52+Providencia+Chile",
@@ -21,13 +21,12 @@ export const siteSettings: SiteSettings = {
 };
 
 export const homeHero: HeroContent = {
-  title: "Defensa legal para riesgos complejos",
-  subtitle:
-    "Rigor técnico, profundidad jurídica y resultados consistentes.",
+  title: "Legal defense for complex risks",
+  subtitle: "Technical rigor, legal depth and consistent results.",
   overlayOpacity: 60,
   backgroundImage: {
     url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
-    alt: "Buques de carga en mar en calma",
+    alt: "Cargo ships on a calm sea",
   },
   // Path relative to PUBLIC_MEDIA_BASE_URL (R2 / CDN).
   backgroundVideo: {
@@ -37,8 +36,8 @@ export const homeHero: HeroContent = {
 };
 
 export const indicators: Indicator[] = [
-  { value: "50+", label: "Años asesorando al mercado asegurador" },
-  { value: "200+", label: "Recuperos judiciales activos al año" },
-  { value: "4", label: "Modalidades de transporte cubiertas" },
-  { value: "LATAM", label: "Cobertura internacional con aseguradores y brokers" },
+  { value: "50+", label: "Years advising the insurance market" },
+  { value: "200+", label: "Active court recovery actions per year" },
+  { value: "4", label: "Modes of transport covered" },
+  { value: "LATAM", label: "International coverage with insurers and brokers" },
 ];

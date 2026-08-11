@@ -15,12 +15,13 @@ const cacheDir = path.join(root, ".cache");
 const cacheFile = path.join(cacheDir, "hero-video.sha");
 
 function readHeroVideoPath() {
-  const contentPath = path.join(root, "src/lib/content/site.ts");
+  // The hero video is shared across locales; the default one defines the poster.
+  const contentPath = path.join(root, "src/lib/content/es/site.ts");
   const content = readFileSync(contentPath, "utf8");
   const match = content.match(/backgroundVideo:\s*\{[\s\S]*?url:\s*"([^"]+)"/);
 
   if (!match) {
-    throw new Error("Could not find home hero backgroundVideo.url in content/site.ts");
+    throw new Error("Could not find home hero backgroundVideo.url in content/es/site.ts");
   }
 
   return match[1];

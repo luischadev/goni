@@ -1,5 +1,6 @@
 ---
 import NavItem from "./NavItem.astro";
+import { getLang, ui } from "../../lib/i18n";
 import type { NavItem as NavItemType } from "../../lib/types";
 
 interface Props {
@@ -25,13 +26,15 @@ function slugify(label: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+// Tighter gaps between md and lg: that band has to fit the logo, the nav, the
+// language switcher and the CTA on a single line.
 const navClass =
   variant === "desktop"
-    ? "hidden md:flex items-center gap-9"
+    ? "hidden md:flex items-center gap-5 lg:gap-9"
     : "flex flex-col gap-5";
 
-const ariaLabel =
-  variant === "desktop" ? "Navegación principal" : "Navegación móvil";
+const t = ui[getLang(Astro.url)].a11y;
+const ariaLabel = variant === "desktop" ? t.mainNav : t.mobileNav;
 ---
 
 <nav class={navClass} aria-label={ariaLabel}>

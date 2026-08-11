@@ -4,6 +4,14 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ToastHost from "../components/ui/ToastHost.astro";
 import { cms } from "../lib/cms";
+import {
+  DEFAULT_LANG,
+  LANGS,
+  getLang,
+  isLocalizedRoute,
+  switchLocalePath,
+  ui,
+} from "../lib/i18n";
 
 interface Props {
   title?: string;
@@ -13,7 +21,10 @@ interface Props {
   headerAutoHide?: boolean;
 }
 
-const settings = await cms.getSiteSettings();
+const lang = getLang(Astro.url);
+const t = ui[lang];
+
+const settings = await cms.getSiteSettings(lang);
 
 const {
   title,
@@ -24,14 +35,27 @@ const {
 } = Astro.props;
 
 const browserSiteName = "Goni";
-const isHome = Astro.url.pathname === "/";
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === "/" || currentPath === "/en/";
 const pageTitle =
   isHome || !title ? browserSiteName : `${title} · ${browserSiteName}`;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogados.cl").toString();
+const siteUrl = Astro.site ?? new URL("https://goniabogados.cl");
+const canonical = new URL(currentPath, siteUrl).toString();
+
+// Spanish-only pages (publications) advertise no alternates.
+const alternates = isLocalizedRoute(currentPath)
+  ? LANGS.map((code) => ({
+      hreflang: ui[code].htmlLang,
+      href: new URL(switchLocalePath(currentPath, code), siteUrl).toString(),
+    }))
+  : [];
+const defaultAlternate = alternates.find(
+  (alternate) => alternate.hreflang === ui[DEFAULT_LANG].htmlLang
+);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={t.htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,9 +65,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
+    {alternates.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+    ))}
+    {defaultAlternate && (
+      <link rel="alternate" hreflang="x-default" href={defaultAlternate.href} />
+    )}
+
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={t.ogLocale} />
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
@@ -70,7 +102,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://goniabogado
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-button focus:bg-surface-inverse focus:px-4 focus:py-2 focus:text-fg-on-inverse"
     >
-      Saltar al contenido principal
+      {t.a11y.skipToContent}
     </a>
 
     <Header variant={headerVariant} autoHide={headerAutoHide} />

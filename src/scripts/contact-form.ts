@@ -12,6 +12,13 @@ export function initContactForm(): void {
   let hasSubmittedSuccessfully = false;
 
   const endpoint = form.dataset.contactEndpoint || "";
+  // Copy is rendered server-side so the script stays language agnostic.
+  const messages = {
+    submitted: form.dataset.contactSubmittedLabel ?? "",
+    success: form.dataset.contactSuccess ?? "",
+    error: form.dataset.contactError ?? "",
+    unconfigured: form.dataset.contactUnconfigured ?? "",
+  };
 
   const waitForNextFrame = () =>
     new Promise<void>((resolve) => {
@@ -52,7 +59,7 @@ export function initContactForm(): void {
     submitButton.setAttribute("aria-busy", "false");
 
     if (submitLabel instanceof HTMLElement) {
-      submitLabel.textContent = "Consulta enviada";
+      submitLabel.textContent = messages.submitted;
     }
 
     form.classList.remove("is-submitting");
@@ -166,10 +173,7 @@ export function initContactForm(): void {
     }
 
     if (!endpoint) {
-      showToast({
-        variant: "error",
-        text: "El formulario no está configurado. Escríbanos directamente a abogados@goniabogados.cl.",
-      });
+      showToast({ variant: "error", text: messages.unconfigured });
       return;
     }
 
@@ -202,17 +206,11 @@ export function initContactForm(): void {
       resetFormState();
       hasSubmittedSuccessfully = true;
       setSubmitSuccess();
-      showToast({
-        variant: "success",
-        text: "Gracias. Recibimos su consulta y le responderemos a la brevedad.",
-      });
+      showToast({ variant: "success", text: messages.success });
     } catch {
       setFormSubmitting(false);
       setSubmitLoading(false);
-      showToast({
-        variant: "error",
-        text: "No pudimos enviar su consulta. Inténtelo nuevamente o escríbanos directamente.",
-      });
+      showToast({ variant: "error", text: messages.error });
     }
   });
 }

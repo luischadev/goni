@@ -1,4 +1,4 @@
-import type { Testimonial } from "../types";
+import type { Testimonial } from "../../types";
 
 export const testimonials: Testimonial[] = [
   {
@@ -34,7 +34,3 @@ export const testimonials: Testimonial[] = [
     avatar: "https://randomuser.me/api/portraits/men/52.jpg",
   },
 ];
-
-export function getTestimonials(): Testimonial[] {
-  return testimonials;
-}

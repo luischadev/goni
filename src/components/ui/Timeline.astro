@@ -1,11 +1,11 @@
 ---
-type TimelineInput =
-  | string
-  | {
-      title: string;
-      meta?: string;
-      description?: string;
-    };
+type TimelineItem = {
+  title: string;
+  meta?: string;
+  description?: string;
+};
+
+type TimelineInput = string | TimelineItem;
 
 interface Props {
   items: TimelineInput[];
@@ -15,7 +15,7 @@ interface Props {
 
 const { items, size = "md", class: className = "" } = Astro.props;
 
-function splitTimelineItem(item: string) {
+function splitTimelineItem(item: string): TimelineItem {
   const trailingMeta = item.match(/\s*\(([^)]+)\)\s*$/);
   let title = trailingMeta ? item.slice(0, trailingMeta.index).trim() : item;
   const meta: string[] = trailingMeta ? [trailingMeta[1]] : [];

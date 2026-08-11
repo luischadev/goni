@@ -1,4 +1,6 @@
 ---
+import { getLang, ui } from "../../lib/i18n";
+
 /**
  * Sheet — generic bottom sheet (mobile) / center modal (desktop).
  *
@@ -16,7 +18,8 @@ interface Props {
   label?: string;
 }
 
-const { id, label = "Detalle" } = Astro.props;
+const t = ui[getLang(Astro.url)].a11y;
+const { id, label = t.sheetLabel } = Astro.props;
 ---
 
 <div
@@ -40,7 +43,7 @@ const { id, label = "Detalle" } = Astro.props;
     <button
       class="sheet__close-btn flex"
       data-sheet-close
-      aria-label="Cerrar"
+      aria-label={t.close}
       type="button"
     >
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -281,15 +284,17 @@ const { id, label = "Detalle" } = Astro.props;
     panel.style.transition = "none";
     handle.setPointerCapture(e.pointerId);
 
-    function handleDragMove(moveEvent: PointerEvent): void {
+    // Arrow functions on purpose: hoisted declarations would lose the null
+    // narrowing on sheet/panel/handle.
+    const handleDragMove = (moveEvent: PointerEvent): void => {
       if (!isDragging) return;
 
       currentY = moveEvent.clientY;
       const deltaY = Math.max(0, currentY - startY);
       panel.style.transform = `translateY(${deltaY}px)`;
-    }
+    };
 
-    function handleDragEnd(endEvent: PointerEvent): void {
+    const handleDragEnd = (endEvent: PointerEvent): void => {
       if (!isDragging) return;
 
       isDragging = false;
@@ -313,7 +318,7 @@ const { id, label = "Detalle" } = Astro.props;
       }
 
       resetPanelDrag(panel);
-    }
+    };
 
     window.addEventListener("pointermove", handleDragMove);
     window.addEventListener("pointerup", handleDragEnd);

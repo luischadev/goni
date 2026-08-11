@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getPracticeAreaHeroImage } from "../../lib/content";
+import { getLang, localizePath, ui } from "../../lib/i18n";
 import type { PracticeArea } from "../../lib/types";
 
 interface Props {
@@ -8,6 +9,9 @@ interface Props {
 }
 
 const { areas } = Astro.props;
+
+const lang = getLang(Astro.url);
+const t = ui[lang].practiceStack;
 ---
 
 <section
@@ -17,16 +21,14 @@ const { areas } = Astro.props;
   <div class="container-x pt-16 md:pt-32 pb-12 md:pb-16">
     <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-12">
       <div class="md:col-span-6">
-        <p class="eyebrow reveal">Áreas de práctica</p>
+        <p class="eyebrow reveal">{t.eyebrow}</p>
         <h2 id="practice-areas" class="font-display text-3xl md:text-5xl mt-6 leading-[1.05] reveal">
-          Servicios legales integrales para riesgos y controversias.
+          {t.title}
         </h2>
       </div>
       <div class="md:col-span-5 md:col-start-8 md:pt-4">
         <p class="text-base md:text-lg text-fg-muted leading-relaxed reveal">
-          Prestamos asesoría legal especializada con eficiencia, calidad y atención
-          personalizada, acompañando a nuestros clientes en la prevención de riesgos
-          y en la solución de conflictos.
+          {t.description}
         </p>
       </div>
     </div>
@@ -36,11 +38,11 @@ const { areas } = Astro.props;
     <div class="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-5 lg:gap-6">
       {
         areas.map((area) => {
-          const heroImage = getPracticeAreaHeroImage(area.slug);
+          const heroImage = getPracticeAreaHeroImage(lang, area.slug);
 
           return (
             <a
-              href={`/areas-de-practica/${area.slug}`}
+              href={localizePath(`/areas-de-practica/${area.slug}`, lang)}
               class="group reveal relative block min-h-[28rem] overflow-hidden rounded-card bg-surface-inverse shadow-[0_24px_80px_rgba(15,24,34,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-line-strong md:min-h-[32rem]"
             >
               <div class="pointer-events-none absolute inset-0 media-skeleton media-skeleton--inverse" aria-hidden="true">

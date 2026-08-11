@@ -10,6 +10,7 @@ import {
   getTeamMembers,
   getTestimonials,
 } from "./content";
+import { localizePath, ui, type Lang } from "./i18n";
 import {
   getVideoPosterPath,
   isExternalMediaUrl,
@@ -28,19 +29,6 @@ import type {
 } from "./types";
 
 export type PracticeAreaHeroImage = { src: string; alt: string };
-
-const practiceAreaNavDescriptions: Record<string, string> = {
-  "recuperos-legales":
-    "Acciones de recupero orientadas al reembolso de indemnizaciones pagadas por compañías de seguros.",
-  "derecho-maritimo-y-transporte":
-    "Prevención y resolución de controversias del transporte nacional e internacional de mercancías.",
-  "litigios-y-arbitrajes":
-    "Litigios civiles, comerciales, laborales, penales, marítimos y de seguros.",
-  "responsabilidad-civil":
-    "Defensa en acciones de indemnización de perjuicios contractuales y extracontractuales.",
-  "derecho-corporativo":
-    "Asesoría en derecho corporativo y comercial para decisiones estratégicas.",
-};
 
 function resolveHero(hero: HeroContent): HeroContent {
   const backgroundImage = resolveMediaAsset(hero.backgroundImage);
@@ -96,26 +84,34 @@ function resolvePracticeArea(area: PracticeArea): PracticeArea {
  * (e.g. swapping the local helpers with `fetch(import.meta.env.STRAPI_URL/...)`
  * calls) and convert the methods to `async`. All pages already `await`
  * these calls to make that migration trivial.
+ *
+ * Every method takes the active language, which maps directly onto Strapi's
+ * `locale` query parameter. Pages resolve it with `getLang(Astro.url)`.
+ * Publications are the exception: they are Spanish-only and live outside
+ * the localized routes.
  */
 export const cms = {
-  async getSiteSettings(): Promise<SiteSettings> {
-    return getSiteSettings();
+  async getSiteSettings(lang: Lang): Promise<SiteSettings> {
+    return getSiteSettings(lang);
   },
 
-  async getHomeHero(): Promise<HeroContent> {
-    return resolveHero(getHomeHero());
+  async getHomeHero(lang: Lang): Promise<HeroContent> {
+    return resolveHero(getHomeHero(lang));
   },
 
-  async getIndicators(): Promise<Indicator[]> {
-    return getIndicators();
+  async getIndicators(lang: Lang): Promise<Indicator[]> {
+    return getIndicators(lang);
   },
 
-  async getPracticeAreas(): Promise<PracticeArea[]> {
-    return getPracticeAreas().map(resolvePracticeArea);
+  async getPracticeAreas(lang: Lang): Promise<PracticeArea[]> {
+    return getPracticeAreas(lang).map(resolvePracticeArea);
   },
 
-  async getPracticeAreaBySlug(slug: string): Promise<PracticeArea | undefined> {
-    const area = getPracticeAreaBySlug(slug);
+  async getPracticeAreaBySlug(
+    lang: Lang,
+    slug: string
+  ): Promise<PracticeArea | undefined> {
+    const area = getPracticeAreaBySlug(lang, slug);
     return area ? resolvePracticeArea(area) : undefined;
   },
 
@@ -128,37 +124,43 @@ export const cms = {
     return publication ? resolvePublication(publication) : undefined;
   },
 
-  async getTeamMembers(): Promise<TeamMember[]> {
-    return getTeamMembers().map((member) => ({
+  async getTeamMembers(lang: Lang): Promise<TeamMember[]> {
+    return getTeamMembers(lang).map((member) => ({
       ...member,
       photo: resolveMediaUrl(member.photo),
     }));
   },
 
-  async getTestimonials(): Promise<Testimonial[]> {
-    return getTestimonials();
+  async getTestimonials(lang: Lang): Promise<Testimonial[]> {
+    return getTestimonials(lang);
   },
 
-  async getPracticeAreaHeroImage(slug: string): Promise<PracticeAreaHeroImage> {
-    return getPracticeAreaHeroImage(slug);
+  async getPracticeAreaHeroImage(
+    lang: Lang,
+    slug: string
+  ): Promise<PracticeAreaHeroImage> {
+    return getPracticeAreaHeroImage(lang, slug);
   },
 
-  async getMainNav(): Promise<NavItem[]> {
-    const areas = getPracticeAreas().map(resolvePracticeArea);
+  async getMainNav(lang: Lang): Promise<NavItem[]> {
+    const areas = getPracticeAreas(lang).map(resolvePracticeArea);
+    const t = ui[lang].nav;
+    // The dictionary keys the descriptions by slug literal; areas arrive as strings.
+    const areaDescriptions: Record<string, string> = t.areaDescriptions;
 
     return [
       {
-        label: "Áreas de práctica",
-        href: "/areas-de-practica",
-        description: "Servicios legales integrales para riesgos y controversias",
+        label: t.practiceAreas,
+        href: localizePath("/areas-de-practica", lang),
+        description: t.practiceAreasDescription,
         children: areas.map((area) => ({
           label: area.title,
-          href: `/areas-de-practica/${area.slug}`,
-          description: practiceAreaNavDescriptions[area.slug],
+          href: localizePath(`/areas-de-practica/${area.slug}`, lang),
+          description: areaDescriptions[area.slug],
         })),
       },
-      { label: "Nosotros", href: "/nosotros" },
-      { label: "Contacto", href: "/contacto" },
+      { label: t.about, href: localizePath("/nosotros", lang) },
+      { label: t.contact, href: localizePath("/contacto", lang) },
     ];
   },
 };

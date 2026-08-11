@@ -1,4 +1,4 @@
-import type { TeamMember } from "../types";
+import type { TeamMember } from "../../types";
 
 export const teamMembers: TeamMember[] = [
   {
@@ -173,7 +173,3 @@ export const teamMembers: TeamMember[] = [
     email: "emunoz@goni-abogados.cl",
   },
 ];
-
-export function getTeamMembers(): TeamMember[] {
-  return teamMembers;
-}

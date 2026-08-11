@@ -1,5 +1,7 @@
 ---
 import { cms } from "../lib/cms";
+import { getLang, localizePath, ui } from "../lib/i18n";
+import LanguageSwitcher from "./header/LanguageSwitcher.astro";
 import NavMenu from "./header/NavMenu.astro";
 import TextLink from "./ui/TextLink.astro";
 
@@ -43,9 +45,12 @@ const {
   scrollThreshold = 80,
 } = Astro.props;
 
+const lang = getLang(Astro.url);
+const t = ui[lang];
+
 const [settings, navItems] = await Promise.all([
-  cms.getSiteSettings(),
-  cms.getMainNav(),
+  cms.getSiteSettings(lang),
+  cms.getMainNav(lang),
 ]);
 const currentPath = Astro.url.pathname;
 ---
@@ -59,32 +64,40 @@ const currentPath = Astro.url.pathname;
   data-threshold={scrollThreshold}
 >
   <div class="container-x flex items-center justify-between py-6 md:py-7 overflow-visible">
-    <a href="/" class="block shrink-0" aria-label={`${settings.name} — Inicio`}>
+    <a
+      href={localizePath("/", lang)}
+      class="block shrink-0"
+      aria-label={t.a11y.homeLink(settings.name)}
+    >
       <img
         src="/goni-abogados-logo.png"
         alt={settings.legalName}
         width="1000"
         height="320"
-        class="header-logo h-8 w-auto md:h-10"
+        class="header-logo h-8 w-auto lg:h-10"
       />
     </a>
 
     <NavMenu items={navItems} variant="desktop" currentPath={currentPath} />
 
-    <TextLink
-      href="/contacto#consulta"
-      variant="current"
-      size="md"
-      class="max-md:hidden md:inline-flex hover:text-[var(--header-nav-hover)]"
-    >
-      Agendar consulta
-    </TextLink>
+    <div class="max-md:hidden md:flex md:items-center md:gap-4 lg:gap-7">
+      <LanguageSwitcher variant="desktop" />
+
+      <TextLink
+        href={localizePath("/contacto#consulta", lang)}
+        variant="current"
+        size="md"
+        class="md:inline-flex hover:text-[var(--header-nav-hover)]"
+      >
+        {t.nav.bookConsultation}
+      </TextLink>
+    </div>
 
     <button
       type="button"
       id="menu-toggle"
       class="md:hidden p-2 -mr-2"
-      aria-label="Abrir menú"
+      aria-label={t.a11y.openMenu}
       aria-expanded="false"
       aria-controls="mobile-menu"
     >
@@ -101,6 +114,10 @@ const currentPath = Astro.url.pathname;
   >
     <div class="container-x py-8">
       <NavMenu items={navItems} variant="mobile" currentPath={currentPath} />
+
+      <div class="mt-8 border-t border-line pt-6">
+        <LanguageSwitcher variant="mobile" />
+      </div>
     </div>
   </div>
 </header>
