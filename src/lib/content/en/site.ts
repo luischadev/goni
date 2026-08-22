@@ -24,9 +24,12 @@ export const homeHero: HeroContent = {
   title: "Legal defense for complex risks",
   subtitle: "Technical rigor, legal depth and consistent results.",
   overlayOpacity: 60,
+  // First-frame poster of the hero video. With video present, cms.ts
+  // already derives this from backgroundVideo; kept explicit so we do
+  // not fall back to an external Unsplash URL.
   backgroundImage: {
-    url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
-    alt: "Cargo ships on a calm sea",
+    url: "/container-port-hero-poster.jpg",
+    alt: "Container port at dusk",
   },
   // Path relative to PUBLIC_MEDIA_BASE_URL (R2 / CDN).
   backgroundVideo: {

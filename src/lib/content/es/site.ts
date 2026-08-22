@@ -25,9 +25,12 @@ export const homeHero: HeroContent = {
   subtitle:
     "Rigor técnico, profundidad jurídica y resultados consistentes.",
   overlayOpacity: 60,
+  // Poster del primer frame del video; con video activo, cms.ts ya
+  // deriva este path desde backgroundVideo, pero lo dejamos explícito
+  // para no depender de Unsplash u otro fallback externo.
   backgroundImage: {
-    url: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=2400&q=80",
-    alt: "Buques de carga en mar en calma",
+    url: "/container-port-hero-poster.jpg",
+    alt: "Puerto de contenedores al atardecer",
   },
   // Path relative to PUBLIC_MEDIA_BASE_URL (R2 / CDN).
   backgroundVideo: {
