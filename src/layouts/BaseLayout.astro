@@ -106,6 +106,47 @@ const defaultAlternate = alternates.find(
         fetchpriority={index === 0 ? "high" : undefined}
       />
     ))}
+    <!-- Preferencia de idioma: corre en head para reducir flash en `/` → `/en/`. -->
+    <script is:inline>
+      (function () {
+        var KEY = "goni-preferred-lang";
+        var path = location.pathname;
+        var stored = null;
+        try {
+          stored = localStorage.getItem(KEY);
+        } catch (e) {}
+
+        function fromNavigator() {
+          var list = (navigator.languages || []).concat(navigator.language || "");
+          for (var i = 0; i < list.length; i++) {
+            var tag = String(list[i] || "").toLowerCase();
+            if (tag.indexOf("en") === 0) return "en";
+            if (tag.indexOf("es") === 0) return "es";
+          }
+          return "es";
+        }
+
+        if (!stored) {
+          if (path !== "/") return;
+          var detected = fromNavigator();
+          try {
+            localStorage.setItem(KEY, detected);
+          } catch (e) {}
+          if (detected === "en") location.replace("/en/");
+          return;
+        }
+
+        if (stored !== "es" && stored !== "en") return;
+
+        var current = path === "/en" || path.indexOf("/en/") === 0 ? "en" : "es";
+        if (stored === current) return;
+
+        // Solo homes aquí (lógica completa de rutas en locale-preference.ts).
+        if (path === "/" && stored === "en") location.replace("/en/");
+        else if ((path === "/en" || path === "/en/") && stored === "es")
+          location.replace("/");
+      })();
+    </script>
   </head>
   <body class="min-h-screen flex flex-col antialiased">
     <a
@@ -127,6 +168,7 @@ const defaultAlternate = alternates.find(
 
     <script>
       import { initMediaSkeletons } from "../scripts/media-skeleton";
+      import { initLocalePreference } from "../scripts/locale-preference";
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -144,10 +186,12 @@ const defaultAlternate = alternates.find(
         document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
       }
 
+      initLocalePreference();
       initReveals();
       initMediaSkeletons();
 
       document.addEventListener("astro:page-load", () => {
+        initLocalePreference();
         initReveals();
         initMediaSkeletons();
       });
