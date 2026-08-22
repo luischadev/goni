@@ -34,11 +34,11 @@ const {
   headerAutoHide = true,
 } = Astro.props;
 
-const browserSiteName = "Goni";
+const browserSiteName = "Goñi & Cía. Abogados";
 const currentPath = Astro.url.pathname;
 const isHome = currentPath === "/" || currentPath === "/en/";
 const pageTitle =
-  isHome || !title ? browserSiteName : `${title} · ${browserSiteName}`;
+  isHome || !title ? browserSiteName : `${title} | ${browserSiteName}`;
 const siteUrl = Astro.site ?? new URL("https://goniabogados.cl");
 const canonical = new URL(currentPath, siteUrl).toString();
 

@@ -137,7 +137,7 @@ const recuperosLegalesFeatures = [
     icon: "summarize",
   },
   {
-    title: "Results orientation",
+    title: "Results-focused approach",
     description:
       "We are committed to delivering efficient, technically sound legal solutions aligned with each client's commercial objectives, always seeking the best alternative to resolve their disputes.",
     icon: "verified",
@@ -166,7 +166,7 @@ const derechoMaritimoFeatures = [
   {
     title: "Efficient solutions",
     description:
-      "We prioritize agile, technically sound management, maintaining ongoing communication with our clients and directing our work towards risk prevention and the effective resolution of disputes.",
+      "We prioritize responsive, technically rigorous service, maintain ongoing communication with our clients, and focus on risk prevention and effective dispute resolution.",
     icon: "bolt",
   },
 ];
@@ -187,7 +187,7 @@ const litigiosFeatures = [
   {
     title: "Efficient management",
     description:
-      "We plan every case with a preventive, results-driven approach, optimizing resources, controlling deadlines and continuously assessing the best alternatives to resolve the dispute.",
+      "We plan every case with a preventive, results-driven approach, optimizing resources, controlling deadlines and continuously assessing the best options for resolving the dispute.",
     icon: "timeline",
   },
   {
@@ -247,7 +247,7 @@ const derechoCorporativoFeatures = [
   {
     title: "Results-driven solutions",
     description:
-      "We work with a practical, close and efficient approach, providing timely answers that add value and contribute to the success of every business.",
+      "We take a practical, responsive, and efficient approach, providing timely advice that adds value and contributes to each client's success.",
     icon: "trending_up",
   },
 ];
@@ -258,7 +258,7 @@ export const practiceAreas: PracticeArea[] = [
     number: "01",
     title: "Legal recoveries",
     shortDescription:
-      "Management and pursuit of recovery actions to reimburse indemnities paid by insurers from liable third parties.",
+      "We manage and pursue recovery actions against liable third parties to recover indemnity payments made by insurers.",
     intro:
       "Comprehensive advice on the management and pursuit of recovery actions, aimed at obtaining reimbursement of the indemnities paid by insurance companies where a third party is legally liable for the loss.",
     featuresTitle:
@@ -318,7 +318,7 @@ export const practiceAreas: PracticeArea[] = [
     number: "05",
     title: "Corporate and business law",
     shortDescription:
-      "Corporate and commercial advice for domestic and international companies in their strategic decisions.",
+      "Corporate and commercial advice to domestic and international companies on strategic decision-making.",
     intro:
       "Advice to domestic and international companies on corporate and commercial law matters, supporting them in the development of their activities and in strategic decision-making. We deliver practical and efficient legal solutions aimed at preventing contingencies, facilitating business development and safeguarding our clients' interests in a dynamic business environment.",
     featuresTitle:
