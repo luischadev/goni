@@ -17,6 +17,8 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** LCP / above-the-fold images to preload in <head>. */
+  preloadImages?: string[];
   headerVariant?: "solid" | "transparent";
   headerAutoHide?: boolean;
 }
@@ -30,6 +32,7 @@ const {
   title,
   description = settings.tagline,
   ogImage,
+  preloadImages = [],
   headerVariant = "solid",
   headerAutoHide = true,
 } = Astro.props;
@@ -94,6 +97,15 @@ const defaultAlternate = alternates.find(
 
     <!-- Medios pesados (imágenes/videos) viven en R2 -->
     <link rel="preconnect" href="https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev" crossorigin />
+
+    {preloadImages.map((href, index) => (
+      <link
+        rel="preload"
+        as="image"
+        href={href}
+        fetchpriority={index === 0 ? "high" : undefined}
+      />
+    ))}
   </head>
   <body class="min-h-screen flex flex-col antialiased">
     <a

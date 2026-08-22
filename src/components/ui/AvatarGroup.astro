@@ -13,6 +13,8 @@ interface Props {
   size?: number;
   href?: string;
   class?: string;
+  /** Prefer for above-the-fold usage (e.g. home intro). */
+  eager?: boolean;
 }
 
 const lang = getLang(Astro.url);
@@ -24,6 +26,7 @@ const {
   size = 40,
   href = localizePath("/nosotros", lang),
   class: className = "",
+  eager = false,
 } = Astro.props;
 
 const visible = members.slice(0, limit);
@@ -56,7 +59,7 @@ const overlapMd = Math.round(sizeMd * 0.3);
             height={size * 3}
             format="webp"
             class="avatar-group__image"
-            loading="lazy"
+            loading={eager ? "eager" : "lazy"}
             decoding="async"
             data-skeleton
           />
@@ -100,6 +103,10 @@ const overlapMd = Math.round(sizeMd * 0.3);
     padding: 0;
   }
 
+  /*
+   * Shell stays visible (skeleton shimmer) while waiting for images.
+   * Entrance only slides; image opacity is handled by .media-skeleton.
+   */
   .avatar-group__item {
     position: relative;
     margin-left: calc(var(--avatar-overlap) * -1);
@@ -110,8 +117,8 @@ const overlapMd = Math.round(sizeMd * 0.3);
     background-color: var(--color-surface-soft);
     overflow: hidden;
     box-sizing: border-box;
-    opacity: 0;
-    transform: translateX(-14px);
+    opacity: 1;
+    transform: none;
   }
 
   .avatar-group__item:first-child {
@@ -119,13 +126,13 @@ const overlapMd = Math.round(sizeMd * 0.3);
   }
 
   :global(.avatar-group-wrap.is-visible) .avatar-group__item {
-    animation: avatar-group-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: avatar-group-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
     animation-delay: var(--avatar-delay, 0ms);
   }
 
   @keyframes avatar-group-in {
     from {
-      opacity: 0;
+      opacity: 1;
       transform: translateX(-14px);
     }
     to {

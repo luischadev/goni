@@ -1,4 +1,5 @@
 ---
+import { getImage } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CTASection from "../../components/CTASection.astro";
 import PageHero from "../../components/PageHero.astro";
@@ -25,11 +26,28 @@ const [settings, hero, areas, team] = await Promise.all([
 ]);
 
 const aboutHref = localizePath("/nosotros", lang);
+
+/** Match AvatarGroup: size 40 → width/height 120 webp. */
+const AVATAR_PRELOAD_COUNT = 4;
+const AVATAR_PX = 40 * 3;
+
+const avatarPreloads = await Promise.all(
+  team.slice(0, AVATAR_PRELOAD_COUNT).map(async (member) => {
+    const img = await getImage({
+      src: member.photo,
+      width: AVATAR_PX,
+      height: AVATAR_PX,
+      format: "webp",
+    });
+    return img.src;
+  })
+);
 ---
 
 <BaseLayout
   description={settings.tagline}
   headerVariant="transparent"
+  preloadImages={[hero.backgroundImage.url, ...avatarPreloads]}
 >
   <PageHero
     videoSrc={hero.backgroundVideo?.url}
@@ -103,6 +121,7 @@ const aboutHref = localizePath("/nosotros", lang);
             limit={4}
             size={40}
             href={aboutHref}
+            eager
           />
         </div>
       </div>

@@ -22,33 +22,42 @@ import { getLang, ui } from "../../lib/i18n";
  * las tarjetas circundantes. Después, los textos se desvanecen.
  */
 
-const VIDEO_SRC =
-  "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/8783391-hd_1920_1080_30fps.mp4";
+const MEDIA_BASE =
+  "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev";
+
+/** First-frame JPG in /public/trust-posters (same basename as the mp4). */
+function trustPoster(filename: string) {
+  return `/trust-posters/${filename.replace(/\.mp4$/, ".jpg")}`;
+}
+
+const VIDEO_FILE = "8783391-hd_1920_1080_30fps.mp4";
+const VIDEO_SRC = `${MEDIA_BASE}/${VIDEO_FILE}`;
+const VIDEO_POSTER = trustPoster(VIDEO_FILE);
 
 const SURROUND_VIDEOS = [
   {
     class: "surround--tl",
-    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/4157778-hd_1920_1080_24fps.mp4",
+    file: "4157778-hd_1920_1080_24fps.mp4",
   },
   {
     class: "surround--tr",
-    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/12028868_1920_1080_24fps.mp4",
+    file: "12028868_1920_1080_24fps.mp4",
   },
   {
     class: "surround--l",
-    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/8344449-uhd_3840_2160_30fps.mp4",
+    file: "8344449-uhd_3840_2160_30fps.mp4",
   },
   {
     class: "surround--r",
-    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/12984266_1920_1080_25fps.mp4",
+    file: "12984266_1920_1080_25fps.mp4",
   },
   {
     class: "surround--bl",
-    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/4292300-uhd_3840_2160_25fps.mp4",
+    file: "4292300-uhd_3840_2160_25fps.mp4",
   },
   {
     class: "surround--br",
-    src: "https://pub-396ba7766f0a49cba86800f9d74523ad.r2.dev/15978611-uhd_3840_2160_30fps.mp4",
+    file: "15978611-uhd_3840_2160_30fps.mp4",
   },
 ] as const;
 
@@ -62,7 +71,7 @@ const headlineWords = HEADLINE.split(" ");
 
     <div class="scroll-scene__grid" data-scene-grid>
 
-      {SURROUND_VIDEOS.map(({ class: cardClass, src }) => (
+      {SURROUND_VIDEOS.map(({ class: cardClass, file }) => (
         <div class={`scroll-scene__surround-card ${cardClass}`} data-scene-surround>
           <video
             class="scroll-scene__video"
@@ -71,10 +80,11 @@ const headlineWords = HEADLINE.split(" ");
             loop
             playsinline
             preload="none"
+            poster={trustPoster(file)}
             aria-hidden="true"
             data-lazy-video
           >
-            <source data-src={src} type="video/mp4" />
+            <source data-src={`${MEDIA_BASE}/${file}`} type="video/mp4" />
           </video>
         </div>
       ))}
@@ -87,6 +97,7 @@ const headlineWords = HEADLINE.split(" ");
           loop
           playsinline
           preload="none"
+          poster={VIDEO_POSTER}
           aria-hidden="true"
           data-lazy-video
         >

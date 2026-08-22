@@ -43,41 +43,50 @@ const posterSrc = videoSrc ? imgSrc : undefined;
   aria-label="Hero"
 >
   <!-- ── Background media ───────────────────────────────────── -->
-  {posterSrc && (
-    <img
-      src={posterSrc}
-      alt=""
-      fetchpriority="high"
-      loading="eager"
-      decoding="async"
-      aria-hidden="true"
-      class="absolute inset-0 h-full w-full object-cover pointer-events-none"
-    />
-  )}
-
-  {videoSrc ? (
-    <video
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-      poster={posterSrc}
-      aria-hidden="true"
-      class="page-hero__video absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[560ms] ease-out pointer-events-none"
+  {hasMedia && (
+    <div
+      class="absolute inset-0 media-skeleton media-skeleton--inverse"
+      aria-hidden={videoSrc ? "true" : undefined}
     >
-      <source src={videoSrc} type="video/mp4" />
-    </video>
-  ) : imgSrc ? (
-    <img
-      src={imgSrc}
-      alt={imgAlt}
-      fetchpriority="high"
-      loading="eager"
-      decoding="async"
-      class="absolute inset-0 h-full w-full object-cover pointer-events-none"
-    />
-  ) : null}
+      {posterSrc && (
+        <img
+          src={posterSrc}
+          alt=""
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+          aria-hidden="true"
+          data-skeleton
+          class="absolute inset-0 h-full w-full object-cover pointer-events-none"
+        />
+      )}
+
+      {videoSrc ? (
+        <video
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster={posterSrc}
+          aria-hidden="true"
+          class="page-hero__video absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[560ms] ease-out pointer-events-none"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+      ) : imgSrc ? (
+        <img
+          src={imgSrc}
+          alt={imgAlt}
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+          data-skeleton
+          class="absolute inset-0 h-full w-full object-cover pointer-events-none"
+        />
+      ) : null}
+    </div>
+  )}
 
   <!-- ── Overlay usando token surface-inverse ───────────────── -->
   {hasMedia && (
